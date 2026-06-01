@@ -235,18 +235,18 @@ Segundo no entra al sistema de puntajes por ahora (primeros 3 meses de la planif
 | Facu | Core (100) | Responsable (100) | Sin uso (0) | CEO (100) | **80,0** |
 | Fede | Importante (60) | Auditor (60) | Presencia (40) | — (0) | **47,0** |
 | Juana | Importante (60) | Auditor (60) | Presencia (40) | — (0) | **47,0** |
+| Franco | Core (100) | Advisor (30) | Sin uso (0) | — (0) | **44,0** |
 | Teo | Soporte (30) | Advisor (30) | Presencia (40) | Dir Ops (60) | **36,5** |
-| Franco | Importante (60) | Advisor (30) | Sin uso (0) | — (0) | **30,0** |
 
 **Reparto B2B (sobre USD 12.269 — el 65% del profit):**
 
 | Persona | % | Monto USD |
 |---|---|---|
-| Facu | 33,3% | 4.081 |
-| Fede | 19,5% | 2.398 |
-| Juana | 19,5% | 2.398 |
-| Teo | 15,2% | 1.862 |
-| Franco | 12,5% | 1.530 |
+| Facu | 31,4% | 3.857 |
+| Fede | 18,5% | 2.266 |
+| Juana | 18,5% | 2.266 |
+| Franco | 17,3% | 2.121 |
+| Teo | 14,3% | 1.760 |
 
 ---
 
@@ -256,14 +256,14 @@ El reparto tiene dos componentes: el **revenue share** (que sale del sistema de 
 
 | Persona | Revenue share | Estratega | Total mensual |
 |---|---|---|---|
-| Fede | 5.446 | 1.200 | **6.647** |
-| Juana | 5.103 | 1.200 | **6.304** |
-| Facu | 5.986 | — | **5.986** |
-| Teo | 3.920 | — | **3.920** |
-| Franco | 3.893 | — | **3.893** |
+| Fede | 5.314 | 1.200 | **6.514** |
+| Juana | 4.971 | 1.200 | **6.171** |
+| Facu | 5.762 | — | **5.762** |
+| Franco | 4.484 | — | **4.484** |
+| Teo | 3.817 | — | **3.817** |
 | Segundo | 1.873 | +600/cliente | **1.873** |
 
-(El revenue share por persona se descompone en B2C + B2B: Facu 1.905+4.081, Fede 3.049+2.398, Juana 2.706+2.398, Teo 2.058+1.862, Franco 2.363+1.530, Segundo 929+944.)
+(El revenue share por persona se descompone en B2C + B2B: Facu 1.905+3.857, Fede 3.049+2.266, Juana 2.706+2.266, Franco 2.363+2.121, Teo 2.058+1.760, Segundo 929+944.)
 
 **Por qué Facu tiene el revenue share más alto:** es el responsable directo de la línea B2B (responsabilidad por resultado 100), el CEO (gerencia 100) y core de la gestión B2B (impacto 100). Su número refleja el peso de la responsabilidad que carga, no un privilegio. Fede y Juana lo superan en el total solo porque suman honorarios de estratega por el trabajo operativo extra de entregar clientes.
 
