@@ -12,8 +12,9 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sans); -webkit-font-smoothing:antialiased; min-height:100vh; }
 .deck { position:relative; width:100vw; height:100vh; overflow:hidden; }
-.s-slide { position:absolute; inset:0; padding:5vh 6vw 8vh; background:var(--cream); opacity:0; pointer-events:none; transition:opacity 0.3s ease; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
-.s-slide.active { opacity:1; pointer-events:auto; }
+.s-slide { position:absolute; inset:0; padding:5vh 6vw 8vh; background:var(--cream); opacity:0; z-index:0; pointer-events:none; transition:opacity 0.3s ease; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
+.s-slide.active { opacity:1; z-index:2; pointer-events:auto; }
+.s-slide.prev { opacity:1; z-index:1; transition:none; } /* saliente: opaca debajo hasta que la entrante la cubre (evita el parpadeo del fondo) */
 .s-slide::after { content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.18; mix-blend-mode:multiply; pointer-events:none; z-index:4; }
 .s-slide.dark { background:var(--blue); color:white; }
 .s-slide.dark::after { mix-blend-mode:overlay; opacity:0.45; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -1802,7 +1803,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </div></div></div>
 <script>
 const slides=document.querySelectorAll('.s-slide');const counter=document.getElementById('counter');let current=0;
-function show(i){slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));counter.textContent=(i+1)+' / '+slides.length;current=i;}
+function show(i){if(i===current||i<0||i>=slides.length)return;const prev=slides[current];if(prev){prev.classList.remove('active');prev.classList.add('prev');setTimeout(()=>prev.classList.remove('prev'),360);}slides[i].classList.add('active');counter.textContent=(i+1)+' / '+slides.length;current=i;}
 document.getElementById('next').onclick=()=>{if(current<slides.length-1)show(current+1);};
 document.getElementById('prev').onclick=()=>{if(current>0)show(current-1);};
 document.addEventListener('keydown',(e)=>{
