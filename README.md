@@ -16,8 +16,6 @@ docs/
   source/
     cascara_founders_v3.md          → fuente del Documento 01
     cascara_estructura_economica_respaldo.md → fuente del Documento 02
-assets/
-  star-data-uri.txt                 → ícono de marca (usado por el generador de PDFs)
 build/
   build-docs.mjs                    → genera los PDFs a partir de los .md
   package.json
@@ -25,8 +23,8 @@ build/
 
 ## Regenerar los PDFs
 
-Los PDFs se generan desde los `.md` de `docs/source/` con la estética de Cáscara
-(crema / tinta / azul serif, portada con el ícono de marca).
+Los PDFs se generan desde los `.md` de `docs/source/` como documentos blancos
+simples estilo Word (fondo blanco, texto negro, tablas con bordes finos).
 
 ```bash
 cd build
