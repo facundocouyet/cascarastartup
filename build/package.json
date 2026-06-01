@@ -1,0 +1,14 @@
+{
+  "name": "cascara-startup-build",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generador de los PDFs respaldatorios de Cáscara a partir de los .md fuente",
+  "scripts": {
+    "docs": "node build-docs.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "puppeteer": "^22.0.0"
+  }
+}

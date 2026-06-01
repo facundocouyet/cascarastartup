@@ -1,0 +1,9 @@
+# Dependencias del build (se reinstalan con `npm install` en build/)
+build/node_modules/
+
+# Sistema
+.DS_Store
+*.log
+
+# Config local de Claude
+.claude/settings.local.json
