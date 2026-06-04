@@ -8,12 +8,13 @@ Este documento es el respaldo escrito de la presentación. Contiene todos los n�
 
 ## 1. LÓGICA GENERAL
 
-Cáscara opera con dos unidades de negocio:
+Cáscara opera con tres unidades de negocio:
 
 - **B2C** — el programa educativo La Cáscara.
 - **B2B** — los servicios a clientes (fábrica de contenido y creatividad).
+- **Aceleradora** — el upsell del B2C (programa de aceleración para quienes ya pasaron el programa base).
 
-Cada unidad funciona con la misma lógica:
+Las dos primeras funcionan con la misma lógica de puntajes. La Aceleradora tiene un reparto más simple (ver sección 8 bis). En todas, la base es la misma:
 
 ```
 1. Facturación de la unidad
@@ -21,7 +22,7 @@ Cada unidad funciona con la misma lógica:
 3. = Profit de la unidad
 ```
 
-Una vez que tenemos el profit, se divide así:
+Una vez que tenemos el profit, se divide así (B2C y B2B):
 
 ```
 30% → Caja de Cáscara (reinversión, reserva, crecimiento)
@@ -49,13 +50,14 @@ Dentro de cada variable, cada persona recibe un puntaje según su nivel de aport
 
 El puntaje de cada persona en cada variable se multiplica por el peso de esa variable. La suma de todos esos productos da el **puntaje total** de la persona. El % de reparto de cada uno es su puntaje dividido por la suma de los puntajes del equipo.
 
-**Ejemplo (Fede en B2C):**
-- Impacto del departamento: 100 × 50% = 50
-- Marca personal: 100 × 30% = 30
-- Gerencia: 0 × 20% = 0
-- **Puntaje total: 80**
+**Ejemplo (Franco en B2C):**
+- Growth y estrategia comercial: 100 × 40% = 40
+- Impacto del departamento: 50 × 30% = 15
+- Marca personal: 40 × 15% = 6
+- Gerencia: 0 × 15% = 0
+- **Puntaje total: 61**
 
-Si el equipo suma 317 puntos, Fede se queda con 80/317 = 25,2% **del reparto neto** (el 65% que queda después de la caja y de Segundo).
+Si el equipo suma 254 puntos, Franco se queda con 61/254 = 24,0% **del reparto** (el 65% del profit que queda después de la caja y de Segundo).
 
 ---
 
@@ -112,16 +114,42 @@ Si el equipo suma 317 puntos, Fede se queda con 80/317 = 25,2% **del reparto net
 | Director de Operaciones | 60 | Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen. |
 | No aplica | 0 | Lidera su departamento pero no la estructura de la empresa. |
 
+### Variable: Growth y estrategia comercial
+
+**Qué mide:** quién construye y mejora el motor del negocio. No es solo traer clientes — es la función de optimizar todo el sistema: la estrategia comercial, la escalera de valor, el pricing, los embudos de conversión, el contenido del producto y el resultado buscado.
+
+**Por qué se agrega esta variable:** el sistema medía el impacto de los departamentos de delivery (contenido, creatividad), la marca personal y la gerencia, pero no medía la construcción del motor comercial — el armado del departamento de ventas, el diseño del pricing, los embudos, la auditoría del producto. Esa era una dimensión real de valor que el sistema no reconocía. Se agrega para cubrir ese hueco. El test que aplicamos: ¿la pondríamos aunque la persona que hoy la lidera no existiera? Sí, porque el motor comercial es una función real de Cáscara. Que una persona la lidere es la consecuencia, no el motivo.
+
+**Diferencia entre marketing y growth:** no son lo mismo. La estrategia de marketing es la capa de atracción y comunicación (el mensaje, los canales, el contenido, la distribución entre marcas personales y la cuenta de Cáscara). El growth es más amplio y estructural: incluye al marketing pero también el departamento comercial, el pricing, los embudos, el upsell y la optimización del producto. El marketing trae la atención; el growth convierte esa atención en un negocio que crece de forma sostenida. La marca personal de cada uno (que también atrae) se mide aparte, en la variable de marca personal.
+
+| Nivel | Puntaje | Criterio |
+|---|---|---|
+| Arquitecto | 100 | Diseña y sostiene el motor: estrategia comercial, pricing, escalera de valor, embudos, optimización de producto y resultado. Es responsable de que el sistema mejore. |
+| Ejecuta y contribuye | 40 | Ejecuta partes del motor y aporta ideas que lo mejoran, pero no lo diseña ni responde por él. |
+| Participa en la gestión | 20 | Está en las decisiones de estrategia, aporta criterio, pero no ejecuta. |
+| Acompaña | 10 | Se involucra de costado, sin ejecutar ni decidir. |
+
 ---
 
 ## 4. POR QUÉ B2C Y B2B TIENEN VARIABLES DISTINTAS
 
-No son espejos. Cada negocio se vende y se sostiene de forma diferente:
+No son espejos. Cada negocio se vende y se sostiene de forma diferente, y por eso los pesos de las variables cambian en cada uno.
 
-- **B2C se vende por comunidad y marca personal.** Por eso ahí la marca personal pesa fuerte (30%) y no existe la variable de "responsabilidad por resultado del cliente".
-- **B2B se vende por resultados y confianza.** Por eso ahí pesa fuerte la responsabilidad por el resultado del cliente (30%), y la marca personal pesa menos (20%).
+**B2C — el programa educativo.** Se vende por comunidad, marca y motor comercial. Por eso el **growth pesa fuerte (40%)**: el B2C vive de un embudo que funcione, un pricing afinado y una escalera de valor que convierta. El impacto del producto (contenido y creatividad) viene segundo (30%).
 
-Lo que comparten es la estructura base (impacto del departamento + marca personal + gerencia). Lo que cambia son los pesos y la variable de responsabilidad por resultado, exclusiva del B2B.
+**B2B — los servicios a clientes.** Se vende por resultados y confianza. Una vez que entra el cliente, lo que manda es la **ejecución y la responsabilidad por la entrega**, no el growth. Por eso ahí la responsabilidad por resultado pesa más (30%) y el growth baja (20%): el motor trae el cliente B2B, pero la presión mensual de que el cliente esté contento la cargan quienes ejecutan. Además, en B2B el cliente también llega por la autoridad de Cáscara, la narrativa y las marcas del equipo, no solo por el motor comercial.
+
+**Pesos de cada vertical:**
+
+| Variable | B2C | B2B |
+|---|---|---|
+| Growth y estrategia comercial | 40% | 20% |
+| Impacto del departamento | 30% | 20% |
+| Marca personal | 15% | 10% |
+| Responsabilidad por resultado | — | 30% |
+| Responsabilidad estructural (gerencia) | 15% | 20% |
+
+La variable de responsabilidad por resultado es exclusiva del B2B (en B2C no hay un cliente al que rendirle una entrega). Todo lo demás está en las dos, con pesos distintos.
 
 ---
 
@@ -208,66 +236,99 @@ Segundo no entra al sistema de puntajes por ahora (primeros 3 meses de la planif
 
 ## 7. PUNTAJES Y REPARTO
 
-### B2C — Impacto 50% / Marca 30% / Gerencia 20%
+### B2C — Growth 40% / Impacto 30% / Marca 15% / Gerencia 15%
 
-| Persona | Impacto | Marca | Gerencia | Puntaje |
-|---|---|---|---|---|
-| Fede | Core (100) | Embajador (100) | — (0) | **80,0** |
-| Juana | Core (100) | Referente (70) | — (0) | **71,0** |
-| Franco | Core (100) | Presencia (40) | — (0) | **62,0** |
-| Teo | Importante (60) | Presencia (40) | Dir Ops (60) | **54,0** |
-| Facu | Importante (60) | Sin uso (0) | CEO (100) | **50,0** |
+| Persona | Growth | Impacto | Marca | Gerencia | Puntaje |
+|---|---|---|---|---|---|
+| Franco | Arquitecto (100) | Importante (50) | Presencia (40) | — (0) | **61,0** |
+| Fede | Ejecuta y contribuye (40) | Core (100) | Referente (70) | — (0) | **56,5** |
+| Juana | Participa en gestión (20) | Core (100) | Referente (70) | — (0) | **48,5** |
+| Teo | Participa en gestión (20) | Importante (60) | Presencia (40) | CEO (100) | **47,0** |
+| Facu | Participa en gestión (20) | Importante (60) | Sin uso (0) | CEO (100) | **41,0** |
 
 **Reparto B2C (sobre USD 12.080 — el 65% del profit):**
 
 | Persona | % | Monto USD |
 |---|---|---|
-| Fede | 25,2% | 3.049 |
-| Juana | 22,4% | 2.706 |
-| Franco | 19,6% | 2.363 |
-| Teo | 17,0% | 2.058 |
-| Facu | 15,8% | 1.905 |
+| Franco | 24,0% | 2.901 |
+| Fede | 22,2% | 2.687 |
+| Juana | 19,1% | 2.307 |
+| Teo | 18,5% | 2.235 |
+| Facu | 16,1% | 1.950 |
 
-### B2B — Impacto 35% / Responsabilidad 30% / Marca 20% / Gerencia 15%
+### B2B — Responsabilidad 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%
 
-| Persona | Impacto | Responsabilidad | Marca | Gerencia | Puntaje |
-|---|---|---|---|---|---|
-| Facu | Core (100) | Responsable (100) | Sin uso (0) | CEO (100) | **80,0** |
-| Fede | Importante (60) | Auditor (60) | Presencia (40) | — (0) | **47,0** |
-| Juana | Importante (60) | Auditor (60) | Presencia (40) | — (0) | **47,0** |
-| Franco | Core (100) | Advisor (30) | Sin uso (0) | — (0) | **44,0** |
-| Teo | Soporte (30) | Advisor (30) | Presencia (40) | Dir Ops (60) | **36,5** |
+| Persona | Responsabilidad | Impacto | Growth | Gerencia | Marca | Puntaje |
+|---|---|---|---|---|---|---|
+| Facu | Responsable (100) | Core (100) | Ejecuta (40) | CEO (100) | — (0) | **78,0** |
+| Franco | Advisor (30) | Core (100) | Arquitecto (100) | — (0) | — (0) | **49,0** |
+| Fede | Auditor (60) | Core (100) | Participa (20) | — (0) | Presencia (40) | **46,0** |
+| Juana | Auditor (60) | Core (100) | Participa (20) | — (0) | Presencia (40) | **46,0** |
+| Teo | — (0) | Importante (60) | Participa (20) | Dir Ops (60) | — (0) | **28,0** |
 
 **Reparto B2B (sobre USD 12.269 — el 65% del profit):**
 
 | Persona | % | Monto USD |
 |---|---|---|
-| Facu | 31,4% | 3.857 |
-| Fede | 18,5% | 2.266 |
-| Juana | 18,5% | 2.266 |
-| Franco | 17,3% | 2.121 |
-| Teo | 14,3% | 1.760 |
+| Facu | 31,6% | 3.874 |
+| Franco | 19,8% | 2.434 |
+| Fede | 18,6% | 2.285 |
+| Juana | 18,6% | 2.285 |
+| Teo | 11,3% | 1.391 |
 
 ---
 
 ## 8. CONSOLIDADO MENSUAL
 
-El reparto tiene dos componentes: el **revenue share** (que sale del sistema de puntajes, o del % fijo en el caso de Segundo) y el **honorario de estratega** (USD 600 por cada cliente B2B que la persona entregue operativamente). En este ejemplo, Fede y Juana toman 2 clientes cada uno como estrategas creativos, así que suman USD 1.200 de honorarios por encima de su revenue share.
+El consolidado suma lo que cada persona recibe de las dos verticales (B2C + B2B) por el sistema de puntajes. El honorario de estratega (USD 600 por cliente B2B entregado) lo cobra quien efectivamente entrega el cliente, como un pago aparte por ese trabajo operativo, no como parte del revenue share.
 
-| Persona | Revenue share | Estratega | Total mensual |
+El consolidado suma lo que cada persona recibe de las dos verticales por puntajes. (La línea Aceleradora se detalla aparte en la sección 8 bis.)
+
+| Persona | B2C | B2B | Total mensual |
 |---|---|---|---|
-| Fede | 5.314 | 1.200 | **6.514** |
-| Juana | 4.971 | 1.200 | **6.171** |
-| Facu | 5.762 | — | **5.762** |
-| Franco | 4.484 | — | **4.484** |
-| Teo | 3.817 | — | **3.817** |
-| Segundo | 1.873 | +600/cliente | **1.873** |
+| Facu | 1.950 | 3.874 | **5.824** |
+| Franco | 2.901 | 2.434 | **5.335** |
+| Fede | 2.687 | 2.285 | **4.972** |
+| Juana | 2.307 | 2.285 | **4.591** |
+| Teo | 2.235 | 1.391 | **3.626** |
+| Segundo | 929 | 944 | **1.873** |
 
-(El revenue share por persona se descompone en B2C + B2B: Facu 1.905+3.857, Fede 3.049+2.266, Juana 2.706+2.266, Franco 2.363+2.121, Teo 2.058+1.760, Segundo 929+944.)
+**Por qué Facu tiene el revenue share más alto:** es el responsable directo de la línea B2B (responsabilidad por resultado 100), el CEO (gerencia 100) y core de la gestión B2B (impacto 100). Su número refleja el peso de la responsabilidad que carga, no un privilegio.
 
-**Por qué Facu tiene el revenue share más alto:** es el responsable directo de la línea B2B (responsabilidad por resultado 100), el CEO (gerencia 100) y core de la gestión B2B (impacto 100). Su número refleja el peso de la responsabilidad que carga, no un privilegio. Fede y Juana lo superan en el total solo porque suman honorarios de estratega por el trabajo operativo extra de entregar clientes.
+**Por qué Franco queda segundo:** lidera el growth en las dos verticales (Arquitecto 100), que en B2C es la variable más pesada (40%). Su revenue sube fuerte respecto a lo que tenía antes (17,5% de una sola vertical), porque ahora participa de las dos y el sistema reconoce su rol en el motor comercial con una variable propia.
 
-**El honorario de estratega no es revenue share:** es el pago por entregar un cliente, igual que cobraría cualquier estratega creativo. Quien entrega, cobra. Si Fede y Juana dejan de tomar clientes, dejan de cobrar ese extra.
+**Nota sobre Segundo:** cobra su 5% fijo de cada vertical (B2C + B2B). No participa de la línea Aceleradora. Si entrega un cliente B2B como estratega creativo, cobra USD 600 por ese cliente, además de su fijo.
+
+---
+
+## 8 bis. LÍNEA ACELERADORA
+
+La Aceleradora es la tercera línea de revenue: un **upsell del B2C**, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que **no tiene gastos directos** (la facturación es directamente profit).
+
+**Reparto:** misma lógica de caja (30%), pero con dos diferencias respecto a las otras líneas:
+- **Segundo no participa** de esta línea.
+- **Lola es PM** y cobra un 10% del reparto por gestionar la operación de la línea. El resto se reparte parejo entre los 5 socios.
+
+**Ejemplo: 5 aceleradoras de USD 2.000 en el mes**
+
+| Concepto | Monto USD |
+|---|---|
+| Facturación = Profit (sin gastos) | 10.000 |
+| 30% Caja de Cáscara | 3.000 |
+| **70% Reparto al equipo** | **7.000** |
+
+**Reparto del 70%:**
+
+| Persona | % | Monto USD |
+|---|---|---|
+| Lola (PM) | 10% | 700 |
+| Facu | 18% | 1.260 |
+| Fede | 18% | 1.260 |
+| Juana | 18% | 1.260 |
+| Franco | 18% | 1.260 |
+| Teo | 18% | 1.260 |
+
+Los montos son un ejemplo; varían según cuántas aceleradoras se vendan en el mes. Lo que no varía es la estructura: 30% caja, 10% Lola PM, resto parejo entre los socios.
 
 ---
 
@@ -318,20 +379,40 @@ Hoy la mayoría de las ventas vienen por la comunicación de Cáscara como tal, 
 
 **Esta variable queda como objetivo del Director de Operaciones (Teo):** construir el sistema de tracking que registre, en cada venta, la fuente del lead (marca personal de quién o cuenta oficial de Cáscara), el closer y el setter. Hasta que ese tracking esté bien medido y sea confiable, la variable no se incorpora al cálculo de reparto de ninguna persona.
 
+**No confundir con la variable de growth:** el growth mide quién *construye y mejora el motor* (estrategia, pricing, embudos). El tracking de ventas atribuibles mediría quién *trajo cada venta puntual*. Son cosas distintas: una es estructural (ya está en el sistema), la otra es de atribución individual (todavía no se puede medir).
+
 ---
 
 ## 11. VARIABLES ABIERTAS
 
 1. **Costo de venta B2B del 17,5%** es supuesto. Cuando arranque B2B real, se ajusta.
-2. **Estrategas creativos junior cobran USD 600** por cliente entregado (costo directo).
+2. **Estrategas creativos cobran USD 600** por cliente entregado (costo directo). Lo cobra quien efectivamente entrega el cliente.
 3. **Segundo entra al sistema de puntajes** después de los primeros 3 meses, cuando su rol se consolide.
 4. **Piso mínimo de profit mensual** para activar el reparto completo.
 5. **Tratamiento de clientes B2B del ecosistema** (Newro, REIN, etc.).
 6. **Tracking de ventas atribuibles** — objetivo de Operaciones, sin fecha de implementación hasta estar bien medido.
+7. **Volumen de la Aceleradora** — el ejemplo usa 5 ventas/mes; el real se verá con el tiempo.
 
 ---
 
-## 12. NOTA SOBRE LOS NÚMEROS
+## 12. EQUITY DEL POOL (FRANCO Y TEO)
+
+El revenue share (este documento) y el equity (documento de founders) son cosas independientes. El revenue es el pago operativo del mes; el equity es la propiedad de largo plazo. Una persona puede tener uno, el otro, o los dos.
+
+Como reconocimiento de largo plazo, se propone otorgar equity del pool de empleados (el 10% reservado) a Franco y Teo:
+
+| Persona | Equity del pool | Vesting | Fundamento |
+|---|---|---|---|
+| Franco | 5% | 4 años, fecha retroactiva | Construyó el motor comercial (departamento, pricing, embudos, auditoría de producto). Su upside de largo plazo, más allá del revenue mensual. |
+| Teo | 3% | 4 años, fecha retroactiva | Sostiene la operación de la empresa, armó la primera versión del producto, es la columna vertebral estructural. |
+
+Entre los dos usan 8% del pool de 10%, dejando 2% de margen para futuros reconocimientos sin diluir a los founders. El vesting es el mismo que el de los founders (4 años) para mantener coherencia; la fecha retroactiva reconoce el tiempo ya invertido.
+
+**Importante:** este equity no cambia aunque el revenue share de cada uno suba o baje. Son dos sistemas separados. El equity responde al costo de oportunidad y al largo plazo; el revenue, al aporte operativo del mes.
+
+---
+
+## 13. NOTA SOBRE LOS NÚMEROS
 
 Todos los montos son una **simulación** sobre datos reales de Abril 2026 (B2C) y un escenario hipotético de 10 clientes a USD 3.500 (B2B, que recién arranca).
 
