@@ -244,6 +244,14 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 .punt-tab.active { background:var(--blue); color:#fff; }
 .punt-panel { display:none; }
 .punt-panel.active { display:block; }
+/* ---------- Fix de render: grano solo en la slide visible ----------
+   El grano per-slide (filtro SVG feTurbulence + mix-blend-mode) se repetía en
+   las 41 slides a la vez. Eso saturaba el compositor del navegador y dejaba
+   TODAS las slides en blanco (se notó con _11 por tener más slides que _9).
+   Se limita el grano a la slide activa (y a la saliente durante la transición):
+   1–2 capas en vez de 41. Mantiene la textura, elimina el bug. */
+.s-slide::after { display:none; }
+.s-slide.active::after, .s-slide.prev::after { display:block; }
 </style></head>
 <body>
 <div class="deck">
