@@ -227,6 +227,16 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
    borrar estas 2 líneas y usar .s-slide.active::after{display:block}. */
 .s-slide::after, .s-slide.dark::after { display:none !important; }
 
+/* ---------- Compatibilidad Chrome / GPU ----------
+   Chrome con aceleración por hardware renderizaba mal los overlays con
+   backdrop-filter / filter:blur: los modales (position:fixed, pantalla completa,
+   z-index:200) quedaban como una capa borrosa que tapaba todo aunque estuvieran
+   cerrados. Safari los maneja bien. Se neutralizan los efectos de GPU: */
+.modal { display:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; background:rgba(10,10,12,0.84) !important; transition:none !important; }
+.modal.open { display:flex !important; }
+.s-nav { -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+.s-slide.dark::before { display:none !important; }
+
 /* ---------- Slide final: documentos respaldatorios ---------- */
 .dl-grid { display:grid; grid-template-columns:1fr 1fr; gap:2vw; margin-top:2vh; }
 .dl-card { display:flex; flex-direction:column; justify-content:space-between; min-height:46vh; padding:38px 40px 32px; background:var(--cream-soft); border:1px solid var(--line-strong); border-radius:22px; text-decoration:none; color:inherit; position:relative; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
