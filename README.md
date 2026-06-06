@@ -9,7 +9,7 @@ La última slide ofrece la descarga de los **dos documentos respaldatorios** en 
 ## Estructura
 
 ```
-index.html                          → el deck (41 slides, navegación con ← →)
+index.html                          → el deck (45 slides, navegación con ← →)
 docs/
   cascara-founders.pdf              → Documento 01 · Founders, Equity y Revenue
   cascara-estructura-economica.pdf  → Documento 02 · Estructura Económica B2C + B2B

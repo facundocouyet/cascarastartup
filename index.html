@@ -12,12 +12,8 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sans); -webkit-font-smoothing:antialiased; min-height:100vh; }
 .deck { position:relative; width:100vw; height:100vh; overflow:hidden; }
-.s-slide { position:absolute; inset:0; padding:5vh 6vw 8vh; background:var(--cream); opacity:0; pointer-events:none; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
+.s-slide { position:absolute; inset:0; padding:5vh 6vw 8vh; background:var(--cream); opacity:0; pointer-events:none; display:flex; flex-direction:column; justify-content:center; overflow:hidden; } /* sin transition: cambio de slide instantáneo (evita parpadeo y bug de compositor de Chrome) */
 .s-slide.active { opacity:1; pointer-events:auto; }
-/* Cambio de slide instantáneo (sin transition de opacidad): evita tanto el
-   parpadeo del fondo como el bug del compositor GPU de Chrome (que dejaba la
-   pantalla en blanco al pasar de página). El antiguo crossfade con z-index/.prev
-   se quitó a propósito. */
 .s-slide::after { content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.18; mix-blend-mode:multiply; pointer-events:none; z-index:4; }
 .s-slide.dark { background:var(--blue); color:white; }
 .s-slide.dark::after { mix-blend-mode:overlay; opacity:0.45; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -220,20 +216,42 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 .mini-table td{padding:0.7vh 0;border-bottom:1px solid rgba(0,0,0,0.08)}
 .mini-table td.r{text-align:right;font-variant-numeric:tabular-nums}
 .mini-table tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:1vh}
-/* ---------- Grano desactivado ----------
-   El grano per-slide (filtro SVG feTurbulence + mix-blend-mode ×41 slides)
-   saturaba el compositor del navegador y dejaba las slides en blanco.
-   Se desactiva por completo. Para re-activarlo solo en la slide visible:
-   borrar estas 2 líneas y usar .s-slide.active::after{display:block}. */
-.s-slide::after, .s-slide.dark::after { display:none !important; }
 
-/* ---------- Compatibilidad Chrome / GPU ----------
-   Chrome con aceleración por hardware renderizaba mal los overlays con
-   backdrop-filter / filter:blur: los modales (position:fixed, pantalla completa,
-   z-index:200) quedaban como una capa borrosa que tapaba todo aunque estuvieran
-   cerrados. Safari los maneja bien. Se neutralizan los efectos de GPU: */
+.b-card-foot{margin-top:auto;padding-top:1.2vh;font-size:0.85vw;color:var(--blue);font-family:var(--font-serif);font-style:italic;border-top:1px solid rgba(20,0,255,0.15)}
+.b-card{display:flex;flex-direction:column}
+
+.timeline-4{display:grid;grid-template-columns:repeat(4,1fr);gap:2vw;margin:3vh 0;position:relative}
+.timeline-4::before{content:'';position:absolute;top:28px;left:8%;right:8%;height:2px;background:var(--blue);opacity:0.3;z-index:0}
+.tl-step{position:relative;z-index:1;text-align:left}
+.tl-num{width:56px;height:56px;border-radius:50%;background:var(--blue);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-style:italic;font-size:24px;margin-bottom:1.5vh}
+.tl-when{font-size:0.8vw;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:0.5vh}
+.tl-step h4{font-size:1.5vw;margin-bottom:0.8vh}
+.tl-step p{font-size:0.95vw;color:var(--ink-muted);line-height:1.4}
+.futuras-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5vw 1.8vw;margin:2.5vh 0}
+.fut-item{background:var(--cream-soft);padding:2vh 1.5vw;border-radius:2px;display:flex;flex-direction:column}
+.fut-n{font-family:var(--font-serif);font-style:italic;color:var(--blue);font-size:1.6vw;margin-bottom:0.6vh}
+.fut-item h4{font-size:1.15vw;margin-bottom:0.6vh;line-height:1.1}
+.fut-item p{font-size:0.82vw;color:var(--ink-muted);line-height:1.35}
+/* =========================================================
+   FIXES DE COMPATIBILIDAD CHROME / GPU
+   Chrome con aceleración por hardware renderiza mal los efectos
+   que usan el compositor (mix-blend-mode, backdrop-filter, filter:blur)
+   cuando hay muchos a la vez o como overlays de pantalla completa.
+   Safari los maneja bien; Chrome los dejaba en blanco / con una capa
+   borrosa encima. Acá se neutralizan / acotan. (Ver nota al chat.)
+   ========================================================= */
+
+/* 1) Grano: solo en la slide visible (no en las 43 a la vez). Así se mantiene
+      la textura pero hay 1 sola capa de mix-blend-mode en lugar de 43. */
+.s-slide::after { display:none !important; }
+.s-slide.active::after { display:block !important; }
+
+/* 2) Modales: cerrados → display:none (no se renderizan, no aplican su
+      backdrop-filter encima de todo). Al abrir, overlay oscuro SÓLIDO sin blur. */
 .modal { display:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; background:rgba(10,10,12,0.84) !important; transition:none !important; }
 .modal.open { display:flex !important; }
+
+/* 3) Contador y glow: sin backdrop-filter ni filter:blur. */
 .s-nav { -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
 .s-slide.dark::before { display:none !important; }
 
@@ -279,7 +297,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <div class="meta-row"><span class="meta-lbl">Para</span><span class="meta-val">Facu <em>·</em> Fede <em>·</em> Juana</span></div>
     <div class="meta-row"><span class="meta-lbl">Versión</span><span class="meta-val">Mayo 2026</span></div>
   </div>
-</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">01</div></div></section>
+</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">1</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">El salto que estamos dando</div>
 <div class="s-headline">
@@ -290,7 +308,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Claridad de founder</h3><p>Qué significa ser founder: qué te da, qué te exige, qué pasa si no cumplís.</p></div>
   <div class="b-card"><div class="num">02</div><h3>Estructura de startup</h3><p>La base legal y financiera para operar en serio, levantar capital y vender participación algún día.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Reglas claras</h3><p>Lo que separa un proyecto de amigos de una empresa que puede valer millones.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-s-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">02</div></div></section>
+</div><button class="detail-btn" onclick="openModal('m-s-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">2</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Tres conceptos que no hay que mezclar</div>
 <div class="s-headline">
@@ -301,7 +319,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Equity · la propiedad</h3><p>Cuánto de Cáscara te pertenece. El valor si se vende o entra un inversor. No cambia mes a mes. Se protege con contrato.</p><div class="b-foot">tus porciones de la pizza</div></div>
   <div class="b-card"><div class="num">02</div><h3>Revenue · la plata del mes</h3><p>Lo que cada socio retira de lo que Cáscara genera después de costos. Flexible, refleja el aporte real del período.</p><div class="b-foot">cuánto te llevás de la caja</div></div>
   <div class="b-card"><div class="num">03</div><h3>Sueldo · el piso fijo</h3><p>Lo que se cobra fijo por estar operativo, venga como venga el mes. Hoy Cáscara no paga sueldos a founders.</p><div class="b-foot">no se usa hoy</div></div>
-</div><button class="detail-btn" onclick="openModal('m-s-conceptos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">03</div></div></section>
+</div><button class="detail-btn" onclick="openModal('m-s-conceptos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">3</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">El concepto que más cuesta bajar</div>
 <div class="s-headline">
@@ -318,7 +336,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>No es cobrar plata automática todos los meses. No es hacer lo que quieras con tu parte. No es dejar de laburar para sostenerla. No es tuya para siempre sin condiciones.</p>
   </div>
 </div>
-<div class="callout">El equity no te paga el alquiler este mes. Te hace <em>millonario</em> si construimos una empresa que pueda venderse algún día. Por eso importa cuidarlo y seguir construyendo en la dirección correcta.</div><button class="detail-btn" onclick="openModal('m-s-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">04</div></div></section>
+<div class="callout">El equity no te paga el alquiler este mes. Te hace <em>millonario</em> si construimos una empresa que pueda venderse algún día. Por eso importa cuidarlo y seguir construyendo en la dirección correcta.</div><button class="detail-btn" onclick="openModal('m-s-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">4</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Vesting · el mecanismo que protege a todos</div>
 <div class="s-headline">
@@ -336,7 +354,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>Protege a la empresa de founders que se van rápido con un pedazo grande. Protege a los que se quedan. Alinea incentivos: nadie cobra equity sin aportar trabajo sostenido.</p>
     <p>Y es <b>requisito obligatorio</b> para levantar capital: sin vesting firmado, no hay ronda posible.</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-s-vesting')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">05</div></div></section>
+</div><button class="detail-btn" onclick="openModal('m-s-vesting')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">5</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">El cap table</div>
 <div class="s-headline">
@@ -349,7 +367,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">30%</div><h3>Juana</h3><p>Founder</p></div>
   <div class="b-card"><div class="num">10%</div><h3>Pool de equipo</h3><p>Equity reservado (EIP) para hires clave o ascensos futuros.</p></div>
 </div>
-<div class="callout">El <em>pool de empleados</em> es estándar en startups (10-15%). Permite atraer talento sin diluir a los founders, y los inversores lo exigen: un cap table sin pool es red flag en due diligence.</div><button class="detail-btn" onclick="openModal('m-s-captable')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">06</div></div></section>
+<div class="callout">El <em>pool de empleados</em> es estándar en startups (10-15%). Permite atraer talento sin diluir a los founders, y los inversores lo exigen: un cap table sin pool es red flag en due diligence.</div><button class="detail-btn" onclick="openModal('m-s-captable')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">6</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Founder · Owner · Partner</div>
 <div class="s-headline">
@@ -360,7 +378,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Founder</h3><p>Facu, Fede, Juana. Equity + revenue share. Dueños de la empresa, votan decisiones estructurales. Su retorno principal es el valor del equity a largo plazo.</p></div>
   <div class="b-card"><div class="num">02</div><h3>Owner</h3><p>Franco, Teo. Revenue share alto, sin equity por ahora. Operadores estructurales que sostienen el día a día. Su retorno está atado al presente.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Partner</h3><p>Acuerdos puntuales (ej: Segundo). % sobre una unidad específica. Colaborador estratégico sobre una vertical concreta, no sobre el total.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-s-niveles')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">07</div></div></section>
+</div><button class="detail-btn" onclick="openModal('m-s-niveles')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">7</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Dividendos</div>
 <div class="s-headline">
@@ -377,10 +395,10 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>A partir del año 4, si la empresa es rentable y estable, los founders pueden decidir por unanimidad repartir un dividendo anual sobre el excedente de caja, proporcional al equity.</p>
   </div>
 </div>
-<div class="callout">Empezar a repartir dividendos muy temprano genera <em>mentalidad de cobrar</em> en vez de mentalidad de construir. Hoy necesitamos cada dólar para crecer.</div><button class="detail-btn" onclick="openModal('m-s-dividendos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">08</div></div></section>
+<div class="callout">Empezar a repartir dividendos muy temprano genera <em>mentalidad de cobrar</em> en vez de mentalidad de construir. Hoy necesitamos cada dólar para crecer.</div><button class="detail-btn" onclick="openModal('m-s-dividendos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">8</div></div></section>
 <section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">El objetivo de fondo</div>
-<div class="statement">No se trata de <span class="accent">vender</span> Cáscara.<br/>Se trata de construir una empresa<br/>que <span class="accent">pueda venderse</span> si quisiéramos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">09</div></div></section>
+<div class="statement">No se trata de <span class="accent">vender</span> Cáscara.<br/>Se trata de construir una empresa<br/>que <span class="accent">pueda venderse</span> si quisiéramos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">9</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">En qué condiciones Cáscara es vendible</div>
 <div class="s-headline">
@@ -717,65 +735,39 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </div>
 <div class="callout"><b>Por qué un % fijo y no puntaje:</b> <span class="segundo-name">Segundo</span> está construyendo su rol —su marca personal y su lugar en el nuevo módulo del programa junto a Facu—. Mientras se consolida, cobra fijo. A los 3 meses se evalúa incorporarlo al sistema de puntajes como todos.</div><button class="detail-btn" onclick="openModal('m-segundo')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">33</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
-<div class="s-tag">De dónde salen los números</div>
+<div class="s-tag">El B2B, en tres niveles</div>
 <div class="s-headline">
-  <div class="s-title">Antes del reparto:<br/><span class="accent">la base.</span></div>
-  <div class="s-lead">Para que el ejemplo sea real, partimos de números concretos</div>
+  <div class="s-title">Una escalera,<br/>no un <span class="accent">solo producto.</span></div>
+  <div class="s-lead">El cliente entra por abajo y sube según lo que necesita</div>
 </div>
-<div class="split-row" style="grid-template-columns:1fr 1fr;">
-  <div class="split-box cream">
-    <div class="split-lbl" style="font-size:1.3vw;">B2C — datos reales de Abril</div>
-    <table class="mini-table">
-      <tr><td>Facturación</td><td class="r">$32.707</td></tr>
-      <tr><td>− Costos comerciales</td><td class="r">$6.731</td></tr>
-      <tr><td>− Contenido + producción</td><td class="r">$6.466</td></tr>
-      <tr><td>− Gastos directos (pauta, herramientas)</td><td class="r">$925</td></tr>
-      <tr class="tot"><td>= Profit B2C</td><td class="r">$18.584</td></tr>
-    </table>
-  </div>
-  <div class="split-box cream">
-    <div class="split-lbl" style="font-size:1.3vw;">B2B — referencia</div>
-    <table class="mini-table">
-      <tr><td>10 tickets de $3.500</td><td class="r">$35.000</td></tr>
-      <tr><td>− Costos directos y comerciales</td><td class="r">$16.125</td></tr>
-      <tr class="tot"><td>= Profit B2B</td><td class="r">$18.875</td></tr>
-    </table>
-    <div class="split-desc" style="margin-top:1.5vh;">Es el modelo B2B anterior. Lo que importa no es la estructura vieja, sino la <em>facturación de referencia de $35.000</em> para ver cómo repartiría el sistema.</div>
-  </div>
+<div class="card-row c3">
+  <div class="b-card"><div class="num">01</div><h3>Entrada</h3><p><b>Estrategia Creativa.</b> Auditoría, estrategia, sistemas y procesos. El cliente ejecuta. Venta directa desde la web.</p><div class="b-card-foot">USD 1.200 · estratega cobra $500</div></div>
+  <div class="b-card"><div class="num">02</div><h3>Estratega embebido</h3><p><b>Cáscara Member.</b> Un estratega creativo insertado en el equipo del cliente, ejecutando la estrategia, 3 meses.</p><div class="b-card-foot">USD 2.000/mes · estratega cobra $750/mes</div></div>
+  <div class="b-card"><div class="num">03</div><h3>High ticket</h3><p><b>Proyectos premium.</b> Marcas personales y proyectos (Delfina Ferro, Kevsho) ejecutados por el C-level con Fede y Juana.</p><div class="b-card-foot">Reparto propio · ver más adelante</div></div>
 </div>
-<div class="callout">Estos son los números que alimentan el ejemplo del reparto. No son una proyección ni una promesa: son una base concreta (un mes real de B2C y una referencia de B2B) para mostrar <em>cómo funciona el sistema</em>, no cuánto va a ganar cada uno. Lo que se aprueba es la lógica, no estas cifras.</div><button class="detail-btn" onclick="openModal('m-datos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">34</div></div></section>
-<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">24,0%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">22,2%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">19,1%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">18,5%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">100</td><td class="r serif">41,0</td><td class="r">16,1%</td></tr></tbody></table></div><div class="punt-panel" data-panel="b2b"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">100</td><td class="r">40</td><td class="r">100</td><td class="r">—</td><td class="r serif">78,0</td><td class="r">31,6%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">19,8%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">18,6%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">18,6%</td></tr><tr><td class="bold">Teo</td><td class="r">—</td><td class="r">60</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r serif">28,0</td><td class="r">11,3%</td></tr></tbody></table></div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">35</div></div></section>
+<div class="callout">Los niveles 1 y 2 reparten por el sistema de puntajes. El nivel 3 (high ticket) tiene un reparto propio, porque son Fede y Juana quienes ejecutan esos proyectos como creativos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">34</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
-<div class="s-tag">Consolidado mensual · ejemplo</div>
+<div class="s-tag">Nivel 3 · High Ticket</div>
 <div class="s-headline">
-  <div class="s-title">Cómo queda <span class="accent">el reparto.</span></div>
-  <div class="s-lead">Ejemplo sobre Abril 2026 (B2C) y 10 clientes a USD 3.500 (B2B)</div>
+  <div class="s-title">Cáscara<br/><span class="accent">Atelier.</span></div>
+  <div class="s-lead">Marcas personales y proyectos que ejecutan Fede y Juana</div>
+</div>
+<div class="var-intro">
+  <div class="var-intro-box"><div class="vi-lbl">Qué son</div><p>Ofertas personalizadas de estrategia creativa para marcas personales y proyectos (ej: Delfina Ferro, Kevsho), ejecutadas por el C-level de Cáscara con <em>Fede y Juana como creativos</em>.</p></div>
+  <div class="var-intro-box"><div class="vi-lbl">Por qué reparto propio</div><p>Son Fede y Juana quienes ejecutan estos proyectos premium. Por eso cobran más de esta línea (25% c/u): es el reconocimiento de su rol como perfiles high ticket.</p></div>
 </div>
 <table class="big-table">
-  <thead><tr><th>Persona</th><th class="r">B2C</th><th class="r">B2B</th><th class="r">Total mensual</th></tr></thead>
+  <thead><tr><th>Persona</th><th class="r">%</th><th class="r">En un proyecto de $5.000</th></tr></thead>
   <tbody>
-    <tr class="hi"><td class="bold">Facu</td><td class="r">$1.950</td><td class="r">$3.874</td><td class="r serif">$5.824</td></tr>
-    <tr class="hi"><td class="bold">Franco</td><td class="r">$2.901</td><td class="r">$2.434</td><td class="r serif">$5.335</td></tr>
-    <tr><td class="bold">Fede</td><td class="r">$2.687</td><td class="r">$2.285</td><td class="r serif">$4.972</td></tr>
-    <tr><td class="bold">Juana</td><td class="r">$2.307</td><td class="r">$2.285</td><td class="r serif">$4.591</td></tr>
-    <tr><td class="bold">Teo</td><td class="r">$2.235</td><td class="r">$1.391</td><td class="r serif">$3.626</td></tr>
-    <tr><td class="bold">Segundo</td><td class="r">$929</td><td class="r">$944</td><td class="r serif">$1.873</td></tr>
+    <tr class="hi"><td class="bold">Juana</td><td class="r">25%</td><td class="r serif">$1.250</td></tr>
+    <tr class="hi"><td class="bold">Fede</td><td class="r">25%</td><td class="r serif">$1.250</td></tr>
+    <tr><td class="bold">Facu</td><td class="r">17,5%</td><td class="r serif">$875</td></tr>
+    <tr><td class="bold">Franco</td><td class="r">17,5%</td><td class="r serif">$875</td></tr>
+    <tr><td class="bold">Cáscara (caja)</td><td class="r">10%</td><td class="r serif">$500</td></tr>
+    <tr><td class="bold">Lola</td><td class="r">5%</td><td class="r serif">$250</td></tr>
   </tbody>
 </table>
-<div class="callout"><b>Facu</b> queda primero porque carga la responsabilidad por resultado, la gerencia y el impacto del B2B. <b>Franco</b> segundo, porque lidera el growth (la variable más pesada del B2C). Es un reparto que refleja el aporte real de cada uno, no la jerarquía. La línea Aceleradora se suma aparte.</div><button class="detail-btn" onclick="openModal('m-consolidado')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">36</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
-<div class="s-tag">La caja de Cáscara</div>
-<div class="s-headline">
-  <div class="s-title">El 30% que no se reparte<br/><span class="accent">construye la empresa.</span></div>
-  <div class="s-lead">Con la facturación de ejemplo, ~USD 135k al año</div>
-</div>
-<div class="card-row c5">
-  <div class="b-card"><div class="num">01</div><h3>Legales</h3><p>Transformación societaria, marca, IP. USD 12k/año.</p></div>
-  <div class="b-card"><div class="num">02</div><h3>Contabilidad</h3><p>Estudio profesional, balances. USD 9,6k/año.</p></div>
-  <div class="b-card"><div class="num">03</div><h3>Reserva</h3><p>Contingencia, 3 meses de operación. USD 36k/año.</p></div>
-  <div class="b-card"><div class="num">04</div><h3>Bonos + imprevistos</h3><p>Pool de bonos USD 12k + margen USD 12k.</p></div>
-  <div class="b-card"><div class="num">05</div><h3>Acumulación</h3><p>Crecimiento, oportunidades, dividendos. USD 53k/año.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-caja')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">37</div></div></section>
+<div class="callout">Acá el 10% de caja reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos. Si el proyecto sale $10.000, Fede y Juana cobran $2.500 cada uno.</div><button class="detail-btn" onclick="openModal('m-highticket')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">35</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Tercera línea · La Aceleradora</div>
 <div class="s-headline">
@@ -791,7 +783,67 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="split-box cream"><div class="split-pct">30%</div><div class="split-lbl">Caja de Cáscara</div><div class="split-desc">Igual que todas las líneas</div></div>
   <div class="split-box cream"><div class="split-pct">70%</div><div class="split-lbl">Reparto al equipo</div><div class="split-desc">Lola PM 10% + los 5 socios parejo</div></div>
 </div>
-<div class="callout">La Aceleradora es simple: <em>sin gastos directos</em> (se vende con una llamada), aporta 30% a la caja como todo, <b>Lola gestiona como PM</b> (10% del reparto) y el resto se divide parejo entre los 5 socios. Segundo no participa de esta línea.</div><button class="detail-btn" onclick="openModal('m-acelera')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
+<div class="callout">La Aceleradora es simple: <em>sin gastos directos</em> (se vende con una llamada), aporta 30% a la caja como todo, <b>Lola gestiona como PM</b> (10% del reparto) y el resto se divide parejo entre los 5 socios. Segundo no participa de esta línea.</div><button class="detail-btn" onclick="openModal('m-acelera')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">36</div></div></section>
+<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="s-tag">De dónde salen los números</div>
+<div class="s-headline">
+  <div class="s-title">Un mes,<br/><span class="accent">simulado.</span></div>
+  <div class="s-lead">Las cuatro líneas activas, con costos en la proporción real de Abril</div>
+</div>
+<div class="split-row" style="grid-template-columns:1fr 1fr;">
+  <div class="split-box cream">
+    <table class="mini-table">
+      <tr><td><b>B2C base</b></td><td class="r"><b>$84.000</b></td></tr>
+      <tr><td>− Costos (43%, prop. Abril)</td><td class="r">$36.269</td></tr>
+      <tr class="tot"><td>= Profit B2C</td><td class="r">$47.731</td></tr>
+      <tr><td><b>Aceleradora</b> (8 × $2.000)</td><td class="r"><b>$16.000</b></td></tr>
+      <tr><td>sin gastos directos</td><td class="r">profit $16.000</td></tr>
+    </table>
+  </div>
+  <div class="split-box cream">
+    <table class="mini-table">
+      <tr><td><b>B2B nivel 1</b> (20 × $1.200)</td><td class="r"><b>$24.000</b></td></tr>
+      <tr><td><b>B2B nivel 2</b> (5 × $2.000)</td><td class="r"><b>$10.000</b></td></tr>
+      <tr><td>− Estrategas creativos</td><td class="r">$13.750</td></tr>
+      <tr class="tot"><td>= Profit B2B 1-2</td><td class="r">$20.250</td></tr>
+      <tr><td><b>High ticket</b> (4 × $5.000)</td><td class="r"><b>$20.000</b></td></tr>
+    </table>
+  </div>
+</div>
+<div class="callout">Facturación total del mes: <em>USD 154.000</em>. Es un ejemplo de referencia para ver el sistema funcionando a escala — no una proyección. Lo que se aprueba es la lógica de reparto, no estas cifras puntuales.</div><button class="detail-btn" onclick="openModal('m-datos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">37</div></div></section>
+<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">25%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">23%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">19%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">60</td><td class="r serif">35,0</td><td class="r">14%</td></tr></tbody></table></div><div class="punt-panel" data-panel="b2b"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">30</td><td class="r">20</td><td class="r">100</td><td class="r">—</td><td class="r serif">64,0</td><td class="r">26%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">21%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">30</td><td class="r">30</td><td class="r">10</td><td class="r">60</td><td class="r">—</td><td class="r serif">29,0</td><td class="r">13%</td></tr></tbody></table></div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
+<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="s-tag">Consolidado mensual · simulación</div>
+<div class="s-headline">
+  <div class="s-title">De qué línea<br/><span class="accent">cobra cada uno.</span></div>
+  <div class="s-lead">Un mes con las cuatro líneas activas · facturación total $154.000</div>
+</div>
+<table class="big-table">
+  <thead><tr><th>Persona</th><th class="r">B2C</th><th class="r">B2B 1-2</th><th class="r">High Tk</th><th class="r">Aceleradora</th></tr></thead>
+  <tbody>
+    <tr><td class="bold">Facu</td><td class="r">$4.379</td><td class="r">$2.905</td><td class="r">$3.500</td><td class="r">$2.016</td></tr>
+    <tr><td class="bold">Fede</td><td class="r">$7.068</td><td class="r">$2.228</td><td class="r">$5.000</td><td class="r">$2.016</td></tr>
+    <tr><td class="bold">Juana</td><td class="r">$6.067</td><td class="r">$2.228</td><td class="r">$5.000</td><td class="r">$2.016</td></tr>
+    <tr><td class="bold">Franco</td><td class="r">$7.631</td><td class="r">$2.373</td><td class="r">$3.500</td><td class="r">$2.016</td></tr>
+    <tr><td class="bold">Teo</td><td class="r">$5.880</td><td class="r">$1.404</td><td class="r">—</td><td class="r">$2.016</td></tr>
+    <tr><td class="bold">Lola</td><td class="r">—</td><td class="r">$2.025</td><td class="r">$1.000</td><td class="r">$1.120</td></tr>
+    <tr><td class="bold">Segundo</td><td class="r">$2.387</td><td class="r">$1.012</td><td class="r">—</td><td class="r">—</td></tr>
+  </tbody>
+</table>
+<div class="callout">Cada uno cobra de las líneas en las que aporta. Es un mes simulado: los montos varían, lo que no cambia es la lógica de cada línea. <em>Tocá "más detalles" para ver la simulación completa.</em></div><button class="detail-btn" onclick="openModal('m-consolidado')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">39</div></div></section>
+<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="s-tag">La caja de Cáscara</div>
+<div class="s-headline">
+  <div class="s-title">El 30% que no se reparte<br/><span class="accent">construye la empresa.</span></div>
+  <div class="s-lead">Con la facturación de ejemplo, ~USD 135k al año</div>
+</div>
+<div class="card-row c5">
+  <div class="b-card"><div class="num">01</div><h3>Legales</h3><p>Transformación societaria, marca, IP. USD 12k/año.</p></div>
+  <div class="b-card"><div class="num">02</div><h3>Contabilidad</h3><p>Estudio profesional, balances. USD 9,6k/año.</p></div>
+  <div class="b-card"><div class="num">03</div><h3>Reserva</h3><p>Contingencia, 3 meses de operación. USD 36k/año.</p></div>
+  <div class="b-card"><div class="num">04</div><h3>Bonos + imprevistos</h3><p>Pool de bonos USD 12k + margen USD 12k.</p></div>
+  <div class="b-card"><div class="num">05</div><h3>Acumulación</h3><p>Crecimiento, oportunidades, dividendos. USD 53k/año.</p></div>
+</div><button class="detail-btn" onclick="openModal('m-caja')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">40</div></div></section>
 <section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Equity del pool · Franco y Teo</div>
 <div class="s-headline">
@@ -803,12 +855,41 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">3%</div><h3>Teo</h3><p>Del pool de empleados. Vesting 4 años, fecha retroactiva. Por sostener la operación y ser la columna vertebral estructural de la empresa.</p></div>
   <div class="b-card"><div class="num">2%</div><h3>Margen</h3><p>Queda en el pool para futuros reconocimientos, sin diluir a los founders.</p></div>
 </div>
-<div class="callout">El equity <em>no cambia</em> aunque el revenue share suba o baje. Son dos sistemas separados: el equity responde al costo de oportunidad y al largo plazo; el revenue, al aporte operativo del mes.</div><button class="detail-btn" onclick="openModal('m-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">39</div></div></section>
+<div class="callout">El equity <em>no cambia</em> aunque el revenue share suba o baje. Son dos sistemas separados: el equity responde al costo de oportunidad y al largo plazo; el revenue, al aporte operativo del mes.</div><button class="detail-btn" onclick="openModal('m-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">41</div></div></section>
+<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="s-tag">Cómo se revisa el sistema</div>
+<div class="s-headline">
+  <div class="s-title">Esto no es <span class="accent">una foto fija.</span></div>
+  <div class="s-lead">Cada trimestre el sistema se revisa dentro del ritual de planificación</div>
+</div>
+<div class="timeline-4">
+  <div class="tl-step"><div class="tl-num">1</div><div class="tl-when">Semana 1</div><h4>Planificación</h4><p>Cada director arma el plan de su área.</p></div>
+  <div class="tl-step"><div class="tl-num">2</div><div class="tl-when">Semana 2</div><h4>Revisión</h4><p>Teo y Facu comentan y aprueban.</p></div>
+  <div class="tl-step"><div class="tl-num">3</div><div class="tl-when">Semanas 3-12</div><h4>Ejecución</h4><p>5 check-ins quincenales. Teo audita.</p></div>
+  <div class="tl-step"><div class="tl-num">4</div><div class="tl-when">Semana 13</div><h4>Cierre</h4><p>Retro y análisis del trimestre.</p></div>
+</div>
+<div class="callout">En el cierre y la planificación siguiente se revisan los pesos, los niveles, las líneas activas y los repartos. Si la realidad del negocio cambió, el sistema se ajusta ahí — de forma ordenada, no improvisada. <em>El sistema vive dentro del ritual trimestral.</em></div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">42</div></div></section>
+<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="s-tag">Hacia dónde vamos</div>
+<div class="s-headline">
+  <div class="s-title">Las líneas que<br/><span class="accent">vienen.</span></div>
+  <div class="s-lead">Todavía no reparten, pero marcan el horizonte de Cáscara</div>
+</div>
+<div class="futuras-grid">
+  <div class="fut-item"><span class="fut-n">01</span><h4>Growth partners</h4><p>Producir marcas y proyectos de forma apalancada, ganando revenue share del lanzamiento y del negocio.</p></div>
+  <div class="fut-item"><span class="fut-n">02</span><h4>Anexos de nicho en B2C</h4><p>Sumar marcas personales de distintos nichos como módulos (startups, lifestyle, etc.).</p></div>
+  <div class="fut-item"><span class="fut-n">03</span><h4>Low ticket</h4><p>Un producto de entrada masivo y accesible.</p></div>
+  <div class="fut-item"><span class="fut-n">04</span><h4>Diseño gráfico</h4><p>Como unidad de negocio lateral.</p></div>
+  <div class="fut-item"><span class="fut-n">05</span><h4>Mailing como embudo</h4><p>El email como canal de adquisición y conversión.</p></div>
+  <div class="fut-item"><span class="fut-n">06</span><h4>Eventos y activaciones</h4><p>Experiencias culturales presenciales monetizables.</p></div>
+  <div class="fut-item"><span class="fut-n">07</span><h4>YouTube</h4><p>El contenido propio como revenue directo.</p></div>
+</div>
+<div class="callout">Cada una se irá incorporando al sistema cuando se active, con su propia lógica de reparto, en las revisiones trimestrales.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">43</div></div></section>
 <section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
 <div class="s-tag">Lo que se aprueba</div>
 <div class="statement" style="font-size:4.4vw;">Lo que se aprueba hoy<br/>no son los números.<br/>Es <span class="accent">el sistema.</span></div>
-<button class="detail-btn" onclick="openModal('m-completo')" style="margin-top:5vh;">+ Ver informe completo entero</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">40</div></div></section>
-<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Documentos de respaldo</div><div class="s-headline"><div class="s-title">Descargá los<br/><span class="accent">documentos completos.</span></div><div class="s-lead">La presentación es el resumen visual. Estos dos documentos son la fuente de verdad: todos los números, las fórmulas y los criterios.</div></div><div class="dl-grid"><a class="dl-card" href="docs/cascara-founders.pdf" download><div class="dl-num">Documento 01</div><div class="dl-mid"><div class="dl-title">Estructura de <em>Founders, Equity y Revenue</em></div><div class="dl-desc">Qué significa ser founder, cómo funciona el equity y el vesting, el cap table, los niveles de socio y la transformación de Cáscara en startup.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Documento de socios</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a><a class="dl-card" href="docs/cascara-estructura-economica.pdf" download><div class="dl-num">Documento 02</div><div class="dl-mid"><div class="dl-title">Estructura <em>Económica B2C + B2B</em></div><div class="dl-desc">El sistema de puntajes, los pesos por variable, el reparto del profit, la caja de Cáscara y todos los números de respaldo.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Respaldo completo</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a></div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">41</div></div></section>
+<button class="detail-btn" onclick="openModal('m-completo')" style="margin-top:5vh;">+ Ver informe completo entero</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">44</div></div></section>
+<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Documentos de respaldo</div><div class="s-headline"><div class="s-title">Descargá los<br/><span class="accent">documentos completos.</span></div><div class="s-lead">La presentación es el resumen visual. Estos dos documentos son la fuente de verdad: todos los números, las fórmulas y los criterios.</div></div><div class="dl-grid"><a class="dl-card" href="docs/cascara-founders.pdf" download><div class="dl-num">Documento 01</div><div class="dl-mid"><div class="dl-title">Estructura de <em>Founders, Equity y Revenue</em></div><div class="dl-desc">Qué significa ser founder, cómo funciona el equity y el vesting, el cap table, los niveles de socio y la transformación de Cáscara en startup.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Documento de socios</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a><a class="dl-card" href="docs/cascara-estructura-economica.pdf" download><div class="dl-num">Documento 02</div><div class="dl-mid"><div class="dl-title">Estructura <em>Económica · 4 líneas</em></div><div class="dl-desc">El sistema de puntajes, los pesos por variable, las cuatro líneas de revenue (B2C, B2B, Aceleradora, High Ticket), el reparto y la caja.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Respaldo completo</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a></div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">45</div></div></section>
 </div>
 <div class="s-nav"><button id="prev">‹</button><span class="counter" id="counter">1</span><button id="next">›</button></div>
 <div class="modal" id="m-s-porque"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Documento · Por qué existe</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
@@ -1650,40 +1731,61 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </ul>
 <p><b>Por qué % fijo y no puntaje:</b> Segundo está construyendo su rol (marca personal desde el ángulo startup × creatividad, futuro módulo del programa V3 junto a Facu). Hasta que ese rol se consolide, cobra fijo. Al cierre de los primeros 3 meses se evalúa incorporarlo al sistema de puntajes.</p></div></div></div>
 <div class="modal" id="m-datos"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Datos de partida</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
-<h3>5. Datos de partida</h3>
-<h4>B2C — datos reales de Abril 2026</h4>
+<h3>5. Datos de partida — simulación de un mes</h3>
+<p>Para mostrar el sistema funcionando a escala, simulamos un mes completo con las cuatro líneas. Los costos del B2C usan la proporción real de Abril (43%).</p>
+<h4>B2C base</h4>
 <table>
 <tr><th>Concepto</th><th>USD</th></tr>
-<tr><td>Facturación (cash recibido)</td><td>32.707</td></tr>
-<tr><td>Costos comerciales</td><td>6.731</td></tr>
-<tr><td>Contenido y producción</td><td>6.466</td></tr>
-<tr><td>Gastos directos (pauta, herramientas)</td><td>925</td></tr>
-<tr><td><b>Profit B2C</b></td><td><b>18.584</b></td></tr>
+<tr><td>Facturación del programa base</td><td>84.000</td></tr>
+<tr><td>Costos (43%, proporción Abril)</td><td>-36.269</td></tr>
+<tr><td><b>Profit B2C</b></td><td><b>47.731</b></td></tr>
 </table>
-<h4>B2B — escenario de referencia</h4>
-<p>Se usa una referencia de 10 clientes a USD 3.500 = <b>USD 35.000 de facturación</b>, con costos directos y comerciales que dejan un profit de USD 18.875. Es el modelo B2B anterior; lo relevante es la facturación de referencia, no su estructura interna, que se va a actualizar cuando el B2B esté activo de verdad.</p>
-<p><b>Por qué importa esta slide:</b> sin una base concreta, el reparto serían porcentajes en el aire. Partir de la facturación real de abril (B2C) y una referencia clara (B2B) permite ver el sistema funcionando sobre números de verdad. Pero lo que se aprueba es el sistema —la fórmula, los pesos, los criterios— no estos montos puntuales, que van a variar todos los meses.</p></div></div></div>
+<h4>B2B niveles 1 y 2</h4>
+<table>
+<tr><th>Concepto</th><th>USD</th></tr>
+<tr><td>Nivel 1: 20 × 1.200</td><td>24.000</td></tr>
+<tr><td>Nivel 2: 5 × 2.000</td><td>10.000</td></tr>
+<tr><td>Estrategas creativos (20×500 + 5×750)</td><td>-13.750</td></tr>
+<tr><td><b>Profit B2B 1-2</b></td><td><b>20.250</b></td></tr>
+</table>
+<p>El B2B no tiene costo comercial: el nivel 1 se vende directo desde la web sin llamada.</p>
+<h4>High ticket y Aceleradora</h4>
+<p>High ticket: 4 proyectos de USD 5.000 = USD 20.000 (reparto propio). Aceleradora: 8 ventas de USD 2.000 = USD 16.000, sin gastos directos (reparto propio).</p>
+<p>Facturación total del mes simulado: USD 154.000. Los montos varían cada mes; lo que se aprueba es el sistema, no estas cifras.</p></div></div></div>
 <div class="modal" id="m-consolidado"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Puntajes, reparto y consolidado</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>Puntajes y reparto</h3>
 <h4>B2C — Growth 40% / Impacto 30% / Marca 15% / Gerencia 15%</h4>
 <table>
 <tr><th>Persona</th><th>Puntaje</th><th>%</th><th>USD</th></tr>
-<tr><td>Franco — Arquitecto growth + Importante</td><td>61,0</td><td>24,0%</td><td>2.901</td></tr>
-<tr><td>Fede — Core + Referente + Ejecuta growth</td><td>56,5</td><td>22,2%</td><td>2.687</td></tr>
-<tr><td>Juana — Core + Referente</td><td>48,5</td><td>19,1%</td><td>2.307</td></tr>
-<tr><td>Teo — Importante + CEO gerencia</td><td>47,0</td><td>18,5%</td><td>2.235</td></tr>
-<tr><td>Facu — Importante + CEO gerencia</td><td>41,0</td><td>16,1%</td><td>1.950</td></tr>
+<tr><td>Franco — Arquitecto growth + Importante</td><td>61,0</td><td>25%</td><td>7.631</td></tr>
+<tr><td>Fede — Core + Referente + Ejecuta growth</td><td>56,5</td><td>23%</td><td>7.068</td></tr>
+<tr><td>Juana — Core + Referente</td><td>48,5</td><td>20%</td><td>6.067</td></tr>
+<tr><td>Teo — Importante + Dirección general</td><td>47,0</td><td>19%</td><td>5.880</td></tr>
+<tr><td>Facu — Importante + Acompañamiento estratégico</td><td>35,0</td><td>14%</td><td>4.379</td></tr>
 </table>
-<h4>B2B — Resp 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%</h4>
+<p>En el B2C, Teo tiene la dirección general (100) y Facu el acompañamiento estratégico (60): en el programa educativo Teo conduce y Facu da soporte. En el B2B se invierte.</p>
+<h4>B2B niveles 1-2 — Resp 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%</h4>
 <table>
 <tr><th>Persona</th><th>Puntaje</th><th>%</th><th>USD</th></tr>
-<tr><td>Facu — Responsable + Core + CEO</td><td>78,0</td><td>31,6%</td><td>3.874</td></tr>
-<tr><td>Franco — Arquitecto growth + Core</td><td>49,0</td><td>19,8%</td><td>2.434</td></tr>
-<tr><td>Fede — Auditor + Core + Presencia</td><td>46,0</td><td>18,6%</td><td>2.285</td></tr>
-<tr><td>Juana — Auditor + Core + Presencia</td><td>46,0</td><td>18,6%</td><td>2.285</td></tr>
-<tr><td>Teo — Importante + DirOps gerencia</td><td>28,0</td><td>11,3%</td><td>1.391</td></tr>
+<tr><td>Facu — Responsable + Soporte + Dir. general</td><td>64,0</td><td>26%</td><td>2.905</td></tr>
+<tr><td>Franco — Arquitecto growth + Core</td><td>49,0</td><td>21%</td><td>2.373</td></tr>
+<tr><td>Fede — Auditor + Core + Participa + Presencia</td><td>46,0</td><td>20%</td><td>2.228</td></tr>
+<tr><td>Juana — Auditor + Core + Participa + Presencia</td><td>46,0</td><td>20%</td><td>2.228</td></tr>
+<tr><td>Teo — Soporte + Acompaña + Acomp. estratégico</td><td>29,0</td><td>13%</td><td>1.404</td></tr>
 </table>
-<p><b>Nota:</b> todos los montos son una simulación sobre datos reales de Abril 2026 (B2C) y un escenario de 10 clientes a USD 3.500 (B2B, que recién arranca). Los números reales van a variar mes a mes. Lo que no varía es el sistema.</p></div></div></div>
+<p>En B2B 1-2 el reparto por puntajes es el 55% del profit (30% caja + 5% Segundo + 10% Lola + 55% reparto). High ticket y Aceleradora tienen reparto propio.</p>
+<h4>Consolidado del mes simulado (suma de las cuatro líneas)</h4>
+<table>
+<tr><th>Persona</th><th>B2C</th><th>B2B</th><th>High Tk</th><th>Acel</th><th>Total</th></tr>
+<tr><td>Fede</td><td>7.068</td><td>2.228</td><td>5.000</td><td>2.016</td><td>16.312</td></tr>
+<tr><td>Franco</td><td>7.631</td><td>2.373</td><td>3.500</td><td>2.016</td><td>15.520</td></tr>
+<tr><td>Juana</td><td>6.067</td><td>2.228</td><td>5.000</td><td>2.016</td><td>15.311</td></tr>
+<tr><td>Facu</td><td>4.379</td><td>2.905</td><td>3.500</td><td>2.016</td><td>12.800</td></tr>
+<tr><td>Teo</td><td>5.880</td><td>1.404</td><td>—</td><td>2.016</td><td>9.300</td></tr>
+<tr><td>Lola</td><td>—</td><td>2.025</td><td>1.000</td><td>1.120</td><td>4.145</td></tr>
+<tr><td>Segundo</td><td>2.387</td><td>1.012</td><td>—</td><td>—</td><td>3.399</td></tr>
+</table>
+<p>Todos los montos son de la simulación del mes; varían mes a mes. Lo que no varía es el sistema.</p></div></div></div>
 <div class="modal" id="m-caja"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Caja de Cáscara y presupuesto</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>9. Caja de Cáscara</h3>
 <table>
@@ -1717,21 +1819,34 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <p><b>Reglas:</b> los KPIs se definen al inicio del trimestre. Los founders no pueden ganar más de una categoría por trimestre, para forzar que los bonos se distribuyan en el equipo. El MVP requiere unanimidad. Los bonos se anuncian públicamente: la transparencia es parte del juego.</p></div></div></div>
 <div class="modal" id="m-acelera"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Línea Aceleradora</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>8 bis. Línea Aceleradora</h3>
-<p>La Aceleradora es la tercera línea de revenue: un <b>upsell del B2C</b>, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que <b>no tiene gastos directos</b> (la facturación es directamente profit).</p>
-<p><b>Reparto:</b> misma lógica de caja (30%), con dos diferencias: Segundo no participa, y Lola es PM (cobra 10% del reparto por gestionar la línea). El resto se reparte parejo entre los 5 socios.</p>
-<h4>Ejemplo: 5 aceleradoras de USD 2.000 en el mes</h4>
+<p>La Aceleradora es un <b>upsell del B2C</b>, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que <b>no tiene gastos directos</b> (la facturación es directamente profit).</p>
+<p><b>Reparto:</b> 30% caja, y del 70% restante, Lola cobra 10% como PM y el resto se reparte parejo entre los 5 socios. Segundo no participa.</p>
+<h4>Ejemplo: 8 aceleradoras de USD 2.000 en el mes (USD 16.000)</h4>
 <table>
 <tr><th>Concepto</th><th>USD</th></tr>
-<tr><td>Facturación = Profit (sin gastos)</td><td>10.000</td></tr>
-<tr><td>30% Caja de Cáscara</td><td>3.000</td></tr>
-<tr><td><b>70% Reparto al equipo</b></td><td><b>7.000</b></td></tr>
+<tr><td>Facturación = Profit (sin gastos)</td><td>16.000</td></tr>
+<tr><td>30% Caja de Cáscara</td><td>4.800</td></tr>
+<tr><td><b>70% Reparto al equipo</b></td><td><b>11.200</b></td></tr>
 </table>
 <table>
 <tr><th>Persona</th><th>%</th><th>USD</th></tr>
-<tr><td>Lola (PM)</td><td>10%</td><td>700</td></tr>
-<tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>1.260 c/u</td></tr>
+<tr><td>Lola (PM)</td><td>10%</td><td>1.120</td></tr>
+<tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>2.016 c/u</td></tr>
 </table>
 <p>Los montos son un ejemplo; varían según cuántas aceleradoras se vendan. Lo que no varía es la estructura.</p></div></div></div>
+<div class="modal" id="m-highticket"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · High Ticket (nivel 3)</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
+<h3>8 ter. High Ticket (nivel 3 del B2B)</h3>
+<p>Proyectos premium de estrategia creativa para marcas personales y proyectos (ejemplos: Delfina Ferro, Kevsho), ejecutados por el C-level de Cáscara con Fede y Juana como creativos. Tiene un reparto propio, distinto del B2B general, porque son Fede y Juana quienes ejecutan y por eso cobran más de esta línea.</p>
+<table>
+<tr><th>Persona</th><th>%</th><th>Proyecto $5.000</th></tr>
+<tr><td>Juana</td><td>25%</td><td>1.250</td></tr>
+<tr><td>Fede</td><td>25%</td><td>1.250</td></tr>
+<tr><td>Facu</td><td>17,5%</td><td>875</td></tr>
+<tr><td>Franco</td><td>17,5%</td><td>875</td></tr>
+<tr><td>Cáscara (caja)</td><td>10%</td><td>500</td></tr>
+<tr><td>Lola</td><td>5%</td><td>250</td></tr>
+</table>
+<p>El 10% que va a la caja reemplaza al 30% de las otras líneas. Los porcentajes son fijos, no dependen de puntajes. Fede y Juana cobran más porque son los creativos que ejecutan el proyecto.</p></div></div></div>
 <div class="modal" id="m-equity"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Equity del pool</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>12. Equity del pool (Franco y Teo)</h3>
 <p>El revenue share y el equity son cosas independientes. El revenue es el pago operativo del mes; el equity es la propiedad de largo plazo. Una persona puede tener uno, el otro, o los dos.</p>
@@ -1754,29 +1869,34 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h3>1. LÓGICA GENERAL</h3>
 
-<p>Cáscara opera con tres unidades de negocio:</p>
+<p>Cáscara opera con cuatro líneas de revenue:</p>
 
 <ul><li><b>B2C</b> — el programa educativo La Cáscara.</li>
-<li><b>B2B</b> — los servicios a clientes (fábrica de contenido y creatividad).</li>
+<li><b>B2B</b> — los servicios a clientes, ahora estructurado en tres niveles (ver abajo).</li>
 <li><b>Aceleradora</b> — el upsell del B2C (programa de aceleración para quienes ya pasaron el programa base).</li>
+<li><b>High Ticket</b> — proyectos premium de estrategia creativa para marcas personales y proyectos (es el nivel 3 del B2B, pero con reparto propio).</li>
 </ul>
-<p>Las dos primeras funcionan con la misma lógica de puntajes. La Aceleradora tiene un reparto más simple (ver sección 8 bis). En todas, la base es la misma:</p>
+<p><b>Los tres niveles del B2B:</b></p>
+
+<ul><li><b>Nivel 1 — Entrada.</b> Estrategia Creativa (done-with-you): auditoría + estrategia + sistemas + procesos, que el cliente ejecuta. Venta directa desde la web, sin llamada. Precio USD 1.200. El estratega creativo que lo entrega cobra USD 500.</li>
+<li><b>Nivel 2 — Estratega embebido (Cáscara Member).</b> Un estratega creativo de Cáscara insertado en el equipo del cliente, ejecutando la estrategia ya armada, durante 3 meses. Precio USD 2.000/mes. El estratega cobra USD 750/mes.</li>
+<li><b>Nivel 3 — High Ticket.</b> Ofertas personalizadas para marcas personales o proyectos premium —Cáscara Atelier— (ejemplos: Delfina Ferro, Kevsho), ejecutadas por el C-level de Cáscara con Fede y Juana como creativos. Tiene un reparto propio (ver sección 11).</li>
+</ul>
+<p><b>La lógica base de cada línea:</b></p>
 
 <pre>
 1. Facturación de la unidad
-2. - Costos comerciales y costos directos
+2. - Costos directos (estrategas creativos, etc.)
 3. = Profit de la unidad
 </pre>
 
-<p>Una vez que tenemos el profit, se divide así (B2C y B2B):</p>
+<p>Una vez que tenemos el profit, se divide así:</p>
 
-<pre>
-30% → Caja de Cáscara (reinversión, reserva, crecimiento)
- 5% → Segundo (% fijo, mientras su rol se consolida)
-65% → Reparto entre el equipo según el sistema de puntajes
-</pre>
+<table><tr><th>Línea</th><th>Caja</th><th>Otros</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>30%</td><td>5% Segundo</td><td>65%</td></tr><tr><td>B2B niveles 1 y 2</td><td>30%</td><td>5% Segundo + 10% Lola</td><td>55%</td></tr><tr><td>Aceleradora</td><td>30%</td><td>10% Lola PM</td><td>70% reparto parejo (sin puntajes)</td></tr><tr><td>High Ticket (nivel 3)</td><td>10%</td><td>5% Lola</td><td>reparto propio fijo</td></tr></table>
 
-<p><b>Por qué Segundo sale acá:</b> del 70% que se destina al equipo, Segundo se lleva un 5% fijo (sobre el profit) y el 65% restante se reparte entre el resto por puntajes. Es decir, Segundo cobra como todos —desde el reparto— pero en lugar de tener puntaje tiene un porcentaje fijo mientras su rol se consolida (ver sección 6).</p>
+<p><b>Sobre Lola:</b> gestiona el delivery de las líneas B2B y la Aceleradora, así que cobra un porcentaje de cada una: 10% en B2B niveles 1 y 2, 10% en la Aceleradora, y 5% en el high ticket. Es su pago por sostener la operación de la entrega.</p>
+
+<p><b>Sobre Segundo:</b> se lleva un 5% fijo del profit de B2C y de B2B (niveles 1 y 2) mientras su rol se consolida (ver sección 6). No participa de la Aceleradora ni del high ticket.</p>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
@@ -1805,6 +1925,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </ul>
 <p>Si el equipo suma 254 puntos, Franco se queda con 61/254 = 24,0% <b>del reparto</b> (el 65% del profit que queda después de la caja y de Segundo).</p>
 
+<p><b>Redondeo de los porcentajes:</b> para que la ejecución administrativa del reparto sea simple, los porcentajes se redondean con la lógica matemática estándar (si la fracción es 0,5 o más, sube al entero siguiente; si es menor, baja). Así la administración trabaja con números enteros en vez de decimales largos.</p>
+
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
 <h3>3. LAS VARIABLES, EXPLICADAS</h3>
@@ -1825,6 +1947,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Embajador</td><td>100</td><td>Su marca es motor de venta de la vertical: habla del producto/rubro y produce contenido constante que atrae.</td></tr><tr><td>Referente</td><td>70</td><td>Construye autoridad en la materia de forma constante.</td></tr><tr><td>Presencia</td><td>40</td><td>Aporta autoridad pero sin constancia.</td></tr><tr><td>Sin uso</td><td>0</td><td>No usa su marca personal para esta vertical.</td></tr></table>
 
+<p><b>Nota sobre el peso de la marca personal en el B2C:</b> en concepto teórico, la marca personal debería pesar más en la relación con el B2C — el programa educativo se vende en buena parte por la marca y la comunidad de quienes lo representan. Sin embargo, hoy las marcas personales del equipo y su estrategia están en un segundo plano más allá de la marca de Cáscara, que es la que realmente sostiene la atracción. Por eso, por ahora la marca personal pesa menos de lo que teóricamente le correspondería (15% en B2C). Cuando las marcas personales se desarrollen y tengan estrategia propia, este peso se puede revisar al alza.</p>
+
 <h4>Variable: Responsabilidad por resultado del cliente (solo B2B)</h4>
 
 <p><b>Qué mide:</b> qué pasa si la entrega al cliente no da resultado. Quién responde.</p>
@@ -1837,9 +1961,11 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Qué mide:</b> si sostenés la empresa entera, más allá de tu departamento.</p>
 
-<p><b>La diferencia con "responsabilidad por resultado":</b> la responsabilidad por resultado mira al <b>cliente</b> (qué pasa si la entrega falla). La responsabilidad estructural mira a la <b>empresa</b> (quién hace que toda la línea exista, funcione, tenga caja y equipo). El CEO y el Director de Operaciones son la gerencia que está por encima de los departamentos.</p>
+<p><b>La diferencia con "responsabilidad por resultado":</b> la responsabilidad por resultado mira al <b>cliente</b> (qué pasa si la entrega falla). La responsabilidad estructural mira a la <b>empresa</b> (quién hace que toda la línea exista, funcione, tenga caja y equipo). La dirección general y el acompañamiento estratégico son la gerencia que está por encima de los departamentos.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>CEO / Responsable final</td><td>100</td><td>Responsable último de la empresa: caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga.</td></tr><tr><td>Director de Operaciones</td><td>60</td><td>Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</td></tr><tr><td>No aplica</td><td>0</td><td>Lidera su departamento pero no la estructura de la empresa.</td></tr></table>
+<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Dirección general</td><td>100</td><td>Responsable último de la empresa: caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga.</td></tr><tr><td>Acompañamiento estratégico</td><td>60</td><td>Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</td></tr><tr><td>No aplica</td><td>0</td><td>Lidera su departamento pero no la estructura de la empresa.</td></tr></table>
+
+<p><b>La diferencia entre los dos niveles, en concreto:</b> quien tiene la dirección general <b>diseña el sistema y pone los objetivos</b> — arma la planificación, define qué hay que lograr, construye la estructura y el capital humano. Quien acompaña estratégicamente <b>aporta a la conducción</b> sin ser el responsable principal de esa estructura: da soporte, visión y otro ángulo, pero no diseña el sistema — operativiza la planificación, hace que los objetivos se ejecuten, sostiene que la máquina funcione día a día. Es la diferencia entre quien dibuja el plano y quien construye con ese plano: los dos son imprescindibles, pero no están en el mismo nivel. Por eso la dirección general puntúa 100 y el acompañamiento estratégico 60. No es una jerarquía de valor personal, es la diferencia entre diseñar y conducir la estructura, y acompañarla desde otro lugar.</p>
 
 <h4>Variable: Growth y estrategia comercial</h4>
 
@@ -1869,7 +1995,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>4 bis. LA ALTERNATIVA QUE EVALUAMOS Y DESCARTAMOS</h3>
+<h3>5. LA ALTERNATIVA QUE EVALUAMOS Y DESCARTAMOS</h3>
 
 <p>Antes de llegar al sistema de puntajes, evaluamos un modelo más simple: <b>asignar a cada persona un porcentaje fijo por rol en cada vertical</b>, revisado cualitativamente cada trimestre por los founders.</p>
 
@@ -1891,99 +2017,147 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>5. DATOS DE PARTIDA</h3>
+<h3>6. DATOS DE PARTIDA — SIMULACIÓN DE UN MES</h3>
 
-<h4>B2C — datos reales de Abril 2026</h4>
+<p>Para mostrar cómo funciona el sistema, simulamos un mes completo con las cuatro líneas activas. Los costos del B2C usan la proporción real de Abril 2026 (43% de la facturación). Es un ejemplo de referencia para ver el sistema funcionando a escala, no una proyección ni una promesa.</p>
 
-<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Cash collected</td><td>32.707,00</td></tr><tr><td>Equipo comercial</td><td>-5.860,48</td></tr><tr><td>Pauta</td><td>-925,00</td></tr><tr><td>Contenido</td><td>-6.466,43</td></tr><tr><td>Herramientas</td><td>-470,63</td></tr><tr><td>Mora (CSM)</td><td>-400,00</td></tr><tr><td><b>Profit B2C</b></td><td><b>18.584,46</b></td></tr></table>
+<h4>B2C — programa base</h4>
 
-<h4>B2B — escenario de 10 clientes a USD 3.500</h4>
+<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación del programa base</td><td>84.000</td></tr><tr><td>Costos (43% — proporción real de Abril: comercial, contenido, herramientas)</td><td>-36.269</td></tr><tr><td><b>Profit B2C</b></td><td><b>47.731</b></td></tr></table>
 
-<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Facturación bruta</td><td>10 × 3.500</td><td>35.000,00</td></tr><tr><td>Estrategas creativos junior</td><td>10 × 600</td><td>-6.000,00</td></tr><tr><td>Project Managers</td><td>10 × 400</td><td>-4.000,00</td></tr><tr><td>Costo de venta B2B</td><td>17,5%</td><td>-6.125,00</td></tr><tr><td><b>Profit B2B</b></td><td></td><td><b>18.875,00</b></td></tr></table>
+<p>(La facturación total de B2C del mes es USD 100.000, de los cuales USD 16.000 son de la Aceleradora, que se contabiliza como línea aparte.)</p>
 
-<h4>Split 30/70</h4>
+<h4>B2B — niveles 1 y 2</h4>
 
-<table><tr><th>Vertical</th><th>Profit</th><th>30% Caja</th><th>70% Reparto</th></tr><tr><td>B2C</td><td>18.584,46</td><td>5.575,34</td><td>13.009,12</td></tr><tr><td>B2B</td><td>18.875,00</td><td>5.662,50</td><td>13.212,50</td></tr></table>
+<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Nivel 1 (entrada)</td><td>20 × 1.200</td><td>24.000</td></tr><tr><td>Nivel 2 (estratega insertado)</td><td>5 × 2.000</td><td>10.000</td></tr><tr><td>Estrategas creativos nivel 1</td><td>20 × 500</td><td>-10.000</td></tr><tr><td>Estrategas creativos nivel 2</td><td>5 × 750</td><td>-3.750</td></tr><tr><td><b>Profit B2B (niveles 1 y 2)</b></td><td></td><td><b>20.250</b></td></tr></table>
+
+<p>El B2B no tiene costo comercial: el nivel 1 se vende directo desde la web sin llamada.</p>
+
+<h4>High Ticket — nivel 3</h4>
+
+<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Proyectos premium</td><td>4 × 5.000</td><td>20.000</td></tr></table>
+
+<p>El high ticket tiene reparto propio (ver sección 11), no pasa por el profit del B2B general.</p>
+
+<h4>Aceleradora</h4>
+
+<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Ventas del mes</td><td>8 × 2.000</td><td>16.000</td></tr></table>
+
+<p>Sin gastos directos (se vende con una llamada). Reparto propio (ver sección 10).</p>
+
+<h4>Cómo queda el profit dividido (B2C y B2B niveles 1-2)</h4>
+
+<table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>65% = 31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>55% = 11.138</td></tr></table>
+
+<p>(En B2C, Lola no participa; el reparto es 65%. En B2B niveles 1-2, Lola entra con 10%, así que el reparto por puntajes baja a 55%.)</p>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>6. SEGUNDO</h3>
+<h3>7. SEGUNDO</h3>
 
-<p>Segundo no entra al sistema de puntajes por ahora (primeros 3 meses de la planificación). En lugar de tener puntaje, cobra un <b>5% fijo del profit de cada vertical</b>. Ese 5% sale del 70% destinado al equipo: Segundo se lleva 5 puntos y el 65% restante se reparte entre los demás por puntajes.</p>
+<p>Segundo no entra al sistema de puntajes por ahora (primeros 3 meses de la planificación). En lugar de tener puntaje, cobra un <b>5% fijo del profit de B2C y de B2B niveles 1-2</b>. No participa de la Aceleradora ni del high ticket.</p>
 
-<ul><li><b>B2C:</b> 5% del profit = USD 929</li>
-<li><b>B2B:</b> 5% del profit = USD 944</li>
-<li><b>Plus:</b> si entrega un cliente B2B como estratega creativo, cobra USD 600 por ese cliente (igual que cualquier estratega), además de su % fijo.</li>
+<ul><li><b>B2C:</b> 5% del profit</li>
+<li><b>B2B 1-2:</b> 5% del profit</li>
+<li><b>Plus:</b> si entrega un cliente B2B como estratega creativo, cobra el honorario de estratega por ese cliente, además de su % fijo.</li>
 </ul>
-<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>5% profit B2C</td><td>929</td></tr><tr><td>5% profit B2B</td><td>944</td></tr><tr><td><b>Total fijo mensual</b></td><td><b>1.873</b></td></tr><tr><td>Plus por cliente entregado</td><td>+600 por cliente</td></tr></table>
-
 <p><b>Por qué % fijo y no puntaje:</b> Segundo está construyendo su rol (marca personal desde el ángulo startup × creatividad, futuro módulo del programa V3 junto a Facu). Hasta que ese rol se consolide, cobra fijo. Al cierre de los primeros 3 meses se evalúa incorporarlo al sistema de puntajes.</p>
 
-<h4>Cómo queda el profit dividido</h4>
+<h4>Cómo queda el profit dividido (con la simulación del mes)</h4>
 
-<table><tr><th>Vertical</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>65% Reparto al equipo</th></tr><tr><td>B2C</td><td>18.584,46</td><td>5.575,34</td><td>929,22</td><td>12.079,90</td></tr><tr><td>B2B</td><td>18.875,00</td><td>5.662,50</td><td>943,75</td><td>12.268,75</td></tr></table>
+<table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto al equipo</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>11.138</td></tr></table>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>7. PUNTAJES Y REPARTO</h3>
+<h3>8. PUNTAJES Y REPARTO</h3>
 
 <h4>B2C — Growth 40% / Impacto 30% / Marca 15% / Gerencia 15%</h4>
 
-<table><tr><th>Persona</th><th>Growth</th><th>Impacto</th><th>Marca</th><th>Gerencia</th><th>Puntaje</th></tr><tr><td>Franco</td><td>Arquitecto (100)</td><td>Importante (50)</td><td>Presencia (40)</td><td>— (0)</td><td><b>61,0</b></td></tr><tr><td>Fede</td><td>Ejecuta y contribuye (40)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>56,5</b></td></tr><tr><td>Juana</td><td>Participa en gestión (20)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>48,5</b></td></tr><tr><td>Teo</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Presencia (40)</td><td>CEO (100)</td><td><b>47,0</b></td></tr><tr><td>Facu</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Sin uso (0)</td><td>CEO (100)</td><td><b>41,0</b></td></tr></table>
+<table><tr><th>Persona</th><th>Growth</th><th>Impacto</th><th>Marca</th><th>Gerencia</th><th>Puntaje</th></tr><tr><td>Franco</td><td>Arquitecto (100)</td><td>Importante (50)</td><td>Presencia (40)</td><td>— (0)</td><td><b>61,0</b></td></tr><tr><td>Fede</td><td>Ejecuta y contribuye (40)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>56,5</b></td></tr><tr><td>Juana</td><td>Participa en gestión (20)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>48,5</b></td></tr><tr><td>Teo</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Presencia (40)</td><td>Dir. general (100)</td><td><b>47,0</b></td></tr><tr><td>Facu</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Sin uso (0)</td><td>Acomp. estratégico (60)</td><td><b>35,0</b></td></tr></table>
 
-<p><b>Reparto B2C (sobre USD 12.080 — el 65% del profit):</b></p>
+<p><b>Sobre la gerencia en el B2C:</b> acá Teo tiene la dirección general (100) y Facu el acompañamiento estratégico (60). Es al revés que en el B2B: en el programa educativo, Teo es quien conduce el día a día y diseña la operación, mientras Facu da soporte y visión desde otro ángulo sin operar. En el B2B se invierte (Facu dirección general, Teo acompañamiento), porque ahí la conducción es de Facu.</p>
 
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Franco</td><td>24,0%</td><td>2.901</td></tr><tr><td>Fede</td><td>22,2%</td><td>2.687</td></tr><tr><td>Juana</td><td>19,1%</td><td>2.307</td></tr><tr><td>Teo</td><td>18,5%</td><td>2.235</td></tr><tr><td>Facu</td><td>16,1%</td><td>1.950</td></tr></table>
+<p><b>Reparto B2C (sobre USD 31.025 — el 65% del profit del mes simulado):</b></p>
+
+<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Franco</td><td>25%</td><td>7.631</td></tr><tr><td>Fede</td><td>23%</td><td>7.068</td></tr><tr><td>Juana</td><td>20%</td><td>6.067</td></tr><tr><td>Teo</td><td>19%</td><td>5.880</td></tr><tr><td>Facu</td><td>14%</td><td>4.379</td></tr></table>
 
 <h4>B2B — Responsabilidad 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%</h4>
 
-<table><tr><th>Persona</th><th>Responsabilidad</th><th>Impacto</th><th>Growth</th><th>Gerencia</th><th>Marca</th><th>Puntaje</th></tr><tr><td>Facu</td><td>Responsable (100)</td><td>Core (100)</td><td>Ejecuta (40)</td><td>CEO (100)</td><td>— (0)</td><td><b>78,0</b></td></tr><tr><td>Franco</td><td>Advisor (30)</td><td>Core (100)</td><td>Arquitecto (100)</td><td>— (0)</td><td>— (0)</td><td><b>49,0</b></td></tr><tr><td>Fede</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td></tr><tr><td>Juana</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td></tr><tr><td>Teo</td><td>— (0)</td><td>Importante (60)</td><td>Participa (20)</td><td>Dir Ops (60)</td><td>— (0)</td><td><b>28,0</b></td></tr></table>
+<table><tr><th>Persona</th><th>Responsabilidad</th><th>Impacto</th><th>Growth</th><th>Gerencia</th><th>Marca</th><th>Puntaje</th><th>%</th></tr><tr><td>Facu</td><td>Responsable (100)</td><td>Soporte (30)</td><td>Participa (20)</td><td>Dir. general (100)</td><td>— (0)</td><td><b>64,0</b></td><td>26%</td></tr><tr><td>Franco</td><td>Advisor (30)</td><td>Core (100)</td><td>Arquitecto (100)</td><td>— (0)</td><td>— (0)</td><td><b>49,0</b></td><td>21%</td></tr><tr><td>Fede</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Juana</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Teo</td><td>Advisor (30)</td><td>Soporte (30)</td><td>Acompaña (10)</td><td>Acomp. estratégico (60)</td><td>— (0)</td><td><b>29,0</b></td><td>13%</td></tr></table>
 
-<p><b>Reparto B2B (sobre USD 12.269 — el 65% del profit):</b></p>
-
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Facu</td><td>31,6%</td><td>3.874</td></tr><tr><td>Franco</td><td>19,8%</td><td>2.434</td></tr><tr><td>Fede</td><td>18,6%</td><td>2.285</td></tr><tr><td>Juana</td><td>18,6%</td><td>2.285</td></tr><tr><td>Teo</td><td>11,3%</td><td>1.391</td></tr></table>
-
-<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
-
-<h3>8. CONSOLIDADO MENSUAL</h3>
-
-<p>El consolidado suma lo que cada persona recibe de las dos verticales (B2C + B2B) por el sistema de puntajes. El honorario de estratega (USD 600 por cliente B2B entregado) lo cobra quien efectivamente entrega el cliente, como un pago aparte por ese trabajo operativo, no como parte del revenue share.</p>
-
-<p>El consolidado suma lo que cada persona recibe de las dos verticales por puntajes. (La línea Aceleradora se detalla aparte en la sección 8 bis.)</p>
-
-<table><tr><th>Persona</th><th>B2C</th><th>B2B</th><th>Total mensual</th></tr><tr><td>Facu</td><td>1.950</td><td>3.874</td><td><b>5.824</b></td></tr><tr><td>Franco</td><td>2.901</td><td>2.434</td><td><b>5.335</b></td></tr><tr><td>Fede</td><td>2.687</td><td>2.285</td><td><b>4.972</b></td></tr><tr><td>Juana</td><td>2.307</td><td>2.285</td><td><b>4.591</b></td></tr><tr><td>Teo</td><td>2.235</td><td>1.391</td><td><b>3.626</b></td></tr><tr><td>Segundo</td><td>929</td><td>944</td><td><b>1.873</b></td></tr></table>
-
-<p><b>Por qué Facu tiene el revenue share más alto:</b> es el responsable directo de la línea B2B (responsabilidad por resultado 100), el CEO (gerencia 100) y core de la gestión B2B (impacto 100). Su número refleja el peso de la responsabilidad que carga, no un privilegio.</p>
-
-<p><b>Por qué Franco queda segundo:</b> lidera el growth en las dos verticales (Arquitecto 100), que en B2C es la variable más pesada (40%). Su revenue sube fuerte respecto a lo que tenía antes (17,5% de una sola vertical), porque ahora participa de las dos y el sistema reconoce su rol en el motor comercial con una variable propia.</p>
-
-<p><b>Nota sobre Segundo:</b> cobra su 5% fijo de cada vertical (B2C + B2B). No participa de la línea Aceleradora. Si entrega un cliente B2B como estratega creativo, cobra USD 600 por ese cliente, además de su fijo.</p>
-
-<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
-
-<h3>8 bis. LÍNEA ACELERADORA</h3>
-
-<p>La Aceleradora es la tercera línea de revenue: un <b>upsell del B2C</b>, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que <b>no tiene gastos directos</b> (la facturación es directamente profit).</p>
-
-<p><b>Reparto:</b> misma lógica de caja (30%), pero con dos diferencias respecto a las otras líneas:</p>
-<ul><li><b>Segundo no participa</b> de esta línea.</li>
-<li><b>Lola es PM</b> y cobra un 10% del reparto por gestionar la operación de la línea. El resto se reparte parejo entre los 5 socios.</li>
+<p><b>La lógica del tablero B2B:</b></p>
+<ul><li><b>Facu</b> es el responsable del resultado y el CEO, pero no produce la entrega creativa (Soporte en impacto) ni construye el motor comercial (solo participa de la gestión del growth). Su peso viene de la responsabilidad y la estructura.</li>
+<li><b>Franco</b> es el arquitecto del growth y core de la entrega, pero solo advisor en responsabilidad (arma el motor, no entrega al cliente).</li>
+<li><b>Fede y Juana</b> auditan resultados, son core de la entrega creativa, participan del growth desarrollando la narrativa de los productos, y tienen presencia de marca. Quedan parejos.</li>
+<li><b>Teo</b> no aporta a la calidad de la entrega (Soporte) ni al motor (Acompaña). Su valor en B2B es la gerencia operativa: lleva a cabo el sistema que el CEO diseña (Dir Ops 60).</li>
 </ul>
-<p><b>Ejemplo: 5 aceleradoras de USD 2.000 en el mes</b></p>
+<p><b>Reparto B2B niveles 1-2 (sobre USD 11.138 — el 55% del profit del mes simulado):</b></p>
 
-<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación = Profit (sin gastos)</td><td>10.000</td></tr><tr><td>30% Caja de Cáscara</td><td>3.000</td></tr><tr><td><b>70% Reparto al equipo</b></td><td><b>7.000</b></td></tr></table>
+<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Facu</td><td>26%</td><td>2.905</td></tr><tr><td>Franco</td><td>21%</td><td>2.373</td></tr><tr><td>Fede</td><td>20%</td><td>2.228</td></tr><tr><td>Juana</td><td>20%</td><td>2.228</td></tr><tr><td>Teo</td><td>13%</td><td>1.404</td></tr></table>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
+
+<h3>9. CONSOLIDADO MENSUAL</h3>
+
+<p>El consolidado suma lo que cada persona recibe de las cuatro líneas en el mes simulado. Cada línea tiene su propia lógica de reparto (B2C y B2B por puntajes; Aceleradora y high ticket con reparto propio).</p>
+
+<table><tr><th>Persona</th><th>B2C</th><th>B2B 1-2</th><th>High Ticket</th><th>Aceleradora</th><th>Total mensual</th></tr><tr><td>Fede</td><td>7.068</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>16.312</b></td></tr><tr><td>Franco</td><td>7.631</td><td>2.373</td><td>3.500</td><td>2.016</td><td><b>15.520</b></td></tr><tr><td>Juana</td><td>6.067</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>15.311</b></td></tr><tr><td>Facu</td><td>4.379</td><td>2.905</td><td>3.500</td><td>2.016</td><td><b>12.800</b></td></tr><tr><td>Teo</td><td>5.880</td><td>1.404</td><td>—</td><td>2.016</td><td><b>9.300</b></td></tr><tr><td>Lola</td><td>—</td><td>2.025</td><td>1.000</td><td>1.120</td><td><b>4.145</b></td></tr><tr><td>Segundo</td><td>2.387</td><td>1.012</td><td>—</td><td>—</td><td><b>3.399</b></td></tr></table>
+
+<p><b>Cómo leer este consolidado:</b> es un mes simulado con facturación total de USD 154.000 (B2C base 84.000 + B2B niveles 1-2 34.000 + high ticket 20.000 + Aceleradora 16.000). Los montos varían cada mes; lo que no cambia es la estructura de reparto de cada línea.</p>
+
+<p><b>Por qué Fede y Juana quedan arriba:</b> son los creativos que ejecutan los proyectos high ticket, donde cobran 25% cada uno. Esa línea premium los empuja al podio.</p>
+
+<p><b>Por qué Franco queda segundo:</b> lidera el growth (Arquitecto 100), la variable más pesada del B2C (40%). Su revenue sube fuerte respecto a lo que tenía antes, porque ahora participa de todas las líneas.</p>
+
+<p><b>Por qué Facu queda cuarto pese a ser CEO:</b> carga la responsabilidad del B2B (primero en esa línea), pero su rol es estructural más que de ejecución creativa o de growth. Su reconocimiento de largo plazo está en el equity, no solo en el revenue del mes.</p>
+
+<p><b>Lola</b> cobra de las tres líneas que gestiona operativamente: 10% en B2B niveles 1-2, 10% en la Aceleradora, 5% en el high ticket.</p>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
+
+<h3>10. LÍNEA ACELERADORA</h3>
+
+<p>La Aceleradora es un <b>upsell del B2C</b>, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que <b>no tiene gastos directos</b> (la facturación es directamente profit).</p>
+
+<p><b>Reparto:</b> 30% caja, y del 70% restante, Lola cobra 10% como PM y el resto se reparte parejo entre los 5 socios. Segundo no participa.</p>
+
+<p><b>Ejemplo: 8 aceleradoras de USD 2.000 en el mes (USD 16.000)</b></p>
+
+<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación = Profit (sin gastos)</td><td>16.000</td></tr><tr><td>30% Caja de Cáscara</td><td>4.800</td></tr><tr><td><b>70% Reparto al equipo</b></td><td><b>11.200</b></td></tr></table>
 
 <p><b>Reparto del 70%:</b></p>
 
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Lola (PM)</td><td>10%</td><td>700</td></tr><tr><td>Facu</td><td>18%</td><td>1.260</td></tr><tr><td>Fede</td><td>18%</td><td>1.260</td></tr><tr><td>Juana</td><td>18%</td><td>1.260</td></tr><tr><td>Franco</td><td>18%</td><td>1.260</td></tr><tr><td>Teo</td><td>18%</td><td>1.260</td></tr></table>
-
-<p>Los montos son un ejemplo; varían según cuántas aceleradoras se vendan en el mes. Lo que no varía es la estructura: 30% caja, 10% Lola PM, resto parejo entre los socios.</p>
+<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Lola (PM)</td><td>10%</td><td>1.120</td></tr><tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>2.016 c/u</td></tr></table>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>9. CAJA DE CÁSCARA</h3>
+<h3>11. HIGH TICKET (NIVEL 3 DEL B2B)</h3>
 
-<table><tr><th>Origen</th><th>Mensual USD</th></tr><tr><td>30% B2C</td><td>5.575</td></tr><tr><td>30% B2B</td><td>5.662</td></tr><tr><td><b>Total mensual</b></td><td><b>11.238</b></td></tr><tr><td><b>Total anual</b></td><td><b>134.854</b></td></tr></table>
+<p>El high ticket son proyectos premium de estrategia creativa para marcas personales y proyectos (ejemplos: Delfina Ferro, Kevsho), ejecutados por el C-level de Cáscara con Fede y Juana como creativos. Tiene un <b>reparto propio</b>, distinto del B2B general, porque son Fede y Juana quienes ejecutan y por eso cobran más de esta línea.</p>
+
+<p><b>Reparto del high ticket:</b></p>
+
+<table><tr><th>Persona</th><th>%</th><th>Sobre un proyecto de USD 5.000</th></tr><tr><td>Juana</td><td>25%</td><td>1.250</td></tr><tr><td>Fede</td><td>25%</td><td>1.250</td></tr><tr><td>Facu</td><td>17,5%</td><td>875</td></tr><tr><td>Franco</td><td>17,5%</td><td>875</td></tr><tr><td>Cáscara (caja)</td><td>10%</td><td>500</td></tr><tr><td>Lola</td><td>5%</td><td>250</td></tr></table>
+
+<p>En este nivel, el 10% que va a la caja de Cáscara reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos, no dependen de puntajes. Fede y Juana cobran más porque son los creativos que ejecutan el proyecto; es el reconocimiento de su rol como perfiles high ticket.</p>
+
+<p><b>Ejemplo: 4 proyectos de USD 5.000 (USD 20.000)</b></p>
+
+<table><tr><th>Persona</th><th>Monto USD</th></tr><tr><td>Juana</td><td>5.000</td></tr><tr><td>Fede</td><td>5.000</td></tr><tr><td>Facu</td><td>3.500</td></tr><tr><td>Franco</td><td>3.500</td></tr><tr><td>Cáscara (caja)</td><td>2.000</td></tr><tr><td>Lola</td><td>1.000</td></tr></table>
+
+<p>Si un proyecto sale más caro (ej: USD 10.000), los porcentajes se mantienen, así que Fede y Juana cobran 2.500 cada uno.</p>
+
+<p><b>Producción audiovisual del high ticket:</b> además del ticket de estrategia creativa, a estos proyectos se les puede sumar un <b>presupuesto especial de producción audiovisual</b>, ejecutado por el equipo audiovisual de Cáscara. Ese presupuesto no tiene una fórmula fija de reparto: su distribución se arma de forma personalizada según el tipo de trabajo (qué se produce, qué equipo se necesita, qué escala). Se define proyecto por proyecto.</p>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
+
+<h3>12. CAJA DE CÁSCARA</h3>
+
+<p>La caja se nutre de <b>todas las líneas de revenue</b>, no solo de B2C y B2B. En el mes simulado:</p>
+
+<table><tr><th>Origen</th><th>Mensual USD</th></tr><tr><td>30% B2C base</td><td>14.319</td></tr><tr><td>30% B2B niveles 1-2</td><td>6.075</td></tr><tr><td>10% High Ticket</td><td>2.000</td></tr><tr><td>30% Aceleradora</td><td>4.800</td></tr><tr><td><b>Total del mes simulado</b></td><td><b>27.194</b></td></tr></table>
+
+<p>(El monto varía cada mes con la facturación. El presupuesto anual de la caja se planifica sobre un promedio conservador, no sobre un mes pico.)</p>
 
 <h4>Presupuesto de la caja anual</h4>
 
@@ -1991,17 +2165,17 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h4>Ejemplo práctico del sistema de bonos</h4>
 
-<p>El pool de bonos premia el sobrecumplimiento y aplica a <b>todo el equipo de Cáscara</b>, no solo a founders. Cada trimestre se separa un pool (USD 3.000 de ejemplo) que se reparte entre quienes sobrecumplen, mediante un juego de categorías. Si nadie cumple una categoría, esa porción vuelve a la caja.</p>
+<p>El pool de bonos premia el sobrecumplimiento y está dirigido al <b>equipo que no tiene equity ni revenue share grande</b> (editores, PMs, roles de soporte y operación). El C-level no participa de los bonos: su upside ya está cubierto por el equity y el revenue share, así que premiarlos con bonos sería redundante. Los bonos rinden más enfocados en reconocer y motivar a quienes no tienen esas otras vías. Cada trimestre se separa un pool (USD 3.000 de ejemplo) que se reparte entre quienes sobrecumplen, mediante un juego de categorías. Si nadie cumple una categoría, esa porción vuelve a la caja.</p>
 
 <table><tr><th>Categoría</th><th>Qué premia</th><th>Bono ejemplo</th></tr><tr><td>MVP del Trimestre</td><td>Aporte general más alto (voto unánime de founders)</td><td>USD 800</td></tr><tr><td>Killer de Resultados</td><td>KPI numérico sobrecumplido (ventas, retención, NPS)</td><td>USD 600</td></tr><tr><td>Constructor del Trimestre</td><td>Construyó algo nuevo que cambia cómo funciona Cáscara</td><td>USD 500</td></tr><tr><td>MVP Silencioso</td><td>Sostuvo procesos invisibles sin los que nada funciona</td><td>USD 400</td></tr><tr><td>Equipo del Trimestre</td><td>El departamento que mejor cumplió su Plan Trimestral</td><td>USD 700</td></tr></table>
 
-<p><b>Reglas:</b> los KPIs y categorías se definen al inicio del trimestre (no al final). Los founders no pueden ganar más de una categoría por trimestre, para forzar que los bonos se distribuyan en el equipo. El MVP del Trimestre requiere unanimidad. Los bonos se anuncian públicamente al equipo: la transparencia es parte del juego.</p>
+<p><b>Reglas:</b> los KPIs y categorías se definen al inicio del trimestre (no al final). El C-level (founders + Teo) no participa de los bonos. El MVP del Trimestre requiere unanimidad de los founders. Los bonos se anuncian públicamente al equipo: la transparencia es parte del juego.</p>
 
 <p><b>Nota:</b> este sistema queda listo para implementar pero arranca cuando los founders lo decidan. El presupuesto ya lo contempla para no descapitalizar la caja cuando se active.</p>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>10. TRACKING DE VENTAS ATRIBUIBLES</h3>
+<h3>13. TRACKING DE VENTAS ATRIBUIBLES</h3>
 
 <p>El sistema contempla una variable de "ventas atribuibles" (cuántas ventas vinieron específicamente por la marca o el cierre de cada persona). <b>No se implementa todavía</b> porque no tenemos forma de medirla con precisión.</p>
 
@@ -2013,19 +2187,17 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>11. VARIABLES ABIERTAS</h3>
+<h3>14. VARIABLES ABIERTAS</h3>
 
-<ul><li><b>Costo de venta B2B del 17,5%</b> es supuesto. Cuando arranque B2B real, se ajusta.</li>
-<li><b>Estrategas creativos cobran USD 600</b> por cliente entregado (costo directo). Lo cobra quien efectivamente entrega el cliente.</li>
+<ul><li><b>Costos del B2B</b> se ajustan cuando el B2B esté operando con volumen real.</li>
+<li><b>Estrategas creativos</b> cobran su honorario por cliente entregado (costo directo). Lo cobra quien efectivamente entrega el cliente.</li>
 <li><b>Segundo entra al sistema de puntajes</b> después de los primeros 3 meses, cuando su rol se consolide.</li>
-<li><b>Piso mínimo de profit mensual</b> para activar el reparto completo.</li>
-<li><b>Tratamiento de clientes B2B del ecosistema</b> (Newro, REIN, etc.).</li>
 <li><b>Tracking de ventas atribuibles</b> — objetivo de Operaciones, sin fecha de implementación hasta estar bien medido.</li>
-<li><b>Volumen de la Aceleradora</b> — el ejemplo usa 5 ventas/mes; el real se verá con el tiempo.</li>
+<li><b>Volumen de cada línea</b> — los ejemplos de la simulación son de referencia; el real se verá con el tiempo.</li>
 </ul>
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>12. EQUITY DEL POOL (FRANCO Y TEO)</h3>
+<h3>15. EQUITY DEL POOL (FRANCO Y TEO)</h3>
 
 <p>El revenue share (este documento) y el equity (documento de founders) son cosas independientes. El revenue es el pago operativo del mes; el equity es la propiedad de largo plazo. Una persona puede tener uno, el otro, o los dos.</p>
 
@@ -2039,15 +2211,43 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
-<h3>13. NOTA SOBRE LOS NÚMEROS</h3>
+<h3>16. CÓMO SE REVISA: LA PLANIFICACIÓN TRIMESTRAL</h3>
 
-<p>Todos los montos son una <b>simulación</b> sobre datos reales de Abril 2026 (B2C) y un escenario hipotético de 10 clientes a USD 3.500 (B2B, que recién arranca).</p>
+<p>Este sistema económico no es una foto fija. Se revisa cada trimestre dentro del proceso de planificación de Cáscara, que sigue siempre el mismo ritual de 13 semanas y cuatro etapas:</p>
+
+<table><tr><th>Etapa</th><th>Cuándo</th><th>Qué pasa</th></tr><tr><td>Planificación</td><td>Semana 1</td><td>Cada director arma el plan de su área.</td></tr><tr><td>Revisión</td><td>Semana 2</td><td>Teo y Facu comentan y aprueban los planes.</td></tr><tr><td>Ejecución</td><td>Semanas 3 a 12</td><td>La mayor parte del trimestre. 5 check-ins quincenales donde cada área mira sus proyectos y deja registro. Teo audita.</td></tr><tr><td>Cierre</td><td>Semana 13</td><td>Retro y análisis del trimestre.</td></tr></table>
+
+<p><b>La vinculación con el sistema económico:</b> en la etapa de cierre y la planificación del trimestre siguiente, se revisan los pesos de las variables, los niveles de cada persona, las líneas de revenue activas y los repartos. Si la realidad del negocio cambió (un rol creció, una línea nueva arrancó, una variable dejó de representar lo que pasa), el sistema se ajusta ahí. Es el momento ordenado para tocar los números, no de manera improvisada. El sistema vive dentro del ritual trimestral.</p>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
+
+<h3>17. LÍNEAS DE REVENUE FUTURAS</h3>
+
+<p>Más allá de las cuatro líneas activas (B2C, B2B, Aceleradora, High Ticket), hay líneas en el horizonte que todavía no forman parte del sistema de reparto, pero que marcan hacia dónde va la empresa:</p>
+
+<ul><li><b>Mailing como embudo</b> — el email como canal de adquisición y conversión.</li>
+<li><b>Departamento de diseño gráfico</b> — como unidad de negocio lateral.</li>
+<li><b>Low ticket de Cáscara</b> — un producto de entrada masivo y accesible.</li>
+<li><b>Growth partners</b> (la más importante) — producir marcas personales y proyectos de forma apalancada, ganando un revenue share del lanzamiento y del revenue del negocio en curso. Es el modelo de ser socios de crecimiento de los proyectos que trabajamos.</li>
+<li><b>Anexos de nicho en el B2C</b> — sumar marcas personales de distintos nichos como módulos del programa (como hoy es el caso de Segundo con el mundo startup y emprendimientos; puede sumarse alguien de lifestyle, etc.). Cada nicho amplía el programa sin diluir su esencia.</li>
+<li><b>Eventos y activaciones culturales</b> — experiencias presenciales monetizables.</li>
+<li><b>Monetización de YouTube</b> — el contenido propio como fuente de revenue directa.</li>
+</ul>
+<p>Estas líneas se irán incorporando al sistema a medida que se activen, cada una con su propia lógica de reparto, en las revisiones trimestrales.</p>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
+
+<h3>18. NOTA SOBRE LOS NÚMEROS</h3>
+
+<p>Todos los montos son una <b>simulación</b> de un mes con las cuatro líneas activas (facturación total USD 154.000), con los costos del B2C en la proporción real de Abril 2026.</p>
+
+<p>Los porcentajes de reparto se <b>redondean con la lógica matemática estándar</b> (si la fracción es 0,5 o más, sube al entero siguiente; si es menor, baja), para que la ejecución administrativa del reparto sea simple.</p>
 
 <p>Los números reales van a variar mes a mes. Lo que no varía es <b>el sistema</b>: la fórmula, los pesos, los criterios y el orden de la repartija. Eso es lo que se aprueba, no los montos puntuales.</p>
 </div></div></div>
 <script>
 const slides=document.querySelectorAll('.s-slide');const counter=document.getElementById('counter');let current=0;
-function show(i){if(i<0||i>=slides.length)return;slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));counter.textContent=(i+1)+' / '+slides.length;current=i;}
+function show(i){slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));counter.textContent=(i+1)+' / '+slides.length;current=i;}
 document.getElementById('next').onclick=()=>{if(current<slides.length-1)show(current+1);};
 document.getElementById('prev').onclick=()=>{if(current>0)show(current-1);};
 document.addEventListener('keydown',(e)=>{
