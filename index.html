@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cáscara · Estructura Económica</title>
+<link rel="stylesheet" href="cascara-shared/cascara.css">
+<style id="cc-overrides">
+  /* estrella decorativa -> jinete-arquero (recurso real de marca) */
+  .s-bg-star{background-image:none!important;object-fit:contain}
+  /* sello del footer -> sticker estrella-arquero */
+  .s-footer .foot-seal{height:14px;width:auto;vertical-align:-2px;margin-right:6px}
+  .s-slide.dark .s-footer .foot-seal{filter:invert(1)}
+</style>
 <style>
-:root {
-  --cream:#DBD8D3; --cream-soft:#E6E3DE; --cream-softer:#EEEBE6;
-  --ink:#0A0A0C; --ink-soft:#1C1C1F; --ink-muted:#52525A; --ink-faint:#A8A8AC;
-  --blue:#1400FF; --blue-soft:#6B7AFF; --line:rgba(0,0,0,0.08); --line-strong:rgba(0,0,0,0.14);
-  --font-sans:'Helvetica Neue',Helvetica,Inter,system-ui,sans-serif;
-  --font-serif:'Redaction','Times New Roman',Georgia,serif;
-}
+/* :root removido — tokens oficiales vienen de cascara.css */
 * { box-sizing:border-box; margin:0; padding:0; }
 html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sans); -webkit-font-smoothing:antialiased; min-height:100vh; }
 .deck { position:relative; width:100vw; height:100vh; overflow:hidden; }
@@ -343,7 +345,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </style></head>
 <body>
 <div class="deck">
-<section class="s-slide active"><div class="s-bg-star"></div><div class="s-slide-inner">
+<section class="s-slide active"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="cover-grid">
   <div>
     <div class="cover-eyebrow">Cáscara · Documento para los socios</div>
@@ -355,8 +357,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <div class="meta-row"><span class="meta-lbl">Para</span><span class="meta-val">Facu <em>·</em> Fede <em>·</em> Juana</span></div>
     <div class="meta-row"><span class="meta-lbl">Versión</span><span class="meta-val">Mayo 2026</span></div>
   </div>
-</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">1</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">1</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El salto que estamos dando</div>
 <div class="s-headline">
   <div class="s-title">De un proyecto<br/>a una <span class="accent">empresa real.</span></div>
@@ -366,8 +368,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Claridad de founder</h3><p>Qué significa ser founder: qué te da, qué te exige, qué pasa si no cumplís.</p></div>
   <div class="b-card"><div class="num">02</div><h3>Estructura de startup</h3><p>La base legal y financiera para operar en serio, levantar capital y vender participación algún día.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Reglas claras</h3><p>Lo que separa un proyecto de amigos de una empresa que puede valer millones.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-s-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">2</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">2</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Tres conceptos que no hay que mezclar</div>
 <div class="s-headline">
   <div class="s-title">Equity, revenue<br/>y <span class="accent">sueldo.</span></div>
@@ -377,8 +379,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Equity · la propiedad</h3><p>Cuánto de Cáscara te pertenece. El valor si se vende o entra un inversor. No cambia mes a mes. Se protege con contrato.</p><div class="b-foot">tus porciones de la pizza</div></div>
   <div class="b-card"><div class="num">02</div><h3>Revenue · la plata del mes</h3><p>Lo que cada socio retira de lo que Cáscara genera después de costos. Flexible, refleja el aporte real del período.</p><div class="b-foot">cuánto te llevás de la caja</div></div>
   <div class="b-card"><div class="num">03</div><h3>Sueldo · el piso fijo</h3><p>Lo que se cobra fijo por estar operativo, venga como venga el mes. Hoy Cáscara no paga sueldos a founders.</p><div class="b-foot">no se usa hoy</div></div>
-</div><button class="detail-btn" onclick="openModal('m-s-conceptos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">3</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-conceptos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">3</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El concepto que más cuesta bajar</div>
 <div class="s-headline">
   <div class="s-title">El equity no te paga.<br/><span class="accent">Te hace dueño.</span></div>
@@ -394,8 +396,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>No es cobrar plata automática todos los meses. No es hacer lo que quieras con tu parte. No es dejar de laburar para sostenerla. No es tuya para siempre sin condiciones.</p>
   </div>
 </div>
-<div class="callout">El equity no te paga el alquiler este mes. Te hace <em>millonario</em> si construimos una empresa que pueda venderse algún día. Por eso importa cuidarlo y seguir construyendo en la dirección correcta.</div><button class="detail-btn" onclick="openModal('m-s-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">4</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">El equity no te paga el alquiler este mes. Te hace <em>millonario</em> si construimos una empresa que pueda venderse algún día. Por eso importa cuidarlo y seguir construyendo en la dirección correcta.</div><button class="detail-btn" onclick="openModal('m-s-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">4</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Vesting · el mecanismo que protege a todos</div>
 <div class="s-headline">
   <div class="s-title">El equity se gana<br/><span class="accent">con el tiempo.</span></div>
@@ -412,8 +414,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>Protege a la empresa de founders que se van rápido con un pedazo grande. Protege a los que se quedan. Alinea incentivos: nadie cobra equity sin aportar trabajo sostenido.</p>
     <p>Y es <b>requisito obligatorio</b> para levantar capital: sin vesting firmado, no hay ronda posible.</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-s-vesting')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">5</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-vesting')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">5</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El cap table</div>
 <div class="s-headline">
   <div class="s-title">Quién es dueño<br/><span class="accent">de qué.</span></div>
@@ -425,8 +427,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">30%</div><h3>Juana</h3><p>Founder</p></div>
   <div class="b-card"><div class="num">10%</div><h3>Pool de equipo</h3><p>Equity reservado (EIP) para hires clave o ascensos futuros.</p></div>
 </div>
-<div class="callout">El <em>pool de empleados</em> es estándar en startups (10-15%). Permite atraer talento sin diluir a los founders, y los inversores lo exigen: un cap table sin pool es red flag en due diligence.</div><button class="detail-btn" onclick="openModal('m-s-captable')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">6</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">El <em>pool de empleados</em> es estándar en startups (10-15%). Permite atraer talento sin diluir a los founders, y los inversores lo exigen: un cap table sin pool es red flag en due diligence.</div><button class="detail-btn" onclick="openModal('m-s-captable')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">6</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Founder · Owner · Partner</div>
 <div class="s-headline">
   <div class="s-title">Tres formas<br/>de <span class="accent">participar.</span></div>
@@ -436,8 +438,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Founder</h3><p>Facu, Fede, Juana. Equity + revenue share. Dueños de la empresa, votan decisiones estructurales. Su retorno principal es el valor del equity a largo plazo.</p></div>
   <div class="b-card"><div class="num">02</div><h3>Owner</h3><p>Franco, Teo. Revenue share alto, sin equity por ahora. Operadores estructurales que sostienen el día a día. Su retorno está atado al presente.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Partner</h3><p>Acuerdos puntuales (ej: Segundo). % sobre una unidad específica. Colaborador estratégico sobre una vertical concreta, no sobre el total.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-s-niveles')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">7</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-niveles')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">7</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Dividendos</div>
 <div class="s-headline">
   <div class="s-title">Una startup no reparte:<br/><span class="accent">reinvierte.</span></div>
@@ -453,11 +455,11 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>A partir del año 4, si la empresa es rentable y estable, los founders pueden decidir por unanimidad repartir un dividendo anual sobre el excedente de caja, proporcional al equity.</p>
   </div>
 </div>
-<div class="callout">Empezar a repartir dividendos muy temprano genera <em>mentalidad de cobrar</em> en vez de mentalidad de construir. Hoy necesitamos cada dólar para crecer.</div><button class="detail-btn" onclick="openModal('m-s-dividendos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">8</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Empezar a repartir dividendos muy temprano genera <em>mentalidad de cobrar</em> en vez de mentalidad de construir. Hoy necesitamos cada dólar para crecer.</div><button class="detail-btn" onclick="openModal('m-s-dividendos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">8</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El objetivo de fondo</div>
-<div class="statement">No se trata de <span class="accent">vender</span> Cáscara.<br/>Se trata de construir una empresa<br/>que <span class="accent">pueda venderse</span> si quisiéramos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">9</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="statement">No se trata de <span class="accent">vender</span> Cáscara.<br/>Se trata de construir una empresa<br/>que <span class="accent">pueda venderse</span> si quisiéramos.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">9</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">En qué condiciones Cáscara es vendible</div>
 <div class="s-headline">
   <div class="s-title">Vendible no es<br/>lo mismo que <span class="accent">rentable.</span></div>
@@ -468,8 +470,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">02</div><h3>Recurrencia de ingresos</h3><p>Evergreen consolidado, contratos B2B con retainer mensual, suscripciones. Objetivo: +50% de ingresos recurrentes en 12 meses.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Activos transferibles</h3><p>Que la empresa sea legalmente dueña de lo que vende: metodología, contenidos, base de datos, contratos. IP Assignment de todos.</p></div>
   <div class="b-card"><div class="num">04</div><h3>Estructura legal clara</h3><p>Sociedad firme, contabilidad profesional, cap table actualizado, acuerdo de socios firmado. Pasar una due diligence sin improvisar.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-s-vendible')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">10</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-vendible')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">10</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Toma de decisiones</div>
 <div class="s-headline">
   <div class="s-title">Tres niveles<br/>de <span class="accent">decisión.</span></div>
@@ -479,8 +481,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Operativas</h3><p>Un solo founder decide en su área sin pedir permiso. Se informa en la weekly, no se vota.</p><div class="b-foot">1 founder</div></div>
   <div class="b-card"><div class="num">02</div><h3>Estratégicas</h3><p>Impactan el negocio pero son reversibles: contrataciones, campañas grandes, nuevos verticales, inversiones +USD 5.000.</p><div class="b-foot">2 de 3</div></div>
   <div class="b-card"><div class="num">03</div><h3>Estructurales</h3><p>Impactan la propiedad o el futuro: venta, nuevo socio, levantar capital, modificar equity, cierre.</p><div class="b-foot">unanimidad</div></div>
-</div><button class="detail-btn" onclick="openModal('m-s-decisiones')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">11</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-s-decisiones')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">11</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Cláusulas de founder</div>
 <div class="s-headline">
   <div class="s-title">Ser founder no es<br/>un título. Es una <span class="accent">responsabilidad.</span></div>
@@ -496,8 +498,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>Dos trimestres consecutivos sin cumplir: reunión formal, plan de recuperación de 60 días. Si no hay mejora, el revenue se ajusta a la baja y los dividendos se suspenden. El equity consolidado se mantiene, pero el rol se renegocia.</p>
   </div>
 </div>
-<div class="callout">Tres principios: ser founder es una responsabilidad, no un título. El equity te hace dueño, no te paga. <em>Nadie es más grande que Cáscara.</em></div><button class="detail-btn" onclick="openModal('m-s-clausulas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">12</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Tres principios: ser founder es una responsabilidad, no un título. El equity te hace dueño, no te paga. <em>Nadie es más grande que Cáscara.</em></div><button class="detail-btn" onclick="openModal('m-s-clausulas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">12</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Qué necesitamos legalmente</div>
 <div class="s-headline">
   <div class="s-title">Cinco capas<br/>para ser <span class="accent">startup.</span></div>
@@ -510,15 +512,15 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">04</div><h3>Plan de equity</h3><p>EIP del 10% aprobado formalmente.</p></div>
   <div class="b-card"><div class="num">05</div><h3>Docs de fundraising</h3><p>IP Assignment, data room, SAFE, pitch deck.</p></div>
 </div>
-<div class="callout">Ya tenemos <em>abogado corporativo</em> con experiencia en expansión internacional de startups (el mismo de la expansión de Bresh). Eso nos ahorra una etapa importante.</div><button class="detail-btn" onclick="openModal('m-s-legal')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">13</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Ya tenemos <em>abogado corporativo</em> con experiencia en expansión internacional de startups (el mismo de la expansión de Bresh). Eso nos ahorra una etapa importante.</div><button class="detail-btn" onclick="openModal('m-s-legal')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">13</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Parte 1 · cierre</div>
 <div class="statement" style="font-size:3.4vw;">Los inversores invierten<br/>donde hay <span class="accent">reglas.</span><br/>Esto es construir esas reglas.</div>
-<button class="detail-btn" onclick="openModal('m-s-completo')" style="margin-top:5vh;">+ Ver documento de startup completo</button></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">14</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+<button class="detail-btn" onclick="openModal('m-s-completo')" style="margin-top:5vh;">+ Ver documento de startup completo</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">14</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Parte 2</div>
-<div class="statement">Así queremos ser<br/>como <span class="accent">empresa.</span><br/>Ahora, cómo se <span class="accent">reparte</span><br/>lo que ganamos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">15</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="statement">Así queremos ser<br/>como <span class="accent">empresa.</span><br/>Ahora, cómo se <span class="accent">reparte</span><br/>lo que ganamos.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">15</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="cover-grid">
   <div>
     <div class="cover-eyebrow">Cáscara · Cómo se reparte lo que generamos</div>
@@ -530,8 +532,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <div class="meta-row"><span class="meta-lbl">Aplica a</span><span class="meta-val">B2B <em>· servicios a clientes</em></span></div>
     <div class="meta-row"><span class="meta-lbl">Versión</span><span class="meta-val">Mayo 2026</span></div>
   </div>
-</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">16</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">16</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Por qué este sistema</div>
 <div class="s-headline">
   <div class="s-title">Cada uno cobra<br/><span class="accent">por lo que aporta.</span></div>
@@ -541,8 +543,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">01</div><h3>Separado por vertical</h3><p>B2C y B2B son negocios distintos. Cada uno factura, descuenta sus costos y reparte su propio profit.</p></div>
   <div class="b-card"><div class="num">02</div><h3>Medido por variables</h3><p>El reparto se calcula con un sistema de puntajes que mide el aporte real de cada persona, no a ojo.</p></div>
   <div class="b-card"><div class="num">03</div><h3>Construye empresa</h3><p>El 30% del profit de cada vertical alimenta la caja de Cáscara para crecer y profesionalizar.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">17</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-porque')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">17</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">La fórmula base</div>
 <div class="s-headline">
   <div class="s-title">La misma lógica<br/>en las <span class="accent">dos verticales.</span></div>
@@ -559,11 +561,11 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="split-box cream"><div class="split-pct">30%</div><div class="split-lbl">Caja de Cáscara</div><div class="split-desc">Reinversión, reserva, crecimiento</div></div>
   <div class="split-box cream"><div class="split-pct">5%</div><div class="split-lbl">Segundo</div><div class="split-desc">% fijo mientras consolida su rol</div></div>
   <div class="split-box cream"><div class="split-pct">65%</div><div class="split-lbl">Reparto al equipo</div><div class="split-desc">Según el aporte de cada uno</div></div>
-</div><button class="detail-btn" onclick="openModal('m-formula')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">18</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-formula')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">18</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Cómo se mide</div>
-<div class="statement">El sistema tiene <span class="accent">dos capas</span>:<br/>cuánto <span class="accent">importa</span> cada cosa,<br/>y cuánto <span class="accent">aporta</span> cada uno.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">19</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="statement">El sistema tiene <span class="accent">dos capas</span>:<br/>cuánto <span class="accent">importa</span> cada cosa,<br/>y cuánto <span class="accent">aporta</span> cada uno.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">19</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Las dos capas</div>
 <div class="s-headline">
   <div class="s-title">Peso <span class="accent">×</span> puntaje<br/><span class="accent">= tu parte.</span></div>
@@ -580,8 +582,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>Dentro de cada variable, cada persona recibe un puntaje según su nivel de aporte: core o soporte, embajador o presencia, responsable o auditor.</p>
     <p>El puntaje de cada uno se multiplica por el peso de la variable. La suma define qué porción del reparto le toca.</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-capas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">20</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-capas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">20</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El mapa completo</div>
 <div class="s-headline">
   <div class="s-title">Las <span class="accent">cinco variables</span><br/>que se miden.</div>
@@ -598,8 +600,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="varmap-foot-item"><b>Cada variable pesa distinto</b> según la vertical: en B2C manda el growth (40%), en B2B manda la responsabilidad por resultado (30%).</div>
   <div class="varmap-foot-item"><b>Dentro de cada variable</b>, cada persona recibe un nivel. Peso × nivel define cuánto cobra.</div>
 </div>
-<button class="detail-btn" onclick="openModal('m-capas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">21</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+<button class="detail-btn" onclick="openModal('m-capas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">21</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable 1 · Growth y estrategia comercial</div>
 <div class="s-headline">
   <div class="s-title">¿Quién construye<br/>el <span class="accent">motor?</span></div>
@@ -614,8 +616,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="level-bar"><div class="lb-fill" style="width:40%"></div><div class="lb-name">Ejecuta y contribuye<em>Aporta ideas</em></div><div class="lb-desc">Ejecuta partes del motor y aporta ideas que lo mejoran, pero no lo diseña.</div><div class="lb-score">40</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:20%"></div><div class="lb-name">Participa en la gestión<em>Aporta criterio</em></div><div class="lb-desc">Está en las decisiones de estrategia, da criterio, pero no ejecuta.</div><div class="lb-score">20</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:10%"></div><div class="lb-name">Acompaña<em>De costado</em></div><div class="lb-desc">Se involucra de costado, sin ejecutar ni decidir.</div><div class="lb-score">10</div></div>
-</div><button class="detail-btn" onclick="openModal('m-growth')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">22</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-growth')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">22</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Growth no es marketing</div>
 <div class="s-headline">
   <div class="s-title">Dos cosas<br/>que se <span class="accent">confunden.</span></div>
@@ -633,8 +635,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>El growth <em>convierte la atención en un negocio que crece</em>. Es construir y mejorar la máquina entera.</p>
   </div>
 </div>
-<div class="callout">Por eso la marca personal (que también atrae) se mide en su propia variable, y el growth mide algo distinto: quién diseña y sostiene el <em>motor completo</em> del negocio.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">23</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Por eso la marca personal (que también atrae) se mide en su propia variable, y el growth mide algo distinto: quién diseña y sostiene el <em>motor completo</em> del negocio.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">23</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable 2 · Impacto del departamento</div>
 <div class="s-headline">
   <div class="s-title">¿Cuánto mueve<br/>la aguja <span class="accent">tu área?</span></div>
@@ -648,8 +650,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="level-bar"><div class="lb-fill" style="width:100%"></div><div class="lb-name">Core<em>El corazón</em></div><div class="lb-desc">Sin este departamento no hay producto. Es donde se genera el valor central de la vertical.</div><div class="lb-score">100</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:60%"></div><div class="lb-name">Importante<em>Aporta fuerte</em></div><div class="lb-desc">Su trabajo es necesario y de peso, pero no es el corazón del producto.</div><div class="lb-score">60</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:30%"></div><div class="lb-name">Soporte<em>Secundario</em></div><div class="lb-desc">Participa de forma puntual o de apoyo, sin estar en el centro de la entrega.</div><div class="lb-score">30</div></div>
-</div><button class="detail-btn" onclick="openModal('m-impacto')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">24</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-impacto')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">24</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable 3 · Marca personal</div>
 <div class="s-headline">
   <div class="s-title">¿Tu marca<br/><span class="accent">trae gente?</span></div>
@@ -664,8 +666,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="level-bar"><div class="lb-fill" style="width:70%"></div><div class="lb-name">Referente<em>Autoridad constante</em></div><div class="lb-desc">Construye autoridad en la materia que se enseña, de forma sostenida.</div><div class="lb-score">70</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:40%"></div><div class="lb-name">Presencia<em>Sin constancia</em></div><div class="lb-desc">Aporta autoridad pero de forma esporádica.</div><div class="lb-score">40</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:10%"></div><div class="lb-name">Sin uso<em>No aplica</em></div><div class="lb-desc">No usa su marca personal para esta vertical.</div><div class="lb-score">0</div></div>
-</div><button class="detail-btn" onclick="openModal('m-marca')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">25</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-marca')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">25</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable 4 · Responsabilidad por resultado · solo B2B</div>
 <div class="s-headline">
   <div class="s-title">Si la entrega falla,<br/><span class="accent">¿quién responde?</span></div>
@@ -679,8 +681,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="level-bar"><div class="lb-fill" style="width:100%"></div><div class="lb-name">Responsable<em>Da la cara</em></div><div class="lb-desc">Si el cliente se queja, lo llaman a él. Gestiona la relación y resuelve.</div><div class="lb-score">100</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:60%"></div><div class="lb-name">Auditor<em>Firma calidad</em></div><div class="lb-desc">Firma que la entrega de su área cumple estándares. Co-responsable si falla por calidad.</div><div class="lb-score">60</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:30%"></div><div class="lb-name">Advisor<em>Soporte puntual</em></div><div class="lb-desc">Lo consultan en temas específicos, pero no responde por el resultado.</div><div class="lb-score">30</div></div>
-</div><button class="detail-btn" onclick="openModal('m-resp')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">26</div></div></section>
-<section class="s-slide dense"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-resp')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">26</div></div></section>
+<section class="s-slide dense"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable 5 · Responsabilidad estructural</div>
 <div class="s-headline">
   <div class="s-title">¿Quién sostiene<br/><span class="accent">la empresa?</span></div>
@@ -694,8 +696,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="level-bar"><div class="lb-fill" style="width:100%"></div><div class="lb-name">CEO<em>Responsable final</em></div><div class="lb-desc">Caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga la empresa.</div><div class="lb-score">100</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:60%"></div><div class="lb-name">Dir. Operaciones<em>Sostiene la operación</em></div><div class="lb-desc">Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</div><div class="lb-score">60</div></div>
   <div class="level-bar"><div class="lb-fill" style="width:10%"></div><div class="lb-name">No aplica<em>Solo su área</em></div><div class="lb-desc">Lidera su departamento pero no la estructura de la empresa.</div><div class="lb-score">0</div></div>
-</div><button class="detail-btn" onclick="openModal('m-gerencia')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">27</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-gerencia')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">27</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Variable futura · Ventas atribuibles</div>
 <div class="s-headline">
   <div class="s-title">Ventas:<br/><span class="accent">todavía no se mide.</span></div>
@@ -712,8 +714,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>Queda como objetivo del Director de Operaciones: construir el sistema de tracking que registre, en cada venta, la fuente del lead (marca de quién o cuenta oficial), el closer y el setter.</p>
     <p>Hasta que ese tracking esté bien medido y sea confiable, la variable no entra en el cálculo de nadie.</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-ventas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">28</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-ventas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">28</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">B2C no es B2B</div>
 <div class="s-headline">
   <div class="s-title">Cada negocio se vende<br/><span class="accent">de forma distinta.</span></div>
@@ -727,8 +729,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <h4>B2B — <em>resultado y confianza</em></h4>
     <p>Los servicios a clientes se venden por resultados y confianza. Por eso ahí pesa fuerte la responsabilidad por el resultado (30%), y la marca personal pesa menos (20%).</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-distintas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">29</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-distintas')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">29</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Los pesos · B2C</div>
 <div class="s-headline">
   <div class="s-title">Qué importa en el<br/><span class="accent">programa educativo.</span></div>
@@ -740,8 +742,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="peso-bar"><div class="peso-bar-top"><span class="peso-bar-name">Marca personal</span><span class="peso-bar-pct">15%</span></div><div class="peso-bar-track"><div class="peso-bar-fill" style="width:15%"></div></div></div>
   <div class="peso-bar"><div class="peso-bar-top"><span class="peso-bar-name">Responsabilidad estructural (gerencia)</span><span class="peso-bar-pct">15%</span></div><div class="peso-bar-track"><div class="peso-bar-fill" style="width:15%"></div></div></div>
 </div>
-<div class="callout">En el B2C no existe la variable de "responsabilidad por resultado": no hay un cliente al que rendirle una entrega mensual. Lo que mueve la aguja es el motor comercial (growth) y la calidad del producto (impacto).</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">30</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">En el B2C no existe la variable de "responsabilidad por resultado": no hay un cliente al que rendirle una entrega mensual. Lo que mueve la aguja es el motor comercial (growth) y la calidad del producto (impacto).</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">30</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Los pesos · B2B</div>
 <div class="s-headline">
   <div class="s-title">Qué importa en los<br/><span class="accent">servicios a clientes.</span></div>
@@ -754,8 +756,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="peso-bar"><div class="peso-bar-top"><span class="peso-bar-name">Responsabilidad estructural (gerencia)</span><span class="peso-bar-pct">20%</span></div><div class="peso-bar-track"><div class="peso-bar-fill" style="width:20%"></div></div></div>
   <div class="peso-bar"><div class="peso-bar-top"><span class="peso-bar-name">Marca personal</span><span class="peso-bar-pct">10%</span></div><div class="peso-bar-track"><div class="peso-bar-fill" style="width:10%"></div></div></div>
 </div>
-<div class="callout">Acá el growth pesa menos (20%): el motor trae al cliente, pero una vez adentro lo que manda es la <em>ejecución y la responsabilidad por la entrega</em>. Además el cliente B2B llega también por la autoridad de Cáscara y las marcas del equipo.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">31</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Acá el growth pesa menos (20%): el motor trae al cliente, pero una vez adentro lo que manda es la <em>ejecución y la responsabilidad por la entrega</em>. Además el cliente B2B llega también por la autoridad de Cáscara y las marcas del equipo.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">31</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">La alternativa que evaluamos</div>
 <div class="s-headline">
   <div class="s-title">Por qué no usamos<br/><span class="accent">% fijos a dedo.</span></div>
@@ -772,8 +774,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <p>El sistema de puntajes traslada la discusión de "cuánto te merecés" (subjetivo, conflictivo) a "qué nivel cumplís en cada variable" (verificable, despersonalizado).</p>
     <p>Si alguien quiere cobrar más, sabe exactamente qué mover: subir el impacto de su área, activar su marca, tomar más responsabilidad.</p>
   </div>
-</div><button class="detail-btn" onclick="openModal('m-descartada')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">32</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-descartada')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">32</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El caso de Segundo</div>
 <div class="s-headline">
   <div class="s-title"><span class="segundo-name">Segundo</span> cobra<br/>distinto <span class="accent">por ahora.</span></div>
@@ -791,8 +793,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <div class="sb-detail">Fijo del profit como rol transversal. <b>+ USD 600 por cada cliente</b> que entregue como estratega creativo.</div>
   </div>
 </div>
-<div class="callout"><b>Por qué un % fijo y no puntaje:</b> <span class="segundo-name">Segundo</span> está construyendo su rol —su marca personal y su lugar en el nuevo módulo del programa junto a Facu—. Mientras se consolida, cobra fijo. A los 3 meses se evalúa incorporarlo al sistema de puntajes como todos.</div><button class="detail-btn" onclick="openModal('m-segundo')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">33</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout"><b>Por qué un % fijo y no puntaje:</b> <span class="segundo-name">Segundo</span> está construyendo su rol —su marca personal y su lugar en el nuevo módulo del programa junto a Facu—. Mientras se consolida, cobra fijo. A los 3 meses se evalúa incorporarlo al sistema de puntajes como todos.</div><button class="detail-btn" onclick="openModal('m-segundo')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">33</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">El B2B, en tres niveles</div>
 <div class="s-headline">
   <div class="s-title">Una escalera,<br/>no un <span class="accent">solo producto.</span></div>
@@ -803,8 +805,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">02</div><h3>Estratega embebido</h3><p><b>Cáscara Member.</b> Un estratega creativo insertado en el equipo del cliente, ejecutando la estrategia, 3 meses.</p><div class="b-card-foot">USD 2.000/mes · estratega cobra $750/mes</div></div>
   <div class="b-card"><div class="num">03</div><h3>High ticket</h3><p><b>Proyectos premium.</b> Marcas personales y proyectos (Delfina Ferro, Kevsho) ejecutados por el C-level con Fede y Juana.</p><div class="b-card-foot">Reparto propio · ver más adelante</div></div>
 </div>
-<div class="callout">Los niveles 1 y 2 reparten por el sistema de puntajes. El nivel 3 (high ticket) tiene un reparto propio, porque son Fede y Juana quienes ejecutan esos proyectos como creativos.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">34</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Los niveles 1 y 2 reparten por el sistema de puntajes. El nivel 3 (high ticket) tiene un reparto propio, porque son Fede y Juana quienes ejecutan esos proyectos como creativos.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">34</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Nivel 3 · High Ticket</div>
 <div class="s-headline">
   <div class="s-title">Cáscara<br/><span class="accent">Atelier.</span></div>
@@ -825,8 +827,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <tr><td class="bold">Lola</td><td class="r">5%</td><td class="r serif">$250</td></tr>
   </tbody>
 </table>
-<div class="callout">Acá el 10% de caja reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos. Si el proyecto sale $10.000, Fede y Juana cobran $2.500 cada uno.</div><button class="detail-btn" onclick="openModal('m-highticket')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">35</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Acá el 10% de caja reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos. Si el proyecto sale $10.000, Fede y Juana cobran $2.500 cada uno.</div><button class="detail-btn" onclick="openModal('m-highticket')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">35</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Tercera línea · La Aceleradora</div>
 <div class="s-headline">
   <div class="s-title">El upsell<br/>del <span class="accent">programa.</span></div>
@@ -841,8 +843,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="split-box cream"><div class="split-pct">30%</div><div class="split-lbl">Caja de Cáscara</div><div class="split-desc">Igual que todas las líneas</div></div>
   <div class="split-box cream"><div class="split-pct">70%</div><div class="split-lbl">Reparto al equipo</div><div class="split-desc">Lola PM 10% + los 5 socios parejo</div></div>
 </div>
-<div class="callout">La Aceleradora es simple: <em>sin gastos directos</em> (se vende con una llamada), aporta 30% a la caja como todo, <b>Lola gestiona como PM</b> (10% del reparto) y el resto se divide parejo entre los 5 socios. Segundo no participa de esta línea.</div><button class="detail-btn" onclick="openModal('m-acelera')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">36</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">La Aceleradora es simple: <em>sin gastos directos</em> (se vende con una llamada), aporta 30% a la caja como todo, <b>Lola gestiona como PM</b> (10% del reparto) y el resto se divide parejo entre los 5 socios. Segundo no participa de esta línea.</div><button class="detail-btn" onclick="openModal('m-acelera')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">36</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">De dónde salen los números</div>
 <div class="s-headline">
   <div class="s-title">Un mes,<br/><span class="accent">simulado.</span></div>
@@ -868,9 +870,9 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     </table>
   </div>
 </div>
-<div class="callout">Facturación total del mes: <em>USD 154.000</em>. Es un ejemplo de referencia para ver el sistema funcionando a escala — no una proyección. Lo que se aprueba es la lógica de reparto, no estas cifras puntuales.</div><button class="detail-btn" onclick="openModal('m-datos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">37</div></div></section>
-<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">25%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">23%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">19%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">60</td><td class="r serif">35,0</td><td class="r">14%</td></tr></tbody></table></div><div class="punt-panel" data-panel="b2b"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">30</td><td class="r">20</td><td class="r">100</td><td class="r">—</td><td class="r serif">64,0</td><td class="r">26%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">21%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">30</td><td class="r">30</td><td class="r">10</td><td class="r">60</td><td class="r">—</td><td class="r serif">29,0</td><td class="r">13%</td></tr></tbody></table></div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Facturación total del mes: <em>USD 154.000</em>. Es un ejemplo de referencia para ver el sistema funcionando a escala — no una proyección. Lo que se aprueba es la lógica de reparto, no estas cifras puntuales.</div><button class="detail-btn" onclick="openModal('m-datos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">37</div></div></section>
+<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">25%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">23%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">19%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">60</td><td class="r serif">35,0</td><td class="r">14%</td></tr></tbody></table></div><div class="punt-panel" data-panel="b2b"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">30</td><td class="r">20</td><td class="r">100</td><td class="r">—</td><td class="r serif">64,0</td><td class="r">26%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">21%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">30</td><td class="r">30</td><td class="r">10</td><td class="r">60</td><td class="r">—</td><td class="r serif">29,0</td><td class="r">13%</td></tr></tbody></table></div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Consolidado mensual · simulación</div>
 <div class="s-headline">
   <div class="s-title">De qué línea<br/><span class="accent">cobra cada uno.</span></div>
@@ -888,8 +890,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <tr><td class="bold">Segundo</td><td class="r">$2.387</td><td class="r">$1.012</td><td class="r">—</td><td class="r">—</td></tr>
   </tbody>
 </table>
-<div class="callout">Cada uno cobra de las líneas en las que aporta. Es un mes simulado: los montos varían, lo que no cambia es la lógica de cada línea. <em>Tocá "más detalles" para ver la simulación completa.</em></div><button class="detail-btn" onclick="openModal('m-consolidado')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">39</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Cada uno cobra de las líneas en las que aporta. Es un mes simulado: los montos varían, lo que no cambia es la lógica de cada línea. <em>Tocá "más detalles" para ver la simulación completa.</em></div><button class="detail-btn" onclick="openModal('m-consolidado')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">39</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">La caja de Cáscara</div>
 <div class="s-headline">
   <div class="s-title">El 30% que no se reparte<br/><span class="accent">construye la empresa.</span></div>
@@ -901,8 +903,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">03</div><h3>Reserva</h3><p>Contingencia, 3 meses de operación. USD 36k/año.</p></div>
   <div class="b-card"><div class="num">04</div><h3>Bonos + imprevistos</h3><p>Pool de bonos USD 12k + margen USD 12k.</p></div>
   <div class="b-card"><div class="num">05</div><h3>Acumulación</h3><p>Crecimiento, oportunidades, dividendos. USD 53k/año.</p></div>
-</div><button class="detail-btn" onclick="openModal('m-caja')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">40</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+</div><button class="detail-btn" onclick="openModal('m-caja')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">40</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Equity del pool · Franco y Teo</div>
 <div class="s-headline">
   <div class="s-title">El largo plazo<br/>va por <span class="accent">otro lado.</span></div>
@@ -913,8 +915,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="b-card"><div class="num">3%</div><h3>Teo</h3><p>Del pool de empleados. Vesting 4 años, fecha retroactiva. Por sostener la operación y ser la columna vertebral estructural de la empresa.</p></div>
   <div class="b-card"><div class="num">2%</div><h3>Margen</h3><p>Queda en el pool para futuros reconocimientos, sin diluir a los founders.</p></div>
 </div>
-<div class="callout">El equity <em>no cambia</em> aunque el revenue share suba o baje. Son dos sistemas separados: el equity responde al costo de oportunidad y al largo plazo; el revenue, al aporte operativo del mes.</div><button class="detail-btn" onclick="openModal('m-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">41</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">El equity <em>no cambia</em> aunque el revenue share suba o baje. Son dos sistemas separados: el equity responde al costo de oportunidad y al largo plazo; el revenue, al aporte operativo del mes.</div><button class="detail-btn" onclick="openModal('m-equity')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">41</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Cómo se revisa el sistema</div>
 <div class="s-headline">
   <div class="s-title">Esto no es <span class="accent">una foto fija.</span></div>
@@ -926,8 +928,8 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="tl-step"><div class="tl-num">3</div><div class="tl-when">Semanas 3-12</div><h4>Ejecución</h4><p>5 check-ins quincenales. Teo audita.</p></div>
   <div class="tl-step"><div class="tl-num">4</div><div class="tl-when">Semana 13</div><h4>Cierre</h4><p>Retro y análisis del trimestre.</p></div>
 </div>
-<div class="callout">En el cierre y la planificación siguiente se revisan los pesos, los niveles, las líneas activas y los repartos. Si la realidad del negocio cambió, el sistema se ajusta ahí — de forma ordenada, no improvisada. <em>El sistema vive dentro del ritual trimestral.</em></div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">42</div></div></section>
-<section class="s-slide"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">En el cierre y la planificación siguiente se revisan los pesos, los niveles, las líneas activas y los repartos. Si la realidad del negocio cambió, el sistema se ajusta ahí — de forma ordenada, no improvisada. <em>El sistema vive dentro del ritual trimestral.</em></div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">42</div></div></section>
+<section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Hacia dónde vamos</div>
 <div class="s-headline">
   <div class="s-title">Las líneas que<br/><span class="accent">vienen.</span></div>
@@ -942,12 +944,12 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="fut-item"><span class="fut-n">06</span><h4>Eventos y activaciones</h4><p>Experiencias culturales presenciales monetizables.</p></div>
   <div class="fut-item"><span class="fut-n">07</span><h4>YouTube</h4><p>El contenido propio como revenue directo.</p></div>
 </div>
-<div class="callout">Cada una se irá incorporando al sistema cuando se active, con su propia lógica de reparto, en las revisiones trimestrales.</div></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">43</div></div></section>
-<section class="s-slide dark"><div class="s-bg-star"></div><div class="s-slide-inner">
+<div class="callout">Cada una se irá incorporando al sistema cuando se active, con su propia lógica de reparto, en las revisiones trimestrales.</div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">43</div></div></section>
+<section class="s-slide dark"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Lo que se aprueba</div>
 <div class="statement" style="font-size:4.4vw;">Lo que se aprueba hoy<br/>no son los números.<br/>Es <span class="accent">el sistema.</span></div>
-<button class="detail-btn" onclick="openModal('m-completo')" style="margin-top:5vh;">+ Ver informe completo entero</button></div><div class="s-footer"><div class="left">★ CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">44</div></div></section>
-<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Documentos de respaldo</div><div class="s-headline"><div class="s-title">Descargá los<br/><span class="accent">documentos completos.</span></div><div class="s-lead">La presentación es el resumen visual. Estos dos documentos son la fuente de verdad: todos los números, las fórmulas y los criterios.</div></div><div class="dl-grid"><a class="dl-card" href="docs/cascara-founders.pdf" download><div class="dl-num">Documento 01</div><div class="dl-mid"><div class="dl-title">Estructura de <em>Founders, Equity y Revenue</em></div><div class="dl-desc">Qué significa ser founder, cómo funciona el equity y el vesting, el cap table, los niveles de socio y la transformación de Cáscara en startup.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Documento de socios</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a><a class="dl-card" href="docs/cascara-estructura-economica.pdf" download><div class="dl-num">Documento 02</div><div class="dl-mid"><div class="dl-title">Estructura <em>Económica · 4 líneas</em></div><div class="dl-desc">El sistema de puntajes, los pesos por variable, las cuatro líneas de revenue (B2C, B2B, Aceleradora, High Ticket), el reparto y la caja.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Respaldo completo</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a></div></div><div class="s-footer"><div class="left">★ CÁSCARA · STARTUP</div><div class="right">45</div></div></section>
+<button class="detail-btn" onclick="openModal('m-completo')" style="margin-top:5vh;">+ Ver informe completo entero</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">44</div></div></section>
+<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Documentos de respaldo</div><div class="s-headline"><div class="s-title">Descargá los<br/><span class="accent">documentos completos.</span></div><div class="s-lead">La presentación es el resumen visual. Estos dos documentos son la fuente de verdad: todos los números, las fórmulas y los criterios.</div></div><div class="dl-grid"><a class="dl-card" href="docs/cascara-founders.pdf" download><div class="dl-num">Documento 01</div><div class="dl-mid"><div class="dl-title">Estructura de <em>Founders, Equity y Revenue</em></div><div class="dl-desc">Qué significa ser founder, cómo funciona el equity y el vesting, el cap table, los niveles de socio y la transformación de Cáscara en startup.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Documento de socios</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a><a class="dl-card" href="docs/cascara-estructura-economica.pdf" download><div class="dl-num">Documento 02</div><div class="dl-mid"><div class="dl-title">Estructura <em>Económica · 4 líneas</em></div><div class="dl-desc">El sistema de puntajes, los pesos por variable, las cuatro líneas de revenue (B2C, B2B, Aceleradora, High Ticket), el reparto y la caja.</div></div><div class="dl-foot"><span class="dl-meta">PDF · Respaldo completo</span><span class="dl-btn">Descargar <span class="arw">↓</span></span></div></a></div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · STARTUP</div><div class="right">45</div></div></section>
 </div>
 <div class="s-nav"><button id="prev">‹</button><span class="counter" id="counter">1</span><button id="next">›</button></div>
 <div class="modal" id="m-s-porque"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Documento · Por qué existe</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">

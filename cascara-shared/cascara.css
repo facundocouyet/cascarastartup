@@ -1,0 +1,173 @@
+/* ============================================================
+   CÁSCARA COLLECTIVE — Hoja de estilos compartida
+   ------------------------------------------------------------
+   Una sola fuente de verdad para TODAS las páginas de Cáscara.
+   Linkeá este archivo y borrá el bloque :root de cada página.
+
+   Contiene:
+     1. @font-face   → Helvetica Neue LT Std + Redaction (las reales)
+     2. :root tokens → paleta OFICIAL (azul #10069F) con los MISMOS
+                       nombres de variable que ya usan las páginas
+     3. Base         → reset, render, ::selection, grano de film
+     4. Logos        → clases helper para wordmark / jinete-arquero
+
+   Requiere que al lado de este .css existan:  fonts/   logos/
+   ============================================================ */
+
+
+/* ============================================================
+   1 · WEBFONTS  (Helvetica Neue LT Std · Redaction 10)
+   ============================================================ */
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:100;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-UltLt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:200;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Th.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:italic;font-weight:200;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-ThIt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:300;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Lt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:italic;font-weight:300;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-LtIt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:400;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Md.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:italic;font-weight:400;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-MdIt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:500;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Md.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:italic;font-weight:500;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-MdIt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:700;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Bd.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:italic;font-weight:700;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-BdIt.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:800;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Hv.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue";font-style:normal;font-weight:900;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-Blk.otf") format("opentype")}
+
+/* Condensed — display / sticker lettering ("CREATE.", "@CASCARAGRAM") */
+@font-face{font-family:"Helvetica Neue Condensed";font-style:normal;font-weight:700;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-HvCn.otf") format("opentype")}
+@font-face{font-family:"Helvetica Neue Condensed";font-style:normal;font-weight:900;font-display:swap;
+  src:url("fonts/HelveticaNeueLTStd-BlkCn.otf") format("opentype")}
+
+/* Redaction 10 — serif accent, SOLO itálica (por diseño) */
+@font-face{font-family:"Redaction";font-style:italic;font-weight:400;font-display:swap;
+  src:url("fonts/Redaction10-Italic.otf") format("opentype")}
+
+
+/* ============================================================
+   2 · TOKENS — paleta OFICIAL de marca
+   ------------------------------------------------------------
+   Los 4 colores oficiales:
+     AZUL #10069F · TIZA #DBD7D2 · NEGRO #000000 · BLANCO #FFFFFF
+   Sin gradientes.
+
+   Se exponen con DOS juegos de nombres:
+     · --cc-*   → nomenclatura canónica del design system
+     · --blue, --cream, --ink…  → los nombres que YA usan tus páginas
+                  (así sólo hay que borrar el :root viejo de cada página)
+   ============================================================ */
+:root{
+  /* ---- nomenclatura design system (--cc-*) ---- */
+  --cc-cream:#DBD7D2;          /* TIZA · fondo (oficial COLOR 2) */
+  --cc-cream-soft:#E4E1DD;     /* superficies / cards */
+  --cc-cream-softer:#EDEBE7;   /* superficie más alta / campos */
+  --cc-paper-white:#FFFFFF;    /* BLANCO · oficial COLOR 4 */
+
+  --cc-ink:#000000;            /* NEGRO · texto (oficial COLOR 3) */
+  --cc-ink-soft:#1A1A1C;
+  --cc-ink-muted:#54545B;
+  --cc-ink-faint:#9B9BA0;
+
+  --cc-blue:#10069F;           /* ★ EL azul Cáscara (oficial COLOR 1) */
+  --cc-blue-electric:#1400FF;  /* eléctrico · secundario aceptable */
+  --cc-blue-deep:#0A0470;      /* hover / pressed */
+  --cc-blue-soft:#6B7AFF;      /* claro · uso limitado, sobre oscuro */
+  --cc-blue-lt:#AEB6FF;        /* claro · uso limitado, sobre oscuro */
+  --cc-blue-wash:rgba(16,6,159,0.06);
+
+  --cc-line:rgba(0,0,0,0.08);
+  --cc-line-strong:rgba(0,0,0,0.14);
+  --cc-line-inv:rgba(255,255,255,0.16);
+  --cc-line-inv-strong:rgba(255,255,255,0.28);
+
+  /* tipografía */
+  --cc-font-sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --cc-font-serif:"Redaction","Times New Roman",Georgia,serif;
+  --cc-font-cond:"Helvetica Neue Condensed","Helvetica Neue",Helvetica,sans-serif;
+
+  /* radios / sombras / motion */
+  --cc-radius:16px;
+  --cc-radius-sm:8px;
+  --cc-radius-lg:28px;
+  --cc-pill:999px;
+  --cc-shadow-md:0 6px 24px rgba(0,0,0,.10);
+  --cc-shadow-lg:0 20px 60px rgba(0,0,0,.20);
+  --cc-ease:cubic-bezier(.2,.8,.2,1);
+
+  /* ============================================================
+     ALIAS de compatibilidad — los nombres que YA usan tus páginas.
+     Al apuntarlos a los tokens oficiales, cada página queda
+     migrada con sólo borrar su propio :root y linkear este css.
+     ============================================================ */
+  --cream:var(--cc-cream);
+  --cream-soft:var(--cc-cream-soft);
+  --cream-softer:var(--cc-cream-softer);
+
+  --ink:var(--cc-ink);
+  --ink-soft:var(--cc-ink-soft);
+  --ink-muted:var(--cc-ink-muted);
+  --ink-faint:var(--cc-ink-faint);
+
+  --blue:var(--cc-blue);          /* ← antes #1400FF, ahora #10069F oficial */
+  --blue-soft:var(--cc-blue-soft);
+  --blue-lt:var(--cc-blue-lt);
+
+  --line:var(--cc-line);
+  --line-strong:var(--cc-line-strong);
+
+  --font-sans:var(--cc-font-sans);
+  --font-serif:var(--cc-font-serif);
+}
+
+
+/* ============================================================
+   3 · BASE — reset suave, render, selección, grano de film
+   ------------------------------------------------------------
+   Es idéntico a lo que las páginas ya tienen embebido, así que
+   podés borrar esas reglas de cada página (o dejarlas: no rompen).
+   ============================================================ */
+::selection{background:var(--cc-blue);color:#fff}
+
+/* Grano de film — overlay sutil sobre toda la página.
+   Activalo agregando la clase .cc-grain al <body>. (Las páginas
+   actuales lo hacen con body::after; podés mantener ese o pasar a éste.) */
+.cc-grain::after{
+  content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+  opacity:.16;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+}
+/* sobre fondo azul / oscuro el grano va en screen, no multiply */
+.cc-grain--inv::after{mix-blend-mode:screen;opacity:.10}
+
+/* El asterisco de marca (bullet / sello). NUNCA usar emoji. */
+.cc-star{color:var(--cc-blue);font-style:normal;line-height:1}
+
+
+/* ============================================================
+   4 · LOGOS — clases helper
+   ------------------------------------------------------------
+   Usá <img> directo o estas clases. El alto controla el tamaño.
+   Archivos disponibles en logos/:
+     wordmark-inline-{black,white,blue}.png   ← lockup horizontal
+     wordmark-stacked-{black,white,blue}.png  ← lockup 2 líneas
+     cascara-{black,white,blue}.png           ← sólo "cáscara"
+     logo-mark-{black,white}.png              ← jinete-arquero (emblema)
+   Regla de color: negro sobre Tiza/blanco · blanco sobre azul/negro.
+   ============================================================ */
+.cc-logo{display:block;height:auto;width:auto}
+.cc-logo--wordmark{height:22px}      /* navbars / footers */
+.cc-logo--wordmark-lg{height:40px}   /* portadas */
+.cc-logo--mark{height:120px}         /* emblema jinete-arquero */
+img.cc-logo{max-width:100%}
