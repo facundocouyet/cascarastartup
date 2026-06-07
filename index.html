@@ -290,12 +290,14 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
    MOBILE  ·  nav fijo abajo + cada slide = 1 pantalla
    ========================================================= */
 @media (max-width:680px){
-  /* Página bloqueada: no scrollea el documento, scrollea la slide si no entra */
-  html,body{ height:100%; overflow:hidden; position:fixed; width:100%; }
-  .deck{ height:100dvh; }
+  /* Página bloqueada: no scrollea el documento, scrollea la slide si no entra.
+     (Sin position:fixed en body — rompe el scroll en iOS Safari. Se bloquea el
+     deck como contenedor fijo a la pantalla y se scrollea dentro de cada slide.) */
+  html,body{ height:100%; margin:0; overflow:hidden; overscroll-behavior:none; }
+  .deck{ position:fixed; top:0; left:0; width:100%; height:100vh; height:100dvh; overflow:hidden; }
 
   /* La slide arranca arriba y deja lugar al nav fijo; scrollea solo si no entra */
-  .s-slide{ padding:3vh 5.5vw calc(62px + 2vh); justify-content:flex-start; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .s-slide{ padding:3vh 5.5vw calc(64px + 2vh); justify-content:flex-start; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
   .s-slide-inner, .s-slide.dense .s-slide-inner{ justify-content:flex-start; }
   .s-footer{ display:none; } /* el número va en el nav de abajo */
 
