@@ -18,7 +18,7 @@ Cáscara opera con cuatro líneas de revenue:
 **Los tres niveles del B2B:**
 
 - **Nivel 1 — Entrada.** Estrategia Creativa (done-with-you): auditoría + estrategia + sistemas + procesos, que el cliente ejecuta. Venta directa desde la web, sin llamada. Precio USD 1.200. El estratega creativo que lo entrega cobra USD 500.
-- **Nivel 2 — Estratega embebido (Cáscara Member).** Un estratega creativo de Cáscara insertado en el equipo del cliente, ejecutando la estrategia ya armada, durante 3 meses. Precio USD 2.000/mes. El estratega cobra USD 750/mes.
+- **Nivel 2 — Estratega insertado (Cáscara Member).** Un estratega creativo de Cáscara insertado en el equipo del cliente, ejecutando la estrategia ya armada, durante 3 meses. Precio USD 2.000/mes. El estratega cobra USD 750/mes.
 - **Nivel 3 — High Ticket.** Ofertas personalizadas para marcas personales o proyectos premium —Cáscara Atelier— (ejemplos: Delfina Ferro, Kevsho), ejecutadas por el C-level de Cáscara con Fede y Juana como creativos. Tiene un reparto propio (ver sección 11).
 
 **La lógica base de cada línea:**
@@ -483,7 +483,7 @@ Entre los dos usan 8% del pool de 10%, dejando 2% de margen para futuros reconoc
 
 ## 16. CÓMO SE REVISA: LA PLANIFICACIÓN TRIMESTRAL
 
-Este sistema económico no es una foto fija. Se revisa cada trimestre dentro del proceso de planificación de Cáscara, que sigue siempre el mismo ritual de 13 semanas y cuatro etapas:
+Este sistema económico se revisa cada trimestre dentro del proceso de planificación de Cáscara, que sigue siempre el mismo ritual de 13 semanas y cuatro etapas:
 
 | Etapa | Cuándo | Qué pasa |
 |---|---|---|
