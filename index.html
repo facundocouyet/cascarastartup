@@ -287,63 +287,67 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 .s-title.ht { font-size:clamp(30px, 4.2vw, 42px); line-height:1.05; } /* High Ticket: título más compacto para que la slide (densa) entre */
 
 /* =========================================================
-   MOBILE  ·  nav fijo abajo + cada slide = 1 pantalla
+   MOBILE  ·  enfoque cómodo: cada slide es una tarjeta que respira y
+   scrollea con holgura. Nav fijo full-width abajo (con safe-area iPhone).
+   Prioriza legibilidad y aire por sobre "meter todo en una pantalla".
    ========================================================= */
-@media (max-width:680px){
-  /* Página bloqueada: no scrollea el documento, scrollea la slide si no entra.
-     (Sin position:fixed en body — rompe el scroll en iOS Safari. Se bloquea el
-     deck como contenedor fijo a la pantalla y se scrollea dentro de cada slide.) */
+@media (max-width:700px){
+  /* Lock de página robusto (sin position:fixed en body, que rompe iOS Safari) */
   html,body{ height:100%; margin:0; overflow:hidden; overscroll-behavior:none; }
   .deck{ position:fixed; top:0; left:0; width:100%; height:100vh; height:100dvh; overflow:hidden; }
 
-  /* La slide arranca arriba y deja lugar al nav fijo; scrollea solo si no entra */
-  .s-slide{ padding:3vh 5.5vw calc(64px + 2vh); justify-content:flex-start; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
-  .s-slide-inner, .s-slide.dense .s-slide-inner{ justify-content:flex-start; }
-  .s-footer{ display:none; } /* el número va en el nav de abajo */
+  /* Slide: padding generoso + lugar para el nav y la home-bar del iPhone */
+  .s-slide{ padding:4.4vh 6.4vw calc(80px + env(safe-area-inset-bottom,0px));
+    justify-content:flex-start; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+  .s-slide-inner,.s-slide.dense .s-slide-inner{ justify-content:flex-start; max-width:100%; }
+  .s-footer{ display:none; }
 
-  /* Tipografía */
-  .cover-title{ font-size:13.5vw; }
-  .cover-title em{ font-size:15.5vw; }
-  .s-title{ font-size:8.4vw; }
-  .statement{ font-size:7.6vw; line-height:1.18; }
-  .s-tag{ font-size:10px; margin-bottom:2vh; }
-  .s-headline{ flex-direction:column; align-items:flex-start; gap:10px; margin-bottom:2.4vh; }
-  .s-lead{ text-align:left; max-width:none; font-size:14px; }
+  /* Tipografía legible, con aire */
+  .s-tag{ font-size:11px; letter-spacing:0.18em; margin-bottom:2.8vh; }
+  .cover-title{ font-size:12.5vw; }
+  .cover-title em{ font-size:14vw; }
+  .s-title{ font-size:8.2vw; line-height:1.07; }
+  .s-title.ht{ font-size:8vw; }
+  .statement{ font-size:7.4vw; line-height:1.24; }
+  .s-headline{ flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:3.4vh; }
+  .s-lead{ text-align:left; max-width:none; font-size:15px; line-height:1.5; }
+  p,li{ font-size:14.5px; line-height:1.6; }
 
-  /* Todo lo multi-columna → una sola columna */
+  /* Multi-columna → 1 columna, con buen espacio entre bloques */
   .cover-grid,.split-row,.var-intro,.segundo-hero,.two-col,.pesos-grid,.varmap,
-  .card-row,.card-row.c3,.card-row.c4,.card-row.c5,.dl-grid{
-    grid-template-columns:1fr !important; gap:12px !important; }
-  .cover-grid{ gap:3vh !important; }
-  .meta-grid{ padding-left:0; border-left:none; }
-  .flow{ flex-direction:column; align-items:stretch; }
+  .card-row,.card-row.c3,.card-row.c4,.card-row.c5,.dl-grid,.timeline-4,.futuras-grid{
+    grid-template-columns:1fr !important; display:grid !important; gap:16px !important; }
+  .cover-grid{ gap:3.6vh !important; }
+  .meta-grid{ padding-left:0; border-left:none; gap:16px; }
+  .flow{ flex-direction:column; align-items:stretch; gap:10px; }
   .flow-arrow{ transform:rotate(90deg); align-self:center; }
-  .level-bar{ grid-template-columns:1fr auto; gap:4px 12px; padding:14px 18px; }
+  .who-row{ gap:9px; }
+
+  /* Tarjetas y bloques: padding cómodo */
+  .b-card,.var-intro-box,.split-box,.segundo-box,.flow-step,.tl-step,.fut-item{ padding:20px 22px !important; }
+  .callout{ padding:18px 20px; margin-top:3vh; font-size:14.5px; line-height:1.6; }
+  .level-bar{ grid-template-columns:1fr auto; gap:6px 14px; padding:16px 20px; }
   .lb-desc{ grid-column:1 / -1; }
-  .who-row{ gap:8px; }
+  .dl-card{ min-height:auto; padding:26px 24px; }
+  .dl-card .dl-title{ font-size:23px; }
+  .dl-mid{ padding:20px 0; }
+  .detail-btn{ width:100%; text-align:center; }
 
-  /* Cards de descarga compactas */
-  .dl-card{ min-height:auto; padding:24px 22px; }
-  .dl-card .dl-title{ font-size:22px; }
-  .dl-mid{ padding:18px 0; }
+  /* Tablas: el contenedor (.tbl-wrap) scrollea horizontal MANTENIENDO la
+     alineación de la tabla; las angostas entran solas, las anchas se deslizan. */
+  .tbl-wrap,.punt-panel{ overflow-x:auto; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; }
+  .big-table,.mini-table,.modal-body table{ min-width:max-content; font-size:13px; white-space:nowrap; }
+  .big-table th,.big-table td,.mini-table th,.mini-table td{ padding:11px 14px; }
+  .big-table td.serif{ font-size:15px; }
+  .punt-tabs{ margin-bottom:2.6vh; }
 
-  /* Tablas: achican; si igual no entran, scroll horizontal del cuadro (no de la página) */
-  .s-slide-inner{ max-width:100%; }
-  table{ font-size:12px; }
-  .big-table{ font-size:12px; display:block; overflow-x:auto; white-space:nowrap; }
-  .big-table thead,.big-table tbody{ display:table; width:100%; min-width:430px; }
-  .big-table th,.big-table td{ padding:8px 9px; }
-  .big-table td.serif{ font-size:14px; }
-  .punt-panel{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .punt-tabs{ margin-bottom:2vh; }
-
-  /* NAV: bloque fijo a todo el ancho, abajo de todo */
+  /* NAV fijo full-width abajo, con safe-area de iPhone */
   .s-nav{ bottom:0; left:0; right:0; top:auto; width:100%; transform:none;
-    border-radius:0; border:none; border-top:1px solid rgba(255,255,255,0.14);
-    background:rgba(10,10,12,0.94); padding:13px max(20px,5vw);
-    justify-content:space-between; gap:0; }
-  .s-nav .counter{ font-size:13px; letter-spacing:0.06em; }
-  .s-nav button{ font-size:22px; line-height:1; padding:4px 10px; }
+    border-radius:0; border:none; border-top:1px solid rgba(255,255,255,0.16);
+    background:rgba(10,10,12,0.96); justify-content:space-between; gap:0;
+    padding:14px max(22px,5.5vw) calc(14px + env(safe-area-inset-bottom,0px)); }
+  .s-nav .counter{ font-size:13.5px; letter-spacing:0.08em; }
+  .s-nav button{ font-size:24px; line-height:1; padding:2px 14px; }
 }
 </style></head>
 <body>
@@ -819,7 +823,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
   <div class="var-intro-box"><div class="vi-lbl">Qué son</div><p>Ofertas personalizadas de estrategia creativa para marcas personales y proyectos (ej: Delfina Ferro, Kevsho), ejecutadas por el C-level de Cáscara con <em>Fede y Juana como creativos</em>.</p></div>
   <div class="var-intro-box"><div class="vi-lbl">Por qué reparto propio</div><p>Son Fede y Juana quienes ejecutan estos proyectos premium. Por eso cobran más de esta línea (25% c/u): es el reconocimiento de su rol como perfiles high ticket.</p></div>
 </div>
-<table class="big-table">
+<div class="tbl-wrap"><table class="big-table">
   <thead><tr><th>Persona</th><th class="r">%</th><th class="r">En un proyecto de $5.000</th></tr></thead>
   <tbody>
     <tr class="hi"><td class="bold">Juana</td><td class="r">25%</td><td class="r serif">$1.250</td></tr>
@@ -829,7 +833,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <tr><td class="bold">Cáscara (caja)</td><td class="r">10%</td><td class="r serif">$500</td></tr>
     <tr><td class="bold">Lola</td><td class="r">5%</td><td class="r serif">$250</td></tr>
   </tbody>
-</table>
+</table></div>
 <div class="callout">Acá el 10% de caja reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos. Si el proyecto sale $10.000, Fede y Juana cobran $2.500 cada uno.</div><button class="detail-btn" onclick="openModal('m-highticket')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">35</div></div></section>
 <section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Tercera línea · La Aceleradora</div>
@@ -855,33 +859,33 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </div>
 <div class="split-row" style="grid-template-columns:1fr 1fr;">
   <div class="split-box cream">
-    <table class="mini-table">
+    <div class="tbl-wrap"><table class="mini-table">
       <tr><td><b>B2C base</b></td><td class="r"><b>$84.000</b></td></tr>
       <tr><td>− Costos (43%, prop. Abril)</td><td class="r">$36.269</td></tr>
       <tr class="tot"><td>= Profit B2C</td><td class="r">$47.731</td></tr>
       <tr><td><b>Aceleradora</b> (8 × $2.000)</td><td class="r"><b>$16.000</b></td></tr>
       <tr><td>sin gastos directos</td><td class="r">profit $16.000</td></tr>
-    </table>
+    </table></div>
   </div>
   <div class="split-box cream">
-    <table class="mini-table">
+    <div class="tbl-wrap"><table class="mini-table">
       <tr><td><b>B2B nivel 1</b> (20 × $1.200)</td><td class="r"><b>$24.000</b></td></tr>
       <tr><td><b>B2B nivel 2</b> (5 × $2.000)</td><td class="r"><b>$10.000</b></td></tr>
       <tr><td>− Estrategas creativos</td><td class="r">$13.750</td></tr>
       <tr class="tot"><td>= Profit B2B 1-2</td><td class="r">$20.250</td></tr>
       <tr><td><b>High ticket</b> (4 × $5.000)</td><td class="r"><b>$20.000</b></td></tr>
-    </table>
+    </table></div>
   </div>
 </div>
 <div class="callout">Facturación total del mes: <em>USD 154.000</em>. Es un ejemplo de referencia para ver el sistema funcionando a escala — no una proyección. Lo que se aprueba es la lógica de reparto, no estas cifras puntuales.</div><button class="detail-btn" onclick="openModal('m-datos')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">37</div></div></section>
-<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">25%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">23%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">19%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">60</td><td class="r serif">35,0</td><td class="r">14%</td></tr></tbody></table></div><div class="punt-panel" data-panel="b2b"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">30</td><td class="r">20</td><td class="r">100</td><td class="r">—</td><td class="r serif">64,0</td><td class="r">26%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">21%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">30</td><td class="r">30</td><td class="r">10</td><td class="r">60</td><td class="r">—</td><td class="r serif">29,0</td><td class="r">13%</td></tr></tbody></table></div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
+<section class="s-slide dense"><div class="s-slide-inner"><div class="s-tag">Cómo quedaron los puntajes</div><div class="s-headline"><div class="s-title">Los puntajes de <span class="accent">cada uno.</span></div><div class="s-lead">El puntaje de cada persona = su nivel en cada variable × el peso de esa variable. De ahí sale el % del reparto.</div></div><div class="punt-tabs"><button class="punt-tab active" data-tab="b2c">B2C · programa</button><button class="punt-tab" data-tab="b2b">B2B · servicios</button></div><div class="punt-panel active" data-panel="b2c"><div class="tbl-wrap"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Growth · 40%</th><th class="r">Impacto · 30%</th><th class="r">Marca · 15%</th><th class="r">Gerencia · 15%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Franco</td><td class="r">100</td><td class="r">50</td><td class="r">40</td><td class="r">—</td><td class="r serif">61,0</td><td class="r">25%</td></tr><tr><td class="bold">Fede</td><td class="r">40</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">56,5</td><td class="r">23%</td></tr><tr><td class="bold">Juana</td><td class="r">20</td><td class="r">100</td><td class="r">70</td><td class="r">—</td><td class="r serif">48,5</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">20</td><td class="r">60</td><td class="r">40</td><td class="r">100</td><td class="r serif">47,0</td><td class="r">19%</td></tr><tr><td class="bold">Facu</td><td class="r">20</td><td class="r">60</td><td class="r">—</td><td class="r">60</td><td class="r serif">35,0</td><td class="r">14%</td></tr></tbody></table></div></div><div class="punt-panel" data-panel="b2b"><div class="tbl-wrap"><table class="big-table"><thead><tr><th>Persona</th><th class="r">Resp. · 30%</th><th class="r">Impacto · 20%</th><th class="r">Growth · 20%</th><th class="r">Gerencia · 20%</th><th class="r">Marca · 10%</th><th class="r">Puntaje</th><th class="r">% reparto</th></tr></thead><tbody><tr class="hi"><td class="bold">Facu</td><td class="r">100</td><td class="r">30</td><td class="r">20</td><td class="r">100</td><td class="r">—</td><td class="r serif">64,0</td><td class="r">26%</td></tr><tr><td class="bold">Franco</td><td class="r">30</td><td class="r">100</td><td class="r">100</td><td class="r">—</td><td class="r">—</td><td class="r serif">49,0</td><td class="r">21%</td></tr><tr><td class="bold">Fede</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Juana</td><td class="r">60</td><td class="r">100</td><td class="r">20</td><td class="r">—</td><td class="r">40</td><td class="r serif">46,0</td><td class="r">20%</td></tr><tr><td class="bold">Teo</td><td class="r">30</td><td class="r">30</td><td class="r">10</td><td class="r">60</td><td class="r">—</td><td class="r serif">29,0</td><td class="r">13%</td></tr></tbody></table></div></div></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">38</div></div></section>
 <section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">Consolidado mensual · simulación</div>
 <div class="s-headline">
   <div class="s-title">De qué línea<br/><span class="accent">cobra cada uno.</span></div>
   <div class="s-lead">Un mes con las cuatro líneas activas · facturación total $154.000</div>
 </div>
-<table class="big-table">
+<div class="tbl-wrap"><table class="big-table">
   <thead><tr><th>Persona</th><th class="r">B2C</th><th class="r">B2B 1-2</th><th class="r">High Tk</th><th class="r">Aceleradora</th></tr></thead>
   <tbody>
     <tr><td class="bold">Facu</td><td class="r">$4.379</td><td class="r">$2.905</td><td class="r">$3.500</td><td class="r">$2.016</td></tr>
@@ -892,7 +896,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
     <tr><td class="bold">Lola</td><td class="r">—</td><td class="r">$2.025</td><td class="r">$1.000</td><td class="r">$1.120</td></tr>
     <tr><td class="bold">Segundo</td><td class="r">$2.387</td><td class="r">$1.012</td><td class="r">—</td><td class="r">—</td></tr>
   </tbody>
-</table>
+</table></div>
 <div class="callout">Cada uno cobra de las líneas en las que aporta. Es un mes simulado: los montos varían, lo que no cambia es la lógica de cada línea. <em>Tocá "más detalles" para ver la simulación completa.</em></div><button class="detail-btn" onclick="openModal('m-consolidado')">+ Ver informe completo de esta sección</button></div><div class="s-footer"><div class="left"><img class="foot-seal" src="cascara-shared/stickers/star-archer.png" alt="">CÁSCARA · ESTRUCTURA ECONÓMICA</div><div class="right">39</div></div></section>
 <section class="s-slide"><img class="s-bg-star" src="cascara-shared/logos/logo-mark-black.png" alt="" aria-hidden="true"><div class="s-slide-inner">
 <div class="s-tag">La caja de Cáscara</div>
@@ -999,26 +1003,26 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <p><b>Por qué existe:</b> protege a la empresa de founders que se van rápido, protege a los que se quedan, alinea incentivos, y es requisito obligatorio para levantar capital.</p>
 <h4>Esquema que aplicamos</h4>
 <p>Vesting total de <b>4 años</b>, liberación mensual y progresiva durante los 48 meses. Las cláusulas de cliff van en el Shareholder Agreement legal.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Momento</th><th>Equity otorgado</th><th>Consolidado</th></tr>
 <tr><td>Día 1</td><td>30%</td><td>0%</td></tr>
 <tr><td>Mes 12</td><td>30%</td><td>7,5%</td></tr>
 <tr><td>Mes 24</td><td>30%</td><td>15%</td></tr>
 <tr><td>Mes 36</td><td>30%</td><td>22,5%</td></tr>
 <tr><td>Mes 48</td><td>30%</td><td>30%</td></tr>
-</table>
+</table></div>
 <h4>Fecha retroactiva</h4>
 <p>Cáscara tiene 18 meses. El vesting se firma tomando como inicio el día que arrancó Cáscara, reconociendo el tiempo ya invertido. Los founders ya tienen una porción consolidada al firmar.</p></div></div></div>
 <div class="modal" id="m-s-captable"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Documento · Equity y cap table</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>5. Equity — distribución con pool de empleados</h3>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Posición</th><th>Equity</th></tr>
 <tr><td>Facundo Couyet</td><td>30%</td></tr>
 <tr><td>Federico Cristofari</td><td>30%</td></tr>
 <tr><td>Juana Tempesta</td><td>30%</td></tr>
 <tr><td>Pool de Empleados (EIP)</td><td>10%</td></tr>
 <tr><td><b>Total</b></td><td><b>100%</b></td></tr>
-</table>
+</table></div>
 <h4>Por qué el pool de empleados</h4>
 <ul>
 <li>Es estándar en todas las startups profesionales (10% a 15%).</li>
@@ -1030,12 +1034,12 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <div class="modal" id="m-s-niveles"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Documento · Los tres niveles de participación</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>6.1 Los tres niveles de participación</h3>
 <p>No son jerarquías de "más o menos importante" — son funciones distintas con lógicas distintas.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Quién</th><th>Qué recibe</th></tr>
 <tr><td><b>Founder</b></td><td>Facu, Fede, Juana</td><td>Equity + revenue share. Dueño, vota decisiones estructurales, su retorno principal es el equity a largo plazo.</td></tr>
 <tr><td><b>Owner</b></td><td>Franco, Teo</td><td>Revenue share sin equity por ahora. Operador estructural; su retorno está atado al presente, no al exit.</td></tr>
 <tr><td><b>Partner</b></td><td>Ej: Segundo</td><td>% sobre una unidad específica. Aporta sobre una vertical concreta, no sobre el total.</td></tr>
-</table>
+</table></div>
 <p>Esta jerarquía resuelve cómo retribuir distinto a personas que aportan distinto sin regalarle equity a todos ni tratar a todos como iguales. El detalle del revenue share está en la Parte 2 de esta presentación.</p></div></div></div>
 <div class="modal" id="m-s-dividendos"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Documento · Dividendos</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>7. Dividendos — cómo funcionan y qué vamos a hacer</h3>
@@ -1074,7 +1078,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <h4>Responsabilidad central: liderar tu departamento</h4>
 <p>Cada founder lidera un área con autonomía, planificación trimestral y resultados medibles. Cada departamento presenta su Plan Trimestral (visión, responsabilidades, scope, recursos, output, KPIs, riesgos), se audita mensualmente por Operaciones y se cierra con el CEO.</p>
 <h4>Los departamentos</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Departamento</th><th>Líder</th></tr>
 <tr><td>Creatividad</td><td>Juana</td></tr>
 <tr><td>Contenido</td><td>Fede</td></tr>
@@ -1083,7 +1087,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <tr><td>Operaciones</td><td>Teo</td></tr>
 <tr><td>Admin & Finanzas</td><td>Facu</td></tr>
 <tr><td>Capital Humano</td><td>Facu</td></tr>
-</table>
+</table></div>
 <h4>Cláusula de desempeño</h4>
 <p>Dos trimestres consecutivos sin cumplir: reunión formal, plan de recuperación de 60 días. Si no hay mejora, el revenue baja y los dividendos se suspenden. El equity consolidado se mantiene; el rol se renegocia.</p>
 <h4>Cláusula de salida</h4>
@@ -1196,7 +1200,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Tomemos el ejemplo de un founder con el 30% de equity otorgado:</p>
 
-<table><tr><th>Momento</th><th>Equity otorgado</th><th>Equity consolidado (vested)</th></tr><tr><td>Día 1</td><td>30%</td><td>0%</td></tr><tr><td>Mes 12</td><td>30%</td><td>7,5%</td></tr><tr><td>Mes 24</td><td>30%</td><td>15%</td></tr><tr><td>Mes 36</td><td>30%</td><td>22,5%</td></tr><tr><td>Mes 48</td><td>30%</td><td><b>30%</b> (equity 100% consolidado)</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Momento</th><th>Equity otorgado</th><th>Equity consolidado (vested)</th></tr><tr><td>Día 1</td><td>30%</td><td>0%</td></tr><tr><td>Mes 12</td><td>30%</td><td>7,5%</td></tr><tr><td>Mes 24</td><td>30%</td><td>15%</td></tr><tr><td>Mes 36</td><td>30%</td><td>22,5%</td></tr><tr><td>Mes 48</td><td>30%</td><td><b>30%</b> (equity 100% consolidado)</td></tr></table></div>
 
 <h4>4.4 Ejemplos prácticos — qué pasa si un founder se va</h4>
 
@@ -1223,7 +1227,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Agregamos un <b>pool de empleados (EIP – Equity Incentive Plan)</b> del 10%. Esto es equity reservado para futuros hires estratégicos o para ascender a gente que hoy está en revenue share y demuestre ser esencial.</p>
 
-<table><tr><th>Posición</th><th>Equity</th></tr><tr><td>Facundo Couyet</td><td>30%</td></tr><tr><td>Federico Cristofari</td><td>30%</td></tr><tr><td>Juana Tempesta</td><td>30%</td></tr><tr><td>Pool de Empleados (EIP)</td><td>10%</td></tr><tr><td><b>Total</b></td><td><b>100%</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Posición</th><th>Equity</th></tr><tr><td>Facundo Couyet</td><td>30%</td></tr><tr><td>Federico Cristofari</td><td>30%</td></tr><tr><td>Juana Tempesta</td><td>30%</td></tr><tr><td>Pool de Empleados (EIP)</td><td>10%</td></tr><tr><td><b>Total</b></td><td><b>100%</b></td></tr></table></div>
 
 <h4>5.2 Por qué el pool de empleados</h4>
 
@@ -1253,7 +1257,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Antes de los números, hay que entender los tres niveles que conviven dentro de Cáscara. No son jerarquías de "más o menos importante" — son funciones distintas con lógicas distintas.</p>
 
-<table><tr><th>Nivel</th><th>Quién</th><th>Qué recibe</th><th>Naturaleza</th></tr><tr><td><b>Founder</b></td><td>Facu, Fede, Juana</td><td>Equity + revenue share</td><td>Dueño de la empresa, vota decisiones estructurales, su retorno principal es el valor del equity a largo plazo.</td></tr><tr><td><b>Owner</b></td><td>Franco, Teo</td><td>Revenue share (sin equity por ahora)</td><td>Operador estructural del negocio que sostiene el día a día. Gana mes a mes, pero su retorno está atado al presente, no al exit.</td></tr><tr><td><b>Partner</b></td><td>Acuerdos puntuales (ej: Segundo)</td><td>% sobre una unidad específica</td><td>Colaborador estratégico que aporta sobre una vertical concreta, no sobre el total de Cáscara.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Quién</th><th>Qué recibe</th><th>Naturaleza</th></tr><tr><td><b>Founder</b></td><td>Facu, Fede, Juana</td><td>Equity + revenue share</td><td>Dueño de la empresa, vota decisiones estructurales, su retorno principal es el valor del equity a largo plazo.</td></tr><tr><td><b>Owner</b></td><td>Franco, Teo</td><td>Revenue share (sin equity por ahora)</td><td>Operador estructural del negocio que sostiene el día a día. Gana mes a mes, pero su retorno está atado al presente, no al exit.</td></tr><tr><td><b>Partner</b></td><td>Acuerdos puntuales (ej: Segundo)</td><td>% sobre una unidad específica</td><td>Colaborador estratégico que aporta sobre una vertical concreta, no sobre el total de Cáscara.</td></tr></table></div>
 
 <p>Esta jerarquía resuelve el problema central de cómo retribuir distinto a personas que aportan distinto sin tener que regalarle equity a todos ni tratar a todos como iguales.</p>
 
@@ -1480,7 +1484,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h4>10.3 Los departamentos de Cáscara</h4>
 
-<table><tr><th>Departamento</th><th>Líder</th></tr><tr><td>Creatividad</td><td>Juana</td></tr><tr><td>Contenido</td><td>Fede</td></tr><tr><td>Marketing / Growth</td><td>Franco</td></tr><tr><td>Comercial</td><td>(a definir)</td></tr><tr><td>Operaciones</td><td>Teo</td></tr><tr><td>Admin & Finanzas</td><td>Facu</td></tr><tr><td>Capital Humano</td><td>Facu</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Departamento</th><th>Líder</th></tr><tr><td>Creatividad</td><td>Juana</td></tr><tr><td>Contenido</td><td>Fede</td></tr><tr><td>Marketing / Growth</td><td>Franco</td></tr><tr><td>Comercial</td><td>(a definir)</td></tr><tr><td>Operaciones</td><td>Teo</td></tr><tr><td>Admin & Finanzas</td><td>Facu</td></tr><tr><td>Capital Humano</td><td>Facu</td></tr></table></div>
 
 <p>Cada founder es responsable por su área. La responsabilidad mínima para sostener el equity es <b>presentar el Plan Trimestral, ejecutarlo, cumplir los KPIs definidos y cerrar el trimestre con resultados auditables.</b></p>
 
@@ -1704,24 +1708,24 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <h3>Variable: Growth y estrategia comercial</h3>
 <p><b>Qué mide:</b> quién construye y mejora el motor del negocio. No es solo traer clientes — es la función de optimizar todo el sistema: la estrategia comercial, la escalera de valor, el pricing, los embudos de conversión, el contenido del producto y el resultado buscado.</p>
 <p><b>Por qué se agrega esta variable:</b> el sistema medía el impacto de los departamentos de delivery (contenido, creatividad), la marca personal y la gerencia, pero no medía la construcción del motor comercial. Esa era una dimensión real de valor que el sistema no reconocía. El test que aplicamos: ¿la pondríamos aunque la persona que hoy la lidera no existiera? Sí, porque el motor comercial es una función real de Cáscara. Que una persona la lidere es la consecuencia, no el motivo.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr>
 <tr><td>Arquitecto</td><td>100</td><td>Diseña y sostiene el motor: estrategia, pricing, escalera de valor, embudos, optimización de producto.</td></tr>
 <tr><td>Ejecuta y contribuye</td><td>40</td><td>Ejecuta partes del motor y aporta ideas que lo mejoran, pero no lo diseña.</td></tr>
 <tr><td>Participa en la gestión</td><td>20</td><td>Está en las decisiones de estrategia, aporta criterio, no ejecuta.</td></tr>
 <tr><td>Acompaña</td><td>10</td><td>Se involucra de costado, sin ejecutar ni decidir.</td></tr>
-</table></div></div></div>
+</table></div></div></div></div>
 <div class="modal" id="m-impacto"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Impacto del departamento</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>Variable: Impacto del departamento</h3>
 <p><b>Qué mide:</b> cuánto mueve la aguja tu área en el resultado de esta vertical.</p>
 <p><b>Por qué existe:</b> el producto se hace entre varios departamentos, pero no todos aportan lo mismo. Esta variable distingue entre el que es corazón del producto y el que aporta de soporte.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr>
 <tr><td>Core</td><td>100</td><td>Sin este departamento no hay producto. Es el corazón.</td></tr>
 <tr><td>Importante</td><td>60</td><td>Aporta fuerte pero no es el corazón.</td></tr>
 <tr><td>Soporte</td><td>30</td><td>Participa de forma secundaria.</td></tr>
 <tr><td>No aplica</td><td>0</td><td>No participa en esta vertical.</td></tr>
-</table>
+</table></div>
 <h4>Cómo se asigna en B2C</h4>
 <p>Contenido <b>Core</b>, Creatividad <b>Core</b>, Marketing <b>Core</b> (los tres son el corazón del producto educativo). Operaciones <b>Importante</b>, Admin & Finanzas <b>Importante</b>.</p>
 <h4>Cómo se asigna en B2B</h4>
@@ -1730,34 +1734,34 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <h3>Variable: Marca personal</h3>
 <p><b>Qué mide:</b> si usás tu marca personal para atraer clientes/alumnos a esta vertical.</p>
 <p><b>Por qué existe:</b> quien "quema" su marca personal por Cáscara aporta un activo de atracción que tiene valor y costo personal. La marca puede estar más dedicada a una vertical que a la otra.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr>
 <tr><td>Embajador</td><td>100</td><td>Su marca es motor de venta de la vertical: habla del producto/rubro y produce contenido constante que atrae.</td></tr>
 <tr><td>Referente</td><td>70</td><td>Construye autoridad en la materia de forma constante.</td></tr>
 <tr><td>Presencia</td><td>40</td><td>Aporta autoridad pero sin constancia.</td></tr>
 <tr><td>Sin uso</td><td>0</td><td>No usa su marca personal para esta vertical.</td></tr>
-</table></div></div></div>
+</table></div></div></div></div>
 <div class="modal" id="m-resp"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Responsabilidad por resultado</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>Variable: Responsabilidad por resultado del cliente (solo B2B)</h3>
 <p><b>Qué mide:</b> qué pasa si la entrega al cliente no da resultado. Quién responde.</p>
 <p><b>Cómo funciona en la práctica:</b> la responsabilidad entra primero en Facu (responsable de la línea) y en Segundo (líder de la entrega), y de ahí baja al sector que tenga que auditar — Contenido (Fede) o Creatividad (Juana) según corresponda.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr>
 <tr><td>Responsable directo</td><td>100</td><td>Da la cara ante el cliente. Si se queja, lo llaman a él. Gestiona la relación y resuelve.</td></tr>
 <tr><td>Auditor de calidad</td><td>60</td><td>Firma que la entrega de su área cumple estándares. Co-responsable si falla por calidad, pero no gestiona la relación.</td></tr>
 <tr><td>Advisor / soporte puntual</td><td>30</td><td>Lo consultan en temas específicos, aporta cuando le piden, pero no responde por el resultado.</td></tr>
 <tr><td>No participa</td><td>0</td><td>No tiene relación con el resultado del cliente.</td></tr>
-</table></div></div></div>
+</table></div></div></div></div>
 <div class="modal" id="m-gerencia"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Responsabilidad estructural (gerencia)</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>Variable: Responsabilidad estructural (gerencia)</h3>
 <p><b>Qué mide:</b> si sostenés la empresa entera, más allá de tu departamento.</p>
 <p><b>La diferencia con "responsabilidad por resultado":</b> la responsabilidad por resultado mira al <b>cliente</b> (qué pasa si la entrega falla). La responsabilidad estructural mira a la <b>empresa</b> (quién hace que toda la línea exista, funcione, tenga caja y equipo). El CEO y el Director de Operaciones son la gerencia que está por encima de los departamentos.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr>
 <tr><td>CEO / Responsable final</td><td>100</td><td>Responsable último de la empresa: caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga.</td></tr>
 <tr><td>Director de Operaciones</td><td>60</td><td>Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</td></tr>
 <tr><td>No aplica</td><td>0</td><td>Lidera su departamento pero no la estructura de la empresa.</td></tr>
-</table></div></div></div>
+</table></div></div></div></div>
 <div class="modal" id="m-ventas"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Tracking de ventas atribuibles</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>10. Tracking de ventas atribuibles</h3>
 <p>El sistema contempla una variable de "ventas atribuibles" (cuántas ventas vinieron específicamente por la marca o el cierre de cada persona). <b>No se implementa todavía</b> porque no tenemos forma de medirla con precisión.</p>
@@ -1797,20 +1801,20 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <h3>5. Datos de partida — simulación de un mes</h3>
 <p>Para mostrar el sistema funcionando a escala, simulamos un mes completo con las cuatro líneas. Los costos del B2C usan la proporción real de Abril (43%).</p>
 <h4>B2C base</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Concepto</th><th>USD</th></tr>
 <tr><td>Facturación del programa base</td><td>84.000</td></tr>
 <tr><td>Costos (43%, proporción Abril)</td><td>-36.269</td></tr>
 <tr><td><b>Profit B2C</b></td><td><b>47.731</b></td></tr>
-</table>
+</table></div>
 <h4>B2B niveles 1 y 2</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Concepto</th><th>USD</th></tr>
 <tr><td>Nivel 1: 20 × 1.200</td><td>24.000</td></tr>
 <tr><td>Nivel 2: 5 × 2.000</td><td>10.000</td></tr>
 <tr><td>Estrategas creativos (20×500 + 5×750)</td><td>-13.750</td></tr>
 <tr><td><b>Profit B2B 1-2</b></td><td><b>20.250</b></td></tr>
-</table>
+</table></div>
 <p>El B2B no tiene costo comercial: el nivel 1 se vende directo desde la web sin llamada.</p>
 <h4>High ticket y Aceleradora</h4>
 <p>High ticket: 4 proyectos de USD 5.000 = USD 20.000 (reparto propio). Aceleradora: 8 ventas de USD 2.000 = USD 16.000, sin gastos directos (reparto propio).</p>
@@ -1818,27 +1822,27 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <div class="modal" id="m-consolidado"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Puntajes, reparto y consolidado</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>Puntajes y reparto</h3>
 <h4>B2C — Growth 40% / Impacto 30% / Marca 15% / Gerencia 15%</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>Puntaje</th><th>%</th><th>USD</th></tr>
 <tr><td>Franco — Arquitecto growth + Importante</td><td>61,0</td><td>25%</td><td>7.631</td></tr>
 <tr><td>Fede — Core + Referente + Ejecuta growth</td><td>56,5</td><td>23%</td><td>7.068</td></tr>
 <tr><td>Juana — Core + Referente</td><td>48,5</td><td>20%</td><td>6.067</td></tr>
 <tr><td>Teo — Importante + Dirección general</td><td>47,0</td><td>19%</td><td>5.880</td></tr>
 <tr><td>Facu — Importante + Acompañamiento estratégico</td><td>35,0</td><td>14%</td><td>4.379</td></tr>
-</table>
+</table></div>
 <p>En el B2C, Teo tiene la dirección general (100) y Facu el acompañamiento estratégico (60): en el programa educativo Teo conduce y Facu da soporte. En el B2B se invierte.</p>
 <h4>B2B niveles 1-2 — Resp 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>Puntaje</th><th>%</th><th>USD</th></tr>
 <tr><td>Facu — Responsable + Soporte + Dir. general</td><td>64,0</td><td>26%</td><td>2.905</td></tr>
 <tr><td>Franco — Arquitecto growth + Core</td><td>49,0</td><td>21%</td><td>2.373</td></tr>
 <tr><td>Fede — Auditor + Core + Participa + Presencia</td><td>46,0</td><td>20%</td><td>2.228</td></tr>
 <tr><td>Juana — Auditor + Core + Participa + Presencia</td><td>46,0</td><td>20%</td><td>2.228</td></tr>
 <tr><td>Teo — Soporte + Acompaña + Acomp. estratégico</td><td>29,0</td><td>13%</td><td>1.404</td></tr>
-</table>
+</table></div>
 <p>En B2B 1-2 el reparto por puntajes es el 55% del profit (30% caja + 5% Segundo + 10% Lola + 55% reparto). High ticket y Aceleradora tienen reparto propio.</p>
 <h4>Consolidado del mes simulado (suma de las cuatro líneas)</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>B2C</th><th>B2B</th><th>High Tk</th><th>Acel</th><th>Total</th></tr>
 <tr><td>Fede</td><td>7.068</td><td>2.228</td><td>5.000</td><td>2.016</td><td>16.312</td></tr>
 <tr><td>Franco</td><td>7.631</td><td>2.373</td><td>3.500</td><td>2.016</td><td>15.520</td></tr>
@@ -1847,19 +1851,19 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <tr><td>Teo</td><td>5.880</td><td>1.404</td><td>—</td><td>2.016</td><td>9.300</td></tr>
 <tr><td>Lola</td><td>—</td><td>2.025</td><td>1.000</td><td>1.120</td><td>4.145</td></tr>
 <tr><td>Segundo</td><td>2.387</td><td>1.012</td><td>—</td><td>—</td><td>3.399</td></tr>
-</table>
+</table></div>
 <p>Todos los montos son de la simulación del mes; varían mes a mes. Lo que no varía es el sistema.</p></div></div></div>
 <div class="modal" id="m-caja"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Caja de Cáscara y presupuesto</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>9. Caja de Cáscara</h3>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Origen</th><th>Mensual USD</th></tr>
 <tr><td>30% B2C</td><td>5.575</td></tr>
 <tr><td>30% B2B</td><td>5.662</td></tr>
 <tr><td><b>Total mensual</b></td><td><b>11.238</b></td></tr>
 <tr><td><b>Total anual</b></td><td><b>134.854</b></td></tr>
-</table>
+</table></div>
 <h4>Presupuesto de la caja anual</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Concepto</th><th>Anual USD</th></tr>
 <tr><td>Legales</td><td>12.000</td></tr>
 <tr><td>Contabilidad profesional</td><td>9.600</td></tr>
@@ -1868,39 +1872,39 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <tr><td>Pool de bonos por resultado</td><td>12.000</td></tr>
 <tr><td>Reserva de acumulación</td><td>53.254</td></tr>
 <tr><td><b>Total</b></td><td><b>134.854</b></td></tr>
-</table>
+</table></div>
 <h4>Ejemplo práctico del sistema de bonos</h4>
 <p>El pool de bonos premia el sobrecumplimiento y aplica a todo el equipo. Cada trimestre se separa un pool (USD 3.000 de ejemplo) que se reparte mediante un juego de categorías:</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Categoría</th><th>Premia</th><th>Bono</th></tr>
 <tr><td>MVP del Trimestre</td><td>Aporte general más alto (unánime)</td><td>800</td></tr>
 <tr><td>Killer de Resultados</td><td>KPI numérico sobrecumplido</td><td>600</td></tr>
 <tr><td>Constructor del Trimestre</td><td>Construyó algo nuevo</td><td>500</td></tr>
 <tr><td>MVP Silencioso</td><td>Sostuvo procesos invisibles</td><td>400</td></tr>
 <tr><td>Equipo del Trimestre</td><td>El depto que mejor cumplió su plan</td><td>700</td></tr>
-</table>
+</table></div>
 <p><b>Reglas:</b> los KPIs se definen al inicio del trimestre. Los founders no pueden ganar más de una categoría por trimestre, para forzar que los bonos se distribuyan en el equipo. El MVP requiere unanimidad. Los bonos se anuncian públicamente: la transparencia es parte del juego.</p></div></div></div>
 <div class="modal" id="m-acelera"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Línea Aceleradora</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>8 bis. Línea Aceleradora</h3>
 <p>La Aceleradora es un <b>upsell del B2C</b>, un programa de aceleración para quienes ya pasaron por el programa base y necesitan más estructura y acompañamiento. Se vende con una llamada de venta, así que <b>no tiene gastos directos</b> (la facturación es directamente profit).</p>
 <p><b>Reparto:</b> 30% caja, y del 70% restante, Lola cobra 10% como PM y el resto se reparte parejo entre los 5 socios. Segundo no participa.</p>
 <h4>Ejemplo: 8 aceleradoras de USD 2.000 en el mes (USD 16.000)</h4>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Concepto</th><th>USD</th></tr>
 <tr><td>Facturación = Profit (sin gastos)</td><td>16.000</td></tr>
 <tr><td>30% Caja de Cáscara</td><td>4.800</td></tr>
 <tr><td><b>70% Reparto al equipo</b></td><td><b>11.200</b></td></tr>
-</table>
-<table>
+</table></div>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>%</th><th>USD</th></tr>
 <tr><td>Lola (PM)</td><td>10%</td><td>1.120</td></tr>
 <tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>2.016 c/u</td></tr>
-</table>
+</table></div>
 <p>Los montos son un ejemplo; varían según cuántas aceleradoras se vendan. Lo que no varía es la estructura.</p></div></div></div>
 <div class="modal" id="m-highticket"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · High Ticket (nivel 3)</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>8 ter. High Ticket (nivel 3 del B2B)</h3>
 <p>Proyectos premium de estrategia creativa para marcas personales y proyectos (ejemplos: Delfina Ferro, Kevsho), ejecutados por el C-level de Cáscara con Fede y Juana como creativos. Tiene un reparto propio, distinto del B2B general, porque son Fede y Juana quienes ejecutan y por eso cobran más de esta línea.</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>%</th><th>Proyecto $5.000</th></tr>
 <tr><td>Juana</td><td>25%</td><td>1.250</td></tr>
 <tr><td>Fede</td><td>25%</td><td>1.250</td></tr>
@@ -1908,17 +1912,17 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 <tr><td>Franco</td><td>17,5%</td><td>875</td></tr>
 <tr><td>Cáscara (caja)</td><td>10%</td><td>500</td></tr>
 <tr><td>Lola</td><td>5%</td><td>250</td></tr>
-</table>
+</table></div>
 <p>El 10% que va a la caja reemplaza al 30% de las otras líneas. Los porcentajes son fijos, no dependen de puntajes. Fede y Juana cobran más porque son los creativos que ejecutan el proyecto.</p></div></div></div>
 <div class="modal" id="m-equity"><div class="modal-card"><div class="modal-head"><span class="mh-tag">Informe · Equity del pool</span><button class="modal-close" onclick="closeModal(this)">✕ Cerrar</button></div><div class="modal-body">
 <h3>12. Equity del pool (Franco y Teo)</h3>
 <p>El revenue share y el equity son cosas independientes. El revenue es el pago operativo del mes; el equity es la propiedad de largo plazo. Una persona puede tener uno, el otro, o los dos.</p>
 <p>Como reconocimiento de largo plazo, se propone otorgar equity del pool de empleados (el 10% reservado) a Franco y Teo:</p>
-<table>
+<div class="tbl-wrap"><table>
 <tr><th>Persona</th><th>Equity</th><th>Vesting</th></tr>
 <tr><td>Franco</td><td>5%</td><td>4 años, retroactivo</td></tr>
 <tr><td>Teo</td><td>3%</td><td>4 años, retroactivo</td></tr>
-</table>
+</table></div>
 <p><b>Franco:</b> construyó el motor comercial (departamento, pricing, embudos, auditoría de producto). El equity es su upside de largo plazo, más allá del revenue mensual.</p>
 <p><b>Teo:</b> sostiene la operación de la empresa, armó la primera versión del producto, es la columna vertebral estructural.</p>
 <p>Entre los dos usan 8% del pool de 10%, dejando 2% de margen. El vesting es el mismo que el de los founders (4 años) para mantener coherencia; la fecha retroactiva reconoce el tiempo ya invertido. Este equity no cambia aunque el revenue share de cada uno suba o baje.</p></div></div></div>
@@ -1955,7 +1959,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Una vez que tenemos el profit, se divide así:</p>
 
-<table><tr><th>Línea</th><th>Caja</th><th>Otros</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>30%</td><td>5% Segundo</td><td>65%</td></tr><tr><td>B2B niveles 1 y 2</td><td>30%</td><td>5% Segundo + 10% Lola</td><td>55%</td></tr><tr><td>Aceleradora</td><td>30%</td><td>10% Lola PM</td><td>70% reparto parejo (sin puntajes)</td></tr><tr><td>High Ticket (nivel 3)</td><td>10%</td><td>5% Lola</td><td>reparto propio fijo</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Línea</th><th>Caja</th><th>Otros</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>30%</td><td>5% Segundo</td><td>65%</td></tr><tr><td>B2B niveles 1 y 2</td><td>30%</td><td>5% Segundo + 10% Lola</td><td>55%</td></tr><tr><td>Aceleradora</td><td>30%</td><td>10% Lola PM</td><td>70% reparto parejo (sin puntajes)</td></tr><tr><td>High Ticket (nivel 3)</td><td>10%</td><td>5% Lola</td><td>reparto propio fijo</td></tr></table></div>
 
 <p><b>Sobre Lola:</b> gestiona el delivery de las líneas B2B y la Aceleradora, así que cobra un porcentaje de cada una: 10% en B2B niveles 1 y 2, 10% en la Aceleradora, y 5% en el high ticket. Es su pago por sostener la operación de la entrega.</p>
 
@@ -2000,7 +2004,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Por qué existe:</b> el producto se hace entre varios departamentos, pero no todos aportan lo mismo. Esta variable distingue entre el que es corazón del producto y el que aporta de soporte.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Core</td><td>100</td><td>Sin este departamento no hay producto. Es el corazón.</td></tr><tr><td>Importante</td><td>60</td><td>Aporta fuerte pero no es el corazón.</td></tr><tr><td>Soporte</td><td>30</td><td>Participa de forma secundaria.</td></tr><tr><td>No aplica</td><td>0</td><td>No participa en esta vertical.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Core</td><td>100</td><td>Sin este departamento no hay producto. Es el corazón.</td></tr><tr><td>Importante</td><td>60</td><td>Aporta fuerte pero no es el corazón.</td></tr><tr><td>Soporte</td><td>30</td><td>Participa de forma secundaria.</td></tr><tr><td>No aplica</td><td>0</td><td>No participa en esta vertical.</td></tr></table></div>
 
 <h4>Variable: Marca personal</h4>
 
@@ -2008,7 +2012,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Por qué existe:</b> quien "quema" su marca personal por Cáscara aporta un activo de atracción que tiene valor y costo personal. La marca puede estar más dedicada a una vertical que a la otra.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Embajador</td><td>100</td><td>Su marca es motor de venta de la vertical: habla del producto/rubro y produce contenido constante que atrae.</td></tr><tr><td>Referente</td><td>70</td><td>Construye autoridad en la materia de forma constante.</td></tr><tr><td>Presencia</td><td>40</td><td>Aporta autoridad pero sin constancia.</td></tr><tr><td>Sin uso</td><td>0</td><td>No usa su marca personal para esta vertical.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Embajador</td><td>100</td><td>Su marca es motor de venta de la vertical: habla del producto/rubro y produce contenido constante que atrae.</td></tr><tr><td>Referente</td><td>70</td><td>Construye autoridad en la materia de forma constante.</td></tr><tr><td>Presencia</td><td>40</td><td>Aporta autoridad pero sin constancia.</td></tr><tr><td>Sin uso</td><td>0</td><td>No usa su marca personal para esta vertical.</td></tr></table></div>
 
 <p><b>Nota sobre el peso de la marca personal en el B2C:</b> en concepto teórico, la marca personal debería pesar más en la relación con el B2C — el programa educativo se vende en buena parte por la marca y la comunidad de quienes lo representan. Sin embargo, hoy las marcas personales del equipo y su estrategia están en un segundo plano más allá de la marca de Cáscara, que es la que realmente sostiene la atracción. Por eso, por ahora la marca personal pesa menos de lo que teóricamente le correspondería (15% en B2C). Cuando las marcas personales se desarrollen y tengan estrategia propia, este peso se puede revisar al alza.</p>
 
@@ -2018,7 +2022,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Cómo funciona en la práctica:</b> la responsabilidad entra primero en Facu (responsable de la línea) y en Segundo (líder de la entrega), y de ahí baja al sector que tenga que auditar — Contenido (Fede) o Creatividad (Juana) según corresponda.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Responsable directo</td><td>100</td><td>Da la cara ante el cliente. Si se queja, lo llaman a él. Gestiona la relación y resuelve.</td></tr><tr><td>Auditor de calidad</td><td>60</td><td>Firma que la entrega de su área cumple estándares. Co-responsable si falla por calidad, pero no gestiona la relación.</td></tr><tr><td>Advisor / soporte puntual</td><td>30</td><td>Lo consultan en temas específicos, aporta cuando le piden, pero no responde por el resultado.</td></tr><tr><td>No participa</td><td>0</td><td>No tiene relación con el resultado del cliente.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Responsable directo</td><td>100</td><td>Da la cara ante el cliente. Si se queja, lo llaman a él. Gestiona la relación y resuelve.</td></tr><tr><td>Auditor de calidad</td><td>60</td><td>Firma que la entrega de su área cumple estándares. Co-responsable si falla por calidad, pero no gestiona la relación.</td></tr><tr><td>Advisor / soporte puntual</td><td>30</td><td>Lo consultan en temas específicos, aporta cuando le piden, pero no responde por el resultado.</td></tr><tr><td>No participa</td><td>0</td><td>No tiene relación con el resultado del cliente.</td></tr></table></div>
 
 <h4>Variable: Responsabilidad estructural (gerencia)</h4>
 
@@ -2026,7 +2030,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>La diferencia con "responsabilidad por resultado":</b> la responsabilidad por resultado mira al <b>cliente</b> (qué pasa si la entrega falla). La responsabilidad estructural mira a la <b>empresa</b> (quién hace que toda la línea exista, funcione, tenga caja y equipo). La dirección general y el acompañamiento estratégico son la gerencia que está por encima de los departamentos.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Dirección general</td><td>100</td><td>Responsable último de la empresa: caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga.</td></tr><tr><td>Acompañamiento estratégico</td><td>60</td><td>Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</td></tr><tr><td>No aplica</td><td>0</td><td>Lidera su departamento pero no la estructura de la empresa.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Dirección general</td><td>100</td><td>Responsable último de la empresa: caja, decisiones estratégicas, capital humano. Sin él, no hay quien sostenga.</td></tr><tr><td>Acompañamiento estratégico</td><td>60</td><td>Sostiene la operación viva de toda la empresa, audita departamentos, hace que las cosas pasen.</td></tr><tr><td>No aplica</td><td>0</td><td>Lidera su departamento pero no la estructura de la empresa.</td></tr></table></div>
 
 <p><b>La diferencia entre los dos niveles, en concreto:</b> quien tiene la dirección general <b>diseña el sistema y pone los objetivos</b> — arma la planificación, define qué hay que lograr, construye la estructura y el capital humano. Quien acompaña estratégicamente <b>aporta a la conducción</b> sin ser el responsable principal de esa estructura: da soporte, visión y otro ángulo, pero no diseña el sistema — operativiza la planificación, hace que los objetivos se ejecuten, sostiene que la máquina funcione día a día. Es la diferencia entre quien dibuja el plano y quien construye con ese plano: los dos son imprescindibles, pero no están en el mismo nivel. Por eso la dirección general puntúa 100 y el acompañamiento estratégico 60. No es una jerarquía de valor personal, es la diferencia entre diseñar y conducir la estructura, y acompañarla desde otro lugar.</p>
 
@@ -2038,7 +2042,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Diferencia entre marketing y growth:</b> no son lo mismo. La estrategia de marketing es la capa de atracción y comunicación (el mensaje, los canales, el contenido, la distribución entre marcas personales y la cuenta de Cáscara). El growth es más amplio y estructural: incluye al marketing pero también el departamento comercial, el pricing, los embudos, el upsell y la optimización del producto. El marketing trae la atención; el growth convierte esa atención en un negocio que crece de forma sostenida. La marca personal de cada uno (que también atrae) se mide aparte, en la variable de marca personal.</p>
 
-<table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Arquitecto</td><td>100</td><td>Diseña y sostiene el motor: estrategia comercial, pricing, escalera de valor, embudos, optimización de producto y resultado. Es responsable de que el sistema mejore.</td></tr><tr><td>Ejecuta y contribuye</td><td>40</td><td>Ejecuta partes del motor y aporta ideas que lo mejoran, pero no lo diseña ni responde por él.</td></tr><tr><td>Participa en la gestión</td><td>20</td><td>Está en las decisiones de estrategia, aporta criterio, pero no ejecuta.</td></tr><tr><td>Acompaña</td><td>10</td><td>Se involucra de costado, sin ejecutar ni decidir.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Nivel</th><th>Puntaje</th><th>Criterio</th></tr><tr><td>Arquitecto</td><td>100</td><td>Diseña y sostiene el motor: estrategia comercial, pricing, escalera de valor, embudos, optimización de producto y resultado. Es responsable de que el sistema mejore.</td></tr><tr><td>Ejecuta y contribuye</td><td>40</td><td>Ejecuta partes del motor y aporta ideas que lo mejoran, pero no lo diseña ni responde por él.</td></tr><tr><td>Participa en la gestión</td><td>20</td><td>Está en las decisiones de estrategia, aporta criterio, pero no ejecuta.</td></tr><tr><td>Acompaña</td><td>10</td><td>Se involucra de costado, sin ejecutar ni decidir.</td></tr></table></div>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
@@ -2052,7 +2056,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Pesos de cada vertical:</b></p>
 
-<table><tr><th>Variable</th><th>B2C</th><th>B2B</th></tr><tr><td>Growth y estrategia comercial</td><td>40%</td><td>20%</td></tr><tr><td>Impacto del departamento</td><td>30%</td><td>20%</td></tr><tr><td>Marca personal</td><td>15%</td><td>10%</td></tr><tr><td>Responsabilidad por resultado</td><td>—</td><td>30%</td></tr><tr><td>Responsabilidad estructural (gerencia)</td><td>15%</td><td>20%</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Variable</th><th>B2C</th><th>B2B</th></tr><tr><td>Growth y estrategia comercial</td><td>40%</td><td>20%</td></tr><tr><td>Impacto del departamento</td><td>30%</td><td>20%</td></tr><tr><td>Marca personal</td><td>15%</td><td>10%</td></tr><tr><td>Responsabilidad por resultado</td><td>—</td><td>30%</td></tr><tr><td>Responsabilidad estructural (gerencia)</td><td>15%</td><td>20%</td></tr></table></div>
 
 <p>La variable de responsabilidad por resultado es exclusiva del B2B (en B2C no hay un cliente al que rendirle una entrega). Todo lo demás está en las dos, con pesos distintos.</p>
 
@@ -2086,31 +2090,31 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h4>B2C — programa base</h4>
 
-<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación del programa base</td><td>84.000</td></tr><tr><td>Costos (43% — proporción real de Abril: comercial, contenido, herramientas)</td><td>-36.269</td></tr><tr><td><b>Profit B2C</b></td><td><b>47.731</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación del programa base</td><td>84.000</td></tr><tr><td>Costos (43% — proporción real de Abril: comercial, contenido, herramientas)</td><td>-36.269</td></tr><tr><td><b>Profit B2C</b></td><td><b>47.731</b></td></tr></table></div>
 
 <p>(La facturación total de B2C del mes es USD 100.000, de los cuales USD 16.000 son de la Aceleradora, que se contabiliza como línea aparte.)</p>
 
 <h4>B2B — niveles 1 y 2</h4>
 
-<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Nivel 1 (entrada)</td><td>20 × 1.200</td><td>24.000</td></tr><tr><td>Nivel 2 (estratega insertado)</td><td>5 × 2.000</td><td>10.000</td></tr><tr><td>Estrategas creativos nivel 1</td><td>20 × 500</td><td>-10.000</td></tr><tr><td>Estrategas creativos nivel 2</td><td>5 × 750</td><td>-3.750</td></tr><tr><td><b>Profit B2B (niveles 1 y 2)</b></td><td></td><td><b>20.250</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Nivel 1 (entrada)</td><td>20 × 1.200</td><td>24.000</td></tr><tr><td>Nivel 2 (estratega insertado)</td><td>5 × 2.000</td><td>10.000</td></tr><tr><td>Estrategas creativos nivel 1</td><td>20 × 500</td><td>-10.000</td></tr><tr><td>Estrategas creativos nivel 2</td><td>5 × 750</td><td>-3.750</td></tr><tr><td><b>Profit B2B (niveles 1 y 2)</b></td><td></td><td><b>20.250</b></td></tr></table></div>
 
 <p>El B2B no tiene costo comercial: el nivel 1 se vende directo desde la web sin llamada.</p>
 
 <h4>High Ticket — nivel 3</h4>
 
-<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Proyectos premium</td><td>4 × 5.000</td><td>20.000</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Proyectos premium</td><td>4 × 5.000</td><td>20.000</td></tr></table></div>
 
 <p>El high ticket tiene reparto propio (ver sección 11), no pasa por el profit del B2B general.</p>
 
 <h4>Aceleradora</h4>
 
-<table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Ventas del mes</td><td>8 × 2.000</td><td>16.000</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Cálculo</th><th>Monto USD</th></tr><tr><td>Ventas del mes</td><td>8 × 2.000</td><td>16.000</td></tr></table></div>
 
 <p>Sin gastos directos (se vende con una llamada). Reparto propio (ver sección 10).</p>
 
 <h4>Cómo queda el profit dividido (B2C y B2B niveles 1-2)</h4>
 
-<table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>65% = 31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>55% = 11.138</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto por puntajes</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>65% = 31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>55% = 11.138</td></tr></table></div>
 
 <p>(En B2C, Lola no participa; el reparto es 65%. En B2B niveles 1-2, Lola entra con 10%, así que el reparto por puntajes baja a 55%.)</p>
 
@@ -2128,7 +2132,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h4>Cómo queda el profit dividido (con la simulación del mes)</h4>
 
-<table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto al equipo</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>11.138</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Línea</th><th>Profit</th><th>30% Caja</th><th>5% Segundo</th><th>10% Lola</th><th>Reparto al equipo</th></tr><tr><td>B2C</td><td>47.731</td><td>14.319</td><td>2.387</td><td>—</td><td>31.025</td></tr><tr><td>B2B 1-2</td><td>20.250</td><td>6.075</td><td>1.012</td><td>2.025</td><td>11.138</td></tr></table></div>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
@@ -2136,17 +2140,17 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <h4>B2C — Growth 40% / Impacto 30% / Marca 15% / Gerencia 15%</h4>
 
-<table><tr><th>Persona</th><th>Growth</th><th>Impacto</th><th>Marca</th><th>Gerencia</th><th>Puntaje</th></tr><tr><td>Franco</td><td>Arquitecto (100)</td><td>Importante (50)</td><td>Presencia (40)</td><td>— (0)</td><td><b>61,0</b></td></tr><tr><td>Fede</td><td>Ejecuta y contribuye (40)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>56,5</b></td></tr><tr><td>Juana</td><td>Participa en gestión (20)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>48,5</b></td></tr><tr><td>Teo</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Presencia (40)</td><td>Dir. general (100)</td><td><b>47,0</b></td></tr><tr><td>Facu</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Sin uso (0)</td><td>Acomp. estratégico (60)</td><td><b>35,0</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>Growth</th><th>Impacto</th><th>Marca</th><th>Gerencia</th><th>Puntaje</th></tr><tr><td>Franco</td><td>Arquitecto (100)</td><td>Importante (50)</td><td>Presencia (40)</td><td>— (0)</td><td><b>61,0</b></td></tr><tr><td>Fede</td><td>Ejecuta y contribuye (40)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>56,5</b></td></tr><tr><td>Juana</td><td>Participa en gestión (20)</td><td>Core (100)</td><td>Referente (70)</td><td>— (0)</td><td><b>48,5</b></td></tr><tr><td>Teo</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Presencia (40)</td><td>Dir. general (100)</td><td><b>47,0</b></td></tr><tr><td>Facu</td><td>Participa en gestión (20)</td><td>Importante (60)</td><td>Sin uso (0)</td><td>Acomp. estratégico (60)</td><td><b>35,0</b></td></tr></table></div>
 
 <p><b>Sobre la gerencia en el B2C:</b> acá Teo tiene la dirección general (100) y Facu el acompañamiento estratégico (60). Es al revés que en el B2B: en el programa educativo, Teo es quien conduce el día a día y diseña la operación, mientras Facu da soporte y visión desde otro ángulo sin operar. En el B2B se invierte (Facu dirección general, Teo acompañamiento), porque ahí la conducción es de Facu.</p>
 
 <p><b>Reparto B2C (sobre USD 31.025 — el 65% del profit del mes simulado):</b></p>
 
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Franco</td><td>25%</td><td>7.631</td></tr><tr><td>Fede</td><td>23%</td><td>7.068</td></tr><tr><td>Juana</td><td>20%</td><td>6.067</td></tr><tr><td>Teo</td><td>19%</td><td>5.880</td></tr><tr><td>Facu</td><td>14%</td><td>4.379</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Franco</td><td>25%</td><td>7.631</td></tr><tr><td>Fede</td><td>23%</td><td>7.068</td></tr><tr><td>Juana</td><td>20%</td><td>6.067</td></tr><tr><td>Teo</td><td>19%</td><td>5.880</td></tr><tr><td>Facu</td><td>14%</td><td>4.379</td></tr></table></div>
 
 <h4>B2B — Responsabilidad 30% / Impacto 20% / Growth 20% / Gerencia 20% / Marca 10%</h4>
 
-<table><tr><th>Persona</th><th>Responsabilidad</th><th>Impacto</th><th>Growth</th><th>Gerencia</th><th>Marca</th><th>Puntaje</th><th>%</th></tr><tr><td>Facu</td><td>Responsable (100)</td><td>Soporte (30)</td><td>Participa (20)</td><td>Dir. general (100)</td><td>— (0)</td><td><b>64,0</b></td><td>26%</td></tr><tr><td>Franco</td><td>Advisor (30)</td><td>Core (100)</td><td>Arquitecto (100)</td><td>— (0)</td><td>— (0)</td><td><b>49,0</b></td><td>21%</td></tr><tr><td>Fede</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Juana</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Teo</td><td>Advisor (30)</td><td>Soporte (30)</td><td>Acompaña (10)</td><td>Acomp. estratégico (60)</td><td>— (0)</td><td><b>29,0</b></td><td>13%</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>Responsabilidad</th><th>Impacto</th><th>Growth</th><th>Gerencia</th><th>Marca</th><th>Puntaje</th><th>%</th></tr><tr><td>Facu</td><td>Responsable (100)</td><td>Soporte (30)</td><td>Participa (20)</td><td>Dir. general (100)</td><td>— (0)</td><td><b>64,0</b></td><td>26%</td></tr><tr><td>Franco</td><td>Advisor (30)</td><td>Core (100)</td><td>Arquitecto (100)</td><td>— (0)</td><td>— (0)</td><td><b>49,0</b></td><td>21%</td></tr><tr><td>Fede</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Juana</td><td>Auditor (60)</td><td>Core (100)</td><td>Participa (20)</td><td>— (0)</td><td>Presencia (40)</td><td><b>46,0</b></td><td>20%</td></tr><tr><td>Teo</td><td>Advisor (30)</td><td>Soporte (30)</td><td>Acompaña (10)</td><td>Acomp. estratégico (60)</td><td>— (0)</td><td><b>29,0</b></td><td>13%</td></tr></table></div>
 
 <p><b>La lógica del tablero B2B:</b></p>
 <ul><li><b>Facu</b> es el responsable del resultado y el CEO, pero no produce la entrega creativa (Soporte en impacto) ni construye el motor comercial (solo participa de la gestión del growth). Su peso viene de la responsabilidad y la estructura.</li>
@@ -2156,7 +2160,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 </ul>
 <p><b>Reparto B2B niveles 1-2 (sobre USD 11.138 — el 55% del profit del mes simulado):</b></p>
 
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Facu</td><td>26%</td><td>2.905</td></tr><tr><td>Franco</td><td>21%</td><td>2.373</td></tr><tr><td>Fede</td><td>20%</td><td>2.228</td></tr><tr><td>Juana</td><td>20%</td><td>2.228</td></tr><tr><td>Teo</td><td>13%</td><td>1.404</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Facu</td><td>26%</td><td>2.905</td></tr><tr><td>Franco</td><td>21%</td><td>2.373</td></tr><tr><td>Fede</td><td>20%</td><td>2.228</td></tr><tr><td>Juana</td><td>20%</td><td>2.228</td></tr><tr><td>Teo</td><td>13%</td><td>1.404</td></tr></table></div>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
@@ -2164,7 +2168,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>El consolidado suma lo que cada persona recibe de las cuatro líneas en el mes simulado. Cada línea tiene su propia lógica de reparto (B2C y B2B por puntajes; Aceleradora y high ticket con reparto propio).</p>
 
-<table><tr><th>Persona</th><th>B2C</th><th>B2B 1-2</th><th>High Ticket</th><th>Aceleradora</th><th>Total mensual</th></tr><tr><td>Fede</td><td>7.068</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>16.312</b></td></tr><tr><td>Franco</td><td>7.631</td><td>2.373</td><td>3.500</td><td>2.016</td><td><b>15.520</b></td></tr><tr><td>Juana</td><td>6.067</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>15.311</b></td></tr><tr><td>Facu</td><td>4.379</td><td>2.905</td><td>3.500</td><td>2.016</td><td><b>12.800</b></td></tr><tr><td>Teo</td><td>5.880</td><td>1.404</td><td>—</td><td>2.016</td><td><b>9.300</b></td></tr><tr><td>Lola</td><td>—</td><td>2.025</td><td>1.000</td><td>1.120</td><td><b>4.145</b></td></tr><tr><td>Segundo</td><td>2.387</td><td>1.012</td><td>—</td><td>—</td><td><b>3.399</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>B2C</th><th>B2B 1-2</th><th>High Ticket</th><th>Aceleradora</th><th>Total mensual</th></tr><tr><td>Fede</td><td>7.068</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>16.312</b></td></tr><tr><td>Franco</td><td>7.631</td><td>2.373</td><td>3.500</td><td>2.016</td><td><b>15.520</b></td></tr><tr><td>Juana</td><td>6.067</td><td>2.228</td><td>5.000</td><td>2.016</td><td><b>15.311</b></td></tr><tr><td>Facu</td><td>4.379</td><td>2.905</td><td>3.500</td><td>2.016</td><td><b>12.800</b></td></tr><tr><td>Teo</td><td>5.880</td><td>1.404</td><td>—</td><td>2.016</td><td><b>9.300</b></td></tr><tr><td>Lola</td><td>—</td><td>2.025</td><td>1.000</td><td>1.120</td><td><b>4.145</b></td></tr><tr><td>Segundo</td><td>2.387</td><td>1.012</td><td>—</td><td>—</td><td><b>3.399</b></td></tr></table></div>
 
 <p><b>Cómo leer este consolidado:</b> es un mes simulado con facturación total de USD 154.000 (B2C base 84.000 + B2B niveles 1-2 34.000 + high ticket 20.000 + Aceleradora 16.000). Los montos varían cada mes; lo que no cambia es la estructura de reparto de cada línea.</p>
 
@@ -2186,11 +2190,11 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Ejemplo: 8 aceleradoras de USD 2.000 en el mes (USD 16.000)</b></p>
 
-<table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación = Profit (sin gastos)</td><td>16.000</td></tr><tr><td>30% Caja de Cáscara</td><td>4.800</td></tr><tr><td><b>70% Reparto al equipo</b></td><td><b>11.200</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Monto USD</th></tr><tr><td>Facturación = Profit (sin gastos)</td><td>16.000</td></tr><tr><td>30% Caja de Cáscara</td><td>4.800</td></tr><tr><td><b>70% Reparto al equipo</b></td><td><b>11.200</b></td></tr></table></div>
 
 <p><b>Reparto del 70%:</b></p>
 
-<table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Lola (PM)</td><td>10%</td><td>1.120</td></tr><tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>2.016 c/u</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>%</th><th>Monto USD</th></tr><tr><td>Lola (PM)</td><td>10%</td><td>1.120</td></tr><tr><td>Facu / Fede / Juana / Franco / Teo</td><td>18% c/u</td><td>2.016 c/u</td></tr></table></div>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:24px 0;">
 
@@ -2200,13 +2204,13 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p><b>Reparto del high ticket:</b></p>
 
-<table><tr><th>Persona</th><th>%</th><th>Sobre un proyecto de USD 5.000</th></tr><tr><td>Juana</td><td>25%</td><td>1.250</td></tr><tr><td>Fede</td><td>25%</td><td>1.250</td></tr><tr><td>Facu</td><td>17,5%</td><td>875</td></tr><tr><td>Franco</td><td>17,5%</td><td>875</td></tr><tr><td>Cáscara (caja)</td><td>10%</td><td>500</td></tr><tr><td>Lola</td><td>5%</td><td>250</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>%</th><th>Sobre un proyecto de USD 5.000</th></tr><tr><td>Juana</td><td>25%</td><td>1.250</td></tr><tr><td>Fede</td><td>25%</td><td>1.250</td></tr><tr><td>Facu</td><td>17,5%</td><td>875</td></tr><tr><td>Franco</td><td>17,5%</td><td>875</td></tr><tr><td>Cáscara (caja)</td><td>10%</td><td>500</td></tr><tr><td>Lola</td><td>5%</td><td>250</td></tr></table></div>
 
 <p>En este nivel, el 10% que va a la caja de Cáscara reemplaza al 30% de las otras líneas (es el caso especial). Los porcentajes son fijos, no dependen de puntajes. Fede y Juana cobran más porque son los creativos que ejecutan el proyecto; es el reconocimiento de su rol como perfiles high ticket.</p>
 
 <p><b>Ejemplo: 4 proyectos de USD 5.000 (USD 20.000)</b></p>
 
-<table><tr><th>Persona</th><th>Monto USD</th></tr><tr><td>Juana</td><td>5.000</td></tr><tr><td>Fede</td><td>5.000</td></tr><tr><td>Facu</td><td>3.500</td></tr><tr><td>Franco</td><td>3.500</td></tr><tr><td>Cáscara (caja)</td><td>2.000</td></tr><tr><td>Lola</td><td>1.000</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>Monto USD</th></tr><tr><td>Juana</td><td>5.000</td></tr><tr><td>Fede</td><td>5.000</td></tr><tr><td>Facu</td><td>3.500</td></tr><tr><td>Franco</td><td>3.500</td></tr><tr><td>Cáscara (caja)</td><td>2.000</td></tr><tr><td>Lola</td><td>1.000</td></tr></table></div>
 
 <p>Si un proyecto sale más caro (ej: USD 10.000), los porcentajes se mantienen, así que Fede y Juana cobran 2.500 cada uno.</p>
 
@@ -2218,19 +2222,19 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>La caja se nutre de <b>todas las líneas de revenue</b>, no solo de B2C y B2B. En el mes simulado:</p>
 
-<table><tr><th>Origen</th><th>Mensual USD</th></tr><tr><td>30% B2C base</td><td>14.319</td></tr><tr><td>30% B2B niveles 1-2</td><td>6.075</td></tr><tr><td>10% High Ticket</td><td>2.000</td></tr><tr><td>30% Aceleradora</td><td>4.800</td></tr><tr><td><b>Total del mes simulado</b></td><td><b>27.194</b></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Origen</th><th>Mensual USD</th></tr><tr><td>30% B2C base</td><td>14.319</td></tr><tr><td>30% B2B niveles 1-2</td><td>6.075</td></tr><tr><td>10% High Ticket</td><td>2.000</td></tr><tr><td>30% Aceleradora</td><td>4.800</td></tr><tr><td><b>Total del mes simulado</b></td><td><b>27.194</b></td></tr></table></div>
 
 <p>(El monto varía cada mes con la facturación. El presupuesto anual de la caja se planifica sobre un promedio conservador, no sobre un mes pico.)</p>
 
 <h4>Presupuesto de la caja anual</h4>
 
-<table><tr><th>Concepto</th><th>Anual USD</th><th>Detalle</th></tr><tr><td>Legales</td><td>12.000</td><td>Transformación SA + LLC, SHA, IP Assignments, marca internacional</td></tr><tr><td>Contabilidad profesional</td><td>9.600</td><td>Estudio contable, balances mensuales</td></tr><tr><td>Reserva de contingencia</td><td>36.000</td><td>3 meses de operación</td></tr><tr><td>Margen para imprevistos</td><td>12.000</td><td>Gastos no previstos</td></tr><tr><td>Pool de bonos por resultado</td><td>12.000</td><td>4 trimestres × USD 3.000 (ver ejemplo práctico abajo)</td></tr><tr><td>Reserva de acumulación</td><td>53.254</td><td>Fortalecimiento, oportunidades, dividendos futuros</td></tr><tr><td><b>Total</b></td><td><b>134.854</b></td><td></td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Concepto</th><th>Anual USD</th><th>Detalle</th></tr><tr><td>Legales</td><td>12.000</td><td>Transformación SA + LLC, SHA, IP Assignments, marca internacional</td></tr><tr><td>Contabilidad profesional</td><td>9.600</td><td>Estudio contable, balances mensuales</td></tr><tr><td>Reserva de contingencia</td><td>36.000</td><td>3 meses de operación</td></tr><tr><td>Margen para imprevistos</td><td>12.000</td><td>Gastos no previstos</td></tr><tr><td>Pool de bonos por resultado</td><td>12.000</td><td>4 trimestres × USD 3.000 (ver ejemplo práctico abajo)</td></tr><tr><td>Reserva de acumulación</td><td>53.254</td><td>Fortalecimiento, oportunidades, dividendos futuros</td></tr><tr><td><b>Total</b></td><td><b>134.854</b></td><td></td></tr></table></div>
 
 <h4>Ejemplo práctico del sistema de bonos</h4>
 
 <p>El pool de bonos premia el sobrecumplimiento y está dirigido al <b>equipo que no tiene equity ni revenue share grande</b> (editores, PMs, roles de soporte y operación). El C-level no participa de los bonos: su upside ya está cubierto por el equity y el revenue share, así que premiarlos con bonos sería redundante. Los bonos rinden más enfocados en reconocer y motivar a quienes no tienen esas otras vías. Cada trimestre se separa un pool (USD 3.000 de ejemplo) que se reparte entre quienes sobrecumplen, mediante un juego de categorías. Si nadie cumple una categoría, esa porción vuelve a la caja.</p>
 
-<table><tr><th>Categoría</th><th>Qué premia</th><th>Bono ejemplo</th></tr><tr><td>MVP del Trimestre</td><td>Aporte general más alto (voto unánime de founders)</td><td>USD 800</td></tr><tr><td>Killer de Resultados</td><td>KPI numérico sobrecumplido (ventas, retención, NPS)</td><td>USD 600</td></tr><tr><td>Constructor del Trimestre</td><td>Construyó algo nuevo que cambia cómo funciona Cáscara</td><td>USD 500</td></tr><tr><td>MVP Silencioso</td><td>Sostuvo procesos invisibles sin los que nada funciona</td><td>USD 400</td></tr><tr><td>Equipo del Trimestre</td><td>El departamento que mejor cumplió su Plan Trimestral</td><td>USD 700</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Categoría</th><th>Qué premia</th><th>Bono ejemplo</th></tr><tr><td>MVP del Trimestre</td><td>Aporte general más alto (voto unánime de founders)</td><td>USD 800</td></tr><tr><td>Killer de Resultados</td><td>KPI numérico sobrecumplido (ventas, retención, NPS)</td><td>USD 600</td></tr><tr><td>Constructor del Trimestre</td><td>Construyó algo nuevo que cambia cómo funciona Cáscara</td><td>USD 500</td></tr><tr><td>MVP Silencioso</td><td>Sostuvo procesos invisibles sin los que nada funciona</td><td>USD 400</td></tr><tr><td>Equipo del Trimestre</td><td>El departamento que mejor cumplió su Plan Trimestral</td><td>USD 700</td></tr></table></div>
 
 <p><b>Reglas:</b> los KPIs y categorías se definen al inicio del trimestre (no al final). El C-level (founders + Teo) no participa de los bonos. El MVP del Trimestre requiere unanimidad de los founders. Los bonos se anuncian públicamente al equipo: la transparencia es parte del juego.</p>
 
@@ -2266,7 +2270,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Como reconocimiento de largo plazo, se propone otorgar equity del pool de empleados (el 10% reservado) a Franco y Teo:</p>
 
-<table><tr><th>Persona</th><th>Equity del pool</th><th>Vesting</th><th>Fundamento</th></tr><tr><td>Franco</td><td>5%</td><td>4 años, fecha retroactiva</td><td>Construyó el motor comercial (departamento, pricing, embudos, auditoría de producto). Su upside de largo plazo, más allá del revenue mensual.</td></tr><tr><td>Teo</td><td>3%</td><td>4 años, fecha retroactiva</td><td>Sostiene la operación de la empresa, armó la primera versión del producto, es la columna vertebral estructural.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Persona</th><th>Equity del pool</th><th>Vesting</th><th>Fundamento</th></tr><tr><td>Franco</td><td>5%</td><td>4 años, fecha retroactiva</td><td>Construyó el motor comercial (departamento, pricing, embudos, auditoría de producto). Su upside de largo plazo, más allá del revenue mensual.</td></tr><tr><td>Teo</td><td>3%</td><td>4 años, fecha retroactiva</td><td>Sostiene la operación de la empresa, armó la primera versión del producto, es la columna vertebral estructural.</td></tr></table></div>
 
 <p>Entre los dos usan 8% del pool de 10%, dejando 2% de margen para futuros reconocimientos sin diluir a los founders. El vesting es el mismo que el de los founders (4 años) para mantener coherencia; la fecha retroactiva reconoce el tiempo ya invertido.</p>
 
@@ -2278,7 +2282,7 @@ html,body { background:var(--cream); color:var(--ink); font-family:var(--font-sa
 
 <p>Este sistema económico se revisa cada trimestre dentro del proceso de planificación de Cáscara, que sigue siempre el mismo ritual de 13 semanas y cuatro etapas:</p>
 
-<table><tr><th>Etapa</th><th>Cuándo</th><th>Qué pasa</th></tr><tr><td>Planificación</td><td>Semana 1</td><td>Cada director arma el plan de su área.</td></tr><tr><td>Revisión</td><td>Semana 2</td><td>Teo y Facu comentan y aprueban los planes.</td></tr><tr><td>Ejecución</td><td>Semanas 3 a 12</td><td>La mayor parte del trimestre. 5 check-ins quincenales donde cada área mira sus proyectos y deja registro. Teo audita.</td></tr><tr><td>Cierre</td><td>Semana 13</td><td>Retro y análisis del trimestre.</td></tr></table>
+<div class="tbl-wrap"><table><tr><th>Etapa</th><th>Cuándo</th><th>Qué pasa</th></tr><tr><td>Planificación</td><td>Semana 1</td><td>Cada director arma el plan de su área.</td></tr><tr><td>Revisión</td><td>Semana 2</td><td>Teo y Facu comentan y aprueban los planes.</td></tr><tr><td>Ejecución</td><td>Semanas 3 a 12</td><td>La mayor parte del trimestre. 5 check-ins quincenales donde cada área mira sus proyectos y deja registro. Teo audita.</td></tr><tr><td>Cierre</td><td>Semana 13</td><td>Retro y análisis del trimestre.</td></tr></table></div>
 
 <p><b>La vinculación con el sistema económico:</b> en la etapa de cierre y la planificación del trimestre siguiente, se revisan los pesos de las variables, los niveles de cada persona, las líneas de revenue activas y los repartos. Si la realidad del negocio cambió (un rol creció, una línea nueva arrancó, una variable dejó de representar lo que pasa), el sistema se ajusta ahí. Es el momento ordenado para tocar los números, no de manera improvisada. El sistema vive dentro del ritual trimestral.</p>
 
